@@ -65,7 +65,6 @@
 
 
 
-//static JNIEnv * javaEnv               = NULL;
 static jclass throwable_class         = NULL;
 static jmethodID get_message_method   = NULL;
 static jclass java_function_class     = NULL;
@@ -1192,26 +1191,12 @@ int isJavaObject( lua_State * L , int idx )
 lua_State * getStateFromCPtr( JNIEnv * env , jobject cptr )
 {
    lua_State * L;
-   JNIEnv ** udEnv;
 
    jclass classPtr       = ( *env )->GetObjectClass( env , cptr );
    jfieldID CPtr_peer_ID = ( *env )->GetFieldID( env , classPtr , "peer" , "J" );
    jbyte * peer          = ( jbyte * ) ( *env )->GetLongField( env , cptr , CPtr_peer_ID );
 
    L = ( lua_State * ) peer;
-
-   //TODO remove from here and put on each function that needs it.
-
-   lua_pushstring( L , LUAJAVAJNIENVTAG );
-   lua_rawget( L , LUA_REGISTRYINDEX );
-
-   if ( !lua_isnil( L , -1 ) )
-   {
-      udEnv = ( JNIEnv ** ) lua_touserdata( L , -1 );
-      *udEnv = env;
-   }
-
-   lua_pop( L , 1 );
 
    return L;
 }
@@ -1350,7 +1335,6 @@ JNIEXPORT void JNICALL Java_luajava_LuaState_luajava_1open
   ( JNIEnv * env , jclass clazz , jobject cptr , jint stateId )
 {
   lua_State* L;
-  JNIEnv** udEnv;
 
   jclass tempClass;
 
@@ -1464,13 +1448,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState_luajava_1open
     }
   }
 
-  udEnv = ( JNIEnv ** ) lua_newuserdata( L , sizeof( JNIEnv * ) );
-  *udEnv = env;
-
-  /* Sets the JNIEnv into L */
-  lua_pushstring( L , LUAJAVAJNIENVTAG );
-  lua_insert( L , -2 );
-  lua_rawset( L , LUA_REGISTRYINDEX );
+  pushJNIEnv( env , L );
 }
 
 /************************************************************************
@@ -1625,7 +1603,7 @@ JNIEXPORT jobject JNICALL Java_luajava_LuaState__1open
    obj = ( *env )->AllocObject( env , tempClass );
    if ( obj )
    {
-      ( *env )->SetLongField( env , obj , (*env)->GetFieldID( env , tempClass , "peer", "J" ) , (jlong)L );
+      ( *env )->SetLongField( env , obj , ( *env )->GetFieldID( env , tempClass , "peer", "J" ) , ( jlong ) L );
    }
    return obj;
 
@@ -1642,7 +1620,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1close
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   lua_close(L);
+   lua_close( L );
 }
 
 
@@ -1659,13 +1637,15 @@ JNIEXPORT jobject JNICALL Java_luajava_LuaState__1newthread
    
    jobject obj;
     
+   pushJNIEnv( env , L );
+   
    newThread = lua_newthread( L );
 
-   obj = (*env)->AllocObject(env , (*env)->FindClass(env,"CPtr") );
-   if (obj)
+   obj = ( *env )->AllocObject( env , ( *env )->FindClass( env , "CPtr" ) );
+   if ( obj )
    {
-      (*env)->SetLongField(env, obj, (*env)->GetFieldID(env,(*env)->FindClass(env,"CPtr"),
-                                                        "peer", "J"), (jlong)L);
+      ( *env )->SetLongField( env , obj , ( *env )->GetFieldID( env , ( *env )->FindClass( env , "CPtr" ) ,
+                                                        "peer" , "J" ), ( jlong ) L );
    }
 
    return obj;
@@ -1683,7 +1663,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1getTop
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_gettop( L );
+   return ( jint ) lua_gettop( L );
 }
 
 
@@ -1697,7 +1677,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1setTop
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   lua_settop( L , (int)top );
+   lua_settop( L , ( int ) top );
 }
 
 
@@ -1711,7 +1691,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1pushValue
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   lua_pushvalue( L , (int)idx );
+   lua_pushvalue( L , ( int ) idx );
 }
 
 
@@ -1725,7 +1705,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1remove
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   lua_remove( L , (int)idx );
+   lua_remove( L , ( int ) idx );
 }
 
 
@@ -1739,7 +1719,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1insert
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   lua_insert( L , (int)idx );
+   lua_insert( L , ( int ) idx );
 }
 
 
@@ -1753,7 +1733,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1replace
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   lua_replace( L , (int)idx );
+   lua_replace( L , ( int ) idx );
 }
 
 
@@ -1767,7 +1747,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1checkStack
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_checkstack( L , (int)sz );
+   return ( jint ) lua_checkstack( L , ( int ) sz );
 }
 
 
@@ -1781,7 +1761,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1isNumber
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_isnumber( L , (int)idx );
+   return ( jint ) lua_isnumber( L , ( int ) idx );
 }
 
 
@@ -1795,7 +1775,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1isString
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_isstring( L , (int)idx );
+   return ( jint ) lua_isstring( L , ( int ) idx );
 }
 
 
@@ -1809,7 +1789,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1isFunction
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_isfunction( L , (int)idx );
+   return ( jint ) lua_isfunction( L , ( int ) idx );
 }
 
 
@@ -1823,7 +1803,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1isUserdata
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_isuserdata( L , (int)idx );
+   return ( jint ) lua_isuserdata( L , ( int ) idx );
 }
 
 
@@ -1837,7 +1817,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1isTable
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_istable( L , (int)idx );
+   return ( jint ) lua_istable( L , ( int ) idx );
 }
 
 
@@ -1851,7 +1831,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1isBoolean
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_isboolean( L , (int)idx );
+   return ( jint ) lua_isboolean( L , ( int ) idx );
 }
 
 
@@ -1865,7 +1845,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1type
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_type( L , (int)idx );
+   return ( jint ) lua_type( L , ( int ) idx );
 }
 
 
@@ -1895,7 +1875,9 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1equal
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_equal( L , idx1 , idx2 );
+   pushJNIEnv( env , L );
+
+   return ( jint ) lua_equal( L , idx1 , idx2 );
 }
 
 
@@ -1909,7 +1891,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1rawequal
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_rawequal( L , idx1 , idx2 );
+   return ( jint ) lua_rawequal( L , idx1 , idx2 );
 }
 
   
@@ -1923,7 +1905,9 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1lessthan
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_lessthan( L , idx1 ,idx2 );
+   pushJNIEnv( env , L );
+
+   return ( jint ) lua_lessthan( L , idx1 ,idx2 );
 }
 
 
@@ -1937,7 +1921,7 @@ JNIEXPORT jdouble JNICALL Java_luajava_LuaState__1toNumber
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jdouble) lua_tonumber( L , idx );
+   return ( jdouble ) lua_tonumber( L , idx );
 }
 
 
@@ -1951,7 +1935,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1toBoolean
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_toboolean( L , idx );
+   return ( jint ) lua_toboolean( L , idx );
 }
 
 
@@ -1980,7 +1964,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1strlen
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_strlen( L , idx );
+   return ( jint ) lua_strlen( L , idx );
 }
 
 
@@ -2008,7 +1992,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1pushNumber
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   lua_pushnumber( L , number );
+   lua_pushnumber( L , ( lua_Number ) number );
 }
 
 
@@ -2040,7 +2024,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1pushBoolean
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   lua_pushboolean( L , (int) jbool );
+   lua_pushboolean( L , ( int ) jbool );
 }
 
 
@@ -2054,7 +2038,9 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1getTable
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   lua_gettable( L , (int)idx );
+   pushJNIEnv( env , L );
+
+   lua_gettable( L , ( int ) idx );
 }
 
 
@@ -2122,7 +2108,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1getFEnv
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   lua_getfenv( L , (int)idx );
+   lua_getfenv( L , ( int ) idx );
 }
 
 
@@ -2136,7 +2122,9 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1setTable
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   lua_settable( L , (int)idx );
+   pushJNIEnv( env , L );
+
+   lua_settable( L , ( int ) idx );
 }
 
 
@@ -2192,6 +2180,8 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1setFEnv
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
+   pushJNIEnv( env , L );
+
    return lua_setfenv( L , idx );
 }
 
@@ -2205,6 +2195,8 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1call
   (JNIEnv * env , jclass clazz , jobject cptr , jint nArgs , jint nResults)
 {
    lua_State * L = getStateFromCPtr( env , cptr );
+
+   pushJNIEnv( env , L );
 
    lua_call( L , nArgs , nResults );
 }
@@ -2220,7 +2212,9 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1pcall
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_pcall( L , nArgs , nResults , errFunc );
+   pushJNIEnv( env , L );
+
+   return ( jint ) lua_pcall( L , nArgs , nResults , errFunc );
 }
 
 
@@ -2234,7 +2228,9 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1yield
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_yield( L , nResults );
+   pushJNIEnv( env , L );
+
+   return ( jint ) lua_yield( L , nResults );
 }
 
 
@@ -2248,7 +2244,9 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1resume
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_resume( L , nArgs );
+   pushJNIEnv( env , L );
+
+   return ( jint ) lua_resume( L , nArgs );
 }
 
 
@@ -2262,7 +2260,9 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1next
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_next( L , idx );
+   pushJNIEnv( env , L );
+
+   return ( jint ) lua_next( L , idx );
 }
 
 
@@ -2276,7 +2276,9 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1error
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) lua_error( L );
+   pushJNIEnv( env , L );
+
+   return ( jint ) lua_error( L );
 }
 
 
@@ -2289,6 +2291,8 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1concat
   (JNIEnv * env , jclass clazz , jobject cptr , jint n)
 {
    lua_State * L = getStateFromCPtr( env , cptr );
+
+   pushJNIEnv( env , L );
 
    lua_concat( L , n );
 }
@@ -2307,6 +2311,8 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1doFile
    const char * file = ( *env )->GetStringUTFChars( env , fileName, NULL );
 
    int ret;
+
+   pushJNIEnv( env , L );
 
    ret = lua_dofile( L , file );
 
@@ -2330,6 +2336,8 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1doString
 
    int ret;
 
+   pushJNIEnv( env , L );
+
    ret = lua_dostring( L , utfStr );
 
    return ret;
@@ -2346,7 +2354,9 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1ref
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) luaL_ref( L , (int) t );
+   pushJNIEnv( env , L );
+
+   return ( jint ) luaL_ref( L , ( int ) t );
 }
 
 
@@ -2360,5 +2370,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1unRef
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   luaL_unref( L , (int) t , (int) ref );
+   pushJNIEnv( env , L );
+
+   luaL_unref( L , ( int ) t , ( int ) ref );
 }
