@@ -61,7 +61,7 @@ apidoc:
 # Build .c files.
 #
 $(SO_FILE): $(OBJS)
-	$(CC) -shared -o$@ $? $(LUA5LIB)/$(LIB_LUA) $(LUA5LIB)/$(LIB_LUALIB)
+	$(CC) -shared -o$@ $? $(LUA_LIBDIR)/$(LIB_LUA) $(LUA_LIBDIR)/$(LIB_LUALIB)
 
 src/c/luajava.c: src/c/luajava.h
 
