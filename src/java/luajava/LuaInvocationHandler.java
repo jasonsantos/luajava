@@ -60,9 +60,9 @@ public class LuaInvocationHandler implements InvocationHandler
 	  	
 	  	Class retType = method.getReturnType();
 	  	Object ret;
-	  	
+
 	  	// Checks if returned type is void. if it is returns null.
-	  	if ( retType.equals( Void.class ) )
+	  	if ( retType.equals( Void.class ) || retType.equals( void.class ) )
 	  	{
 	  		func.call( args , 0 );
 	  		ret = null;
