@@ -26,7 +26,7 @@ public class Console
 					if (res != 0)
 						throw new LuaException("Error on file " + args[i]);
 				}
-				L.close();
+
 				return;
 			}
 
