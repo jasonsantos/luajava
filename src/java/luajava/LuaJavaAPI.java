@@ -267,15 +267,20 @@ public final class LuaJavaAPI
       try
       {
         Method mt = clazz.getMethod(methodName, new Class[] {LuaState.class});
-        mt.invoke(null, new Object[] {L});
+        Object obj = mt.invoke(null, new Object[] {L});
+        
+        if (obj != null && obj instanceof Integer)
+        {
+          return ((Integer) obj).intValue();
+        }
+        else
+          return 0;
       }
       catch (Exception e)
       {
         throw new LuaException("Error on calling method. Library could not be loaded. " + e.getMessage());
       }
     }
-
-    return 0;
   }
 
   private static Object getObjInstance(LuaState L, Class clazz)
