@@ -43,7 +43,7 @@ build: checkjdk $(JAR_FILE) apidoc $(SO_FILE)
 # Build .class files.
 #
 .java.class:
-	$(JDK)\bin\javac -sourcepath ./src/java $*.java
+	$(JDK)/bin/javac -sourcepath ./src/java $*.java
 
 #
 # Create the JAR
@@ -63,7 +63,7 @@ apidoc:
 # Build .c files.
 #
 $(SO_FILE): $(OBJS)
-	$(CC) -shared -o$@ $? $(LUA5LIB)/liblua5.a $(LUA5LIB)/liblualib5.a
+	$(CC) -shared -o$@ $? $(LUA5LIB)/liblua.a $(LUA5LIB)/liblualib.a
 
 src/c/luajava.c: src/c/luajava.h
 
@@ -92,9 +92,9 @@ clean:
 	rm -f src/java/org/keplerproject/luajava/*.class src/c/*.o src/c/luajava.h
 	rm -f $(TAR_FILE) $(ZIP_FILE)
 
-dist:
-	tar -czf $(TAR_FILE) --exclude \*CVS\* --exclude *.class --exclude $(TAR_FILE) --exclude $(ZIP_FILE) $(DIST_DIR)
-	zip -qr $(ZIP_FILE) $(DIST_DIR)/* -x ./\*CVS\* *.class ./$(TAR_FILE) ./$(ZIP_FILE)
+dist:	dist_dir
+	tar -czf $(TAR_FILE) --exclude \*CVS\* --exclude *.class --exclude *.o --exclude *.h --exclude $(TAR_FILE) --exclude $(ZIP_FILE) $(DIST_DIR)
+	zip -qr $(ZIP_FILE) $(DIST_DIR)/* -x ./\*CVS\* *.class *.o *.h ./$(TAR_FILE) ./$(ZIP_FILE)
 
 dist_dir:	apidoc
 	mkdir -p $(DIST_DIR)
