@@ -108,7 +108,7 @@ public final class LuaJavaAPI
       // If method is null means there isn't one receiving the given arguments
       if (method == null)
       {
-        throw new LuaException("Invalid method call . No such method .");
+        throw new LuaException("Invalid method call. No such method.");
       }
 
       Object ret;
@@ -277,7 +277,7 @@ public final class LuaJavaAPI
 	    // If method is null means there isn't one receiving the given arguments
 	    if (constructor == null)
 	    {
-	      throw new LuaException("Invalid method call . No such method .");
+	      throw new LuaException("Invalid method call. No such method.");
 	    }
 	
 	    Object ret;
@@ -570,12 +570,12 @@ public final class LuaJavaAPI
     }
     else
     {
-      throw new LuaException("Invalid Parameters .");
+      throw new LuaException("Invalid Parameters.");
     }
 
     if (!okType)
     {
-      throw new LuaException("Invalid Parameter .");
+      throw new LuaException("Invalid Parameter.");
     }
 
     return obj;
