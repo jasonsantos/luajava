@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<title>LuaJava - A Script Tool for Java</title>
+<style type="text/css">
+ul { list-style-type: disc };
+</style>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<hr>
+
+<center>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td align="center">
+<a href="http://www.keplerproject.org/luajava">
+<img border=0 alt="LuaJava" src="luajava_128.png">
+</a>
+<tr><td align="center "valign="top">A Script Tool for Java</td></tr>
+</table>
+</center>
+
+<p align="center">
+<a href="index.html">home</a> &middot;
+<a href="index.html#whatis">what is</a> &middot;
+<a href="index.html#down">download</a> &middot;
+<a href="installation.html">installation</a> &middot;
+<a href="manual.html">manual</a> &middot;
+<a href="api/index.html">API</a> &middot;
+<a href="examples.html">examples</a> &middot;
+<a href="index.html#contact">contact</a>
+<p>
+
+<hr>
+
+<h2>The LuaJava tool</h2>
+
+One of the goals of LuaJava is to allow the programmer to manipulate Java objects in the same way as it manipulates native (Lua) objects.
+Lua, like most interpreted languages, is dynamically typed. Variables have no type. Instead, each value carries its own type with it. Lua has no declarations, instead variables may contain any value of the language.
+
+LuaJava creates a library in Lua called <code>luajava</code>. Inside this library 4 functions are available.
+
+ 
+<h4>newInstance</h4>
+
+<p>This function creates a new Java object, and returns a Lua object that is a reference to the actual Java object. Now we can access this object with the regular syntax used to access object oriented functions in Lua objects.<p/>
+<p><code>newInstance</code> first parameter is the name of the class to be instantiated. The other arguments are passed to the construtctor.</p>
+<p>
+Example :
+<pre><code>
+obj = luajava.newInstance("java.lang.Object")
+-- obj is now a reference to the new object created and any of its methods can be accessed.
+
+-- this creates a string tokenizer to the "a,b,c,d" string using "," as the token separator.
+strTk = luajava.newInstance("java.util.StringTokenizer", "a,b,c,d", ",")
+while strTk:hasMoreTokens() do
+    print(strTk:nextToken())
+end
+
+-- the while loop code should print the following on the screen:
+a
+b
+c
+d
+</code></pre>
+
+<h4>bindClass</h4> 
+
+This function retrieves a Java class. The returned object can be used to access static fields and methods of the corresponding class.
+
+Example :
+<pre><code>
+sys = luajava.bindClass("java.lang.System")
+print ( sys:currentTimeMillis() )
+
+-- this prints the time returned by the function.
+</code></pre>
+
+
+<h4>new</h4>
+
+<p>
+This function receives a java.lang.Class and returns a new instance of this class.</p>
+<p><code>new</code> works just like the <code>newInstance</code>, but the first argument is the instance of the class.</p>
+
+Example:
+<pre><code>
+str = luajava.bindClass("java.lang.String")
+strInstance = luajava.new(str)
+</code></pre>
+
+<h4>createProxy</h4>
+We can also, instead of creating a Java object to be manipulated by Lua, create a Lua object that will be manipulated by Java. We can do that in LuaJava by creating a proxy to that object. This is done by the createProxy function.
+<p>
+The function createProxy returns a java Object reference that can be used as a implementation of the given interface.
+<p>
+createProxy receives a string that contain the name of the interfaces to be implemented, separated by a comma(,), and a lua object that is the interface implementation.
+</p>
+Example:
+<pre><code>button = luajava.newInstance("java.awt.Button", "execute")
+button_cb = {}
+function button_cb:actionPerformed(ev)
+ . . .
+end
+
+buttonProxy = luajava.createProxy("java.awt.ActionListener", button_cb)
+
+button:addActionListenet(buttonProxy)
+
+</code></pre>
+
+We can use Lua scripts to write implementations for Java <b>interfaces</b> only.
+
+<h4>loadLib</h4>
+<p>
+loadLib is a function that has a use similar to Lua's loadlib function. The purpose
+of this function is to allow users to write libraries in Java and then load them into Lua.
+</p>
+<p>
+What loadLib does is call a static function in a given class and execute a given method, which
+should receive LuaState as parameter.
+</p>
+Example:<br>
+<pre>
+Lua:
+    <code>luajava.loadLib("test.LoadLibExample", "open")
+    eg.example(3)</code>
+
+Java:
+    <code>
+  public static void open(LuaState L) throws LuaException
+  {
+    L.newTable();
+    L.pushValue(-1);
+    L.setGlobal("eg");
+
+    L.pushString("example");
+
+    L.pushJavaFunction(new JavaFunction(L) {
+      /**
+       * Example for loadLib.
+       * Prints the time and the first parameter, if any.
+       */
+      public int foo() throws LuaException
+      {
+        System.out.println(new Date().toString());
+        
+        if (L.getTop() > 1)
+        {
+          System.out.println(getParam(2));
+        }
+
+        return 0;
+      }
+    });
+  
+    L.setTable(-3);
+    
+    L.pop(1);
+  }
+    </code>
+</pre>
+
+<h2>How to use LuaJava from Java</h2>
+
+Since Java is a compiled and typed language, the usage of scripting languages can be very useful. We have seen how to write Lua code using Java objects.
+
+Now we are going to see how to use Lua objects and proxies in Java.
+
+
+<h3>LuaState</h3>
+
+<p>LuaState if the main class of LuaJava for the Java developer. LuaState is a mapping of most of Lua's C API functions. LuaState also provides many other functions that will be used to manipulate objects between Lua and Java.</p>
+<br/>
+
+<h3>LuaObject</h3>
+
+LuaJava has a class luajava.LuaObject . This class represents a Lua object of any type. A LuaObject is constructed by the LuaState object by the overloaded <code>getLuaObject</code> function. Threre are four ways in which you can create a LuaObject.<p>
+
+<b>First Function :</b>
+<code>
+public LuaObject getLuaObject(String globalName);
+</code><br>
+
+<code>globalName</code> is the name of the global variable that hold the wanted object.
+<p>
+
+<b>Second Function :</b>
+<code>
+public LuaObject getLuaObject(LuaObject parent, String name);
+</code><br>
+
+<code>parent</code> is the LuaObject representing the parent object. The parent object should be either a table or userdata.<br>
+<code>name</code> is the index name of the wanted object. <br>
+<p>
+
+<b>Third Function :</b>
+<code>
+public LuaObject getLuaObject(LuaObject parent, Number name);
+</code><br>
+
+<code>parent</code> is the LuaObject representing the parent object. The parent object should be either a table or userdata.<br>
+<code>name</code> is the numeric index of the wanted object. <br>
+<p>
+
+<b>Fourth Function :</b>
+<code>
+LuaObject getLuaObject(LuaObject parent, LuaObject name);
+</code><br>
+
+<code>parent</code> is the LuaObject representing the parent object. The parent object should be either a table or userdata.<br>
+<code>name</code> is the the object that the wanted object is indexed by. <br>
+<p>
+
+<b>Fifth Function :</b>
+<code>
+public LuaObject getLuaObject(int index);
+</code><br>
+
+<code>index</code> is the index of the object in the Lua stack. The constructor will not pop the object from the stack.
+<p>
+
+
+<h4>Important:</h4>
+
+The LuaObject will represent only the object itself, not a variable or a stack index, so when you change a string, remember that strings are immutable objects in Lua, and the LuaObject you have will represent the old one.
+
+
+<h3>Proxies</h3>
+
+
+LuaJava allows you to implement a class in Lua, like said before. If you want to create this proxy from Java, you should have a LuaObject representing the table that has the functions that implement the interface. From this LuaObject you can call the <code>createProxy(String implements)</code>. This method receives the string with the name of the interfaces implemented by the object separated by comma.
+
+
+<h3>JavaFunction</h3>
+
+JavaFunction is a class that can be used to implement a Lua function in Java.
+
+JavaFunction is an abstract class, so in order to use it you must extend this class and implement the <code>foo</code> method. This <code>foo</code> method is the method that will be called when you call the function from Lua.
+
+To register the JavaFunction in Lua use the method <code>register(String name)</code>.
+
+
+<hr>
+<p align="center">
+<a href="index.html">home</a> &middot;
+<a href="index.html#whatis">what is</a> &middot;
+<a href="index.html#down">download</a> &middot;
+<a href="installation.html">installation</a> &middot;
+<a href="manual.html">manual</a> &middot;
+<a href="api/index.html">API</a> &middot;
+<a href="examples.html">examples</a> &middot;
+<a href="index.html#contact">contact</a>
+<p>
+
+
+</body>
+
+</html>
