@@ -30,7 +30,7 @@ package luajava;
  */
 public class LuaState
 {
-  private final static String LUAJAVA_LIB = "luajava-1.0b";
+  private final static String LUAJAVA_LIB = "luajava-1.0b2";
 
   final public static Integer LUA_GLOBALSINDEX  = new Integer(-10001);
   final public static Integer LUA_REGISTRYINDEX = new Integer(-10000);
