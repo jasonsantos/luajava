@@ -124,11 +124,14 @@ public class LuaState
   private synchronized native void _insert(CPtr ptr, int idx);
   private synchronized native void _replace(CPtr ptr, int idx);
   private synchronized native int  _checkStack(CPtr ptr, int sz);
+  
+  private synchronized native void _xmove(CPtr from, CPtr to, int n);
 
   // Access functions
   private synchronized native int    _isNumber(CPtr ptr, int idx);
   private synchronized native int    _isString(CPtr ptr, int idx);
   private synchronized native int    _isFunction(CPtr ptr, int idx);
+  private synchronized native int    _isCFunction(CPtr ptr, int idx);
   private synchronized native int    _isUserdata(CPtr ptr, int idx);
   private synchronized native int    _isTable(CPtr ptr, int idx);
   private synchronized native int    _isBoolean(CPtr ptr, int idx);
@@ -143,6 +146,7 @@ public class LuaState
   private synchronized native int    _toBoolean(CPtr ptr, int idx);
   private synchronized native String _toString(CPtr ptr, int idx);
   private synchronized native int    _strlen(CPtr ptr, int idx);
+  private synchronized native CPtr   _toThread(CPtr ptr, int idx);
 
   // Push functions
   private synchronized native void _pushNil(CPtr ptr);
@@ -171,11 +175,17 @@ public class LuaState
   // Coroutine Functions
   private synchronized native int _yield(CPtr ptr, int nResults);
   private synchronized native int _resume(CPtr ptr, int nargs);
+  
+  // Gargabe Collection Functions
+  private synchronized native int  _getGcThreshold(CPtr ptr);
+  private synchronized native int  _getGcCount(CPtr ptr);
+  private synchronized native void _setGcThreshold(CPtr ptr, int newThreshold);
 
   // Miscellaneous Functions
-  private synchronized native int  _next(CPtr ptr, int idx);
-  private synchronized native int  _error(CPtr ptr);
-  private synchronized native void _concat(CPtr ptr, int n);
+  private synchronized native String _version();
+  private synchronized native int    _next(CPtr ptr, int idx);
+  private synchronized native int    _error(CPtr ptr);
+  private synchronized native void   _concat(CPtr ptr, int n);
 
 	// Some macros
 	private synchronized native int  _ref(CPtr ptr, int t);
@@ -185,6 +195,16 @@ public class LuaState
   // LuaLibAux
   private synchronized native int _doFile(CPtr ptr, String fileName);
   private synchronized native int _doString(CPtr ptr, String string);
+  
+  
+  // Open Libraries Functions
+  private synchronized native void _openBase(CPtr ptr);
+  private synchronized native void _openTable(CPtr ptr);
+  private synchronized native void _openIo(CPtr ptr);
+  private synchronized native void _openString(CPtr ptr);
+  private synchronized native void _openMath(CPtr ptr);
+  private synchronized native void _openDebug(CPtr ptr);
+  private synchronized native void _openLoadLib(CPtr ptr);
 
   // Java Interface -----------------------------------------------------
 
@@ -231,6 +251,11 @@ public class LuaState
   {
     return _checkStack(luaState, sz);
   }
+  
+  public void xmove(LuaState to, int n)
+  {
+    _xmove(luaState, to.luaState, n);
+  }
 
   // ACCESS FUNCTION
 
@@ -247,6 +272,11 @@ public class LuaState
   public boolean isFunction(int idx)
   {
     return (_isFunction(luaState, idx)!=0);
+  }
+  
+  public boolean ifCFunction(int idx)
+  {
+    return (_isCFunction(luaState, idx)!=0);
   }
 
   public boolean isUserdata(int idx)
@@ -309,6 +339,11 @@ public class LuaState
     return _strlen(luaState, idx);
   }
 
+  public LuaState toThread(int idx)
+  {
+    return new LuaState(_toThread(luaState, idx));
+  }
+  
   public void pushNil()
   {
     _pushNil(luaState);
@@ -412,6 +447,26 @@ public class LuaState
   {
   	return _resume(luaState, nArgs);
   }
+  
+  public int getGcThreshold()
+  {
+    return _getGcThreshold(luaState);
+  }
+  
+  public int getGcCount()
+  {
+    return _getGcCount(luaState);
+  }
+  
+  public void setGcThreshold(int newThreshold)
+  {
+    _setGcThreshold(luaState, newThreshold);
+  }
+  
+  public String version()
+  {
+    return _version();
+  }
 
   public int next(int idx)
   {
@@ -474,6 +529,48 @@ public class LuaState
   {
     int type = type(idx);
     return (type == LUA_TNIL.intValue());
+  }
+  
+  // Functions to open lua libraries
+  public void openBase()
+  {
+    _openBase(luaState);
+  }
+  public void openTable()
+  {
+    _openTable(luaState);
+  }
+  public void openIo()
+  {
+    _openIo(luaState);
+  }
+  public void openString()
+  {
+    _openString(luaState);
+  }
+  public void openMath()
+  {
+    _openMath(luaState);
+  }
+  public void openDebug()
+  {
+    _openDebug(luaState);
+  }
+  public void openLoadLib()
+  {
+    _openLoadLib(luaState);
+  }
+  
+  /**
+   * Open lua libraries, except for loadlib and debug
+   */
+  public void openBasicLibraries()
+  {
+    _openBase(luaState);
+    _openTable(luaState);
+    _openIo(luaState);
+    _openString(luaState);
+    _openMath(luaState); 
   }
 
   /********************** Luajava API Library **********************/
