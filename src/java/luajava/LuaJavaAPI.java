@@ -47,7 +47,7 @@ public final class LuaJavaAPI
    * @return int
    */
   public static int objectIndex(int luaState, Object obj, String methodName)
-      throws Exception
+      throws LuaException
   {
     LuaState L = LuaStateFactory.getExistingState(luaState);
 
@@ -153,7 +153,7 @@ public final class LuaJavaAPI
    * @throws Exception
    */
   public static int classIndex(int luaState, Class clazz, String searchName)
-      throws Exception
+      throws LuaException
   {
     synchronized (LuaStateFactory.getExistingState(luaState))
     {
@@ -186,14 +186,21 @@ public final class LuaJavaAPI
    * @throws Exception
    */
   public static int javaNewInstance(int luaState, String className)
-      throws Exception
+      throws LuaException
   {
     LuaState L = LuaStateFactory.getExistingState(luaState);
 
     synchronized (L)
     {
-      Class clazz = Class.forName(className);
-
+      Class clazz;
+      try
+      {
+        clazz = Class.forName(className);
+      }
+      catch (ClassNotFoundException e)
+      {
+        throw new LuaException(e);
+      }
       Object ret = getObjInstance(L, clazz);
 
       L.pushJavaObject(ret);
@@ -429,7 +436,7 @@ public final class LuaJavaAPI
   }
 
   private static Object compareTypes(LuaState L, Class parameter, int idx)
-      throws Exception
+      throws LuaException
   {
     boolean okType = true;
     Object obj = null;
@@ -568,7 +575,7 @@ public final class LuaJavaAPI
 
     if (!okType)
     {
-      throw new Exception("Invalid Parameter .");
+      throw new LuaException("Invalid Parameter .");
     }
 
     return obj;
