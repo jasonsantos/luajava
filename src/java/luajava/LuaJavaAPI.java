@@ -42,10 +42,10 @@ public final class LuaJavaAPI
   /**
    * Java implementation of the metamethod __index
    * 
-   * @param luaState - int that indicates the state used
-   * @param obj - Object to be indexed
-   * @param methodName - the name of the method
-   * @return int - number of returned objects
+   * @param luaState int that indicates the state used
+   * @param obj Object to be indexed
+   * @param methodName the name of the method
+   * @return number of returned objects
    */
   public static int objectIndex(int luaState, Object obj, String methodName)
       throws LuaException
@@ -152,10 +152,10 @@ public final class LuaJavaAPI
    * This function returns 1 if there is a field with searchName and 2 if there
    * is a method if the searchName
    * 
-   * @param luaState - int that represents the state to be used
-   * @param clazz - class to be indexed
-   * @param searchName - name of the field or method to be accessed
-   * @return int - number of returned objects
+   * @param luaState int that represents the state to be used
+   * @param clazz class to be indexed
+   * @param searchName name of the field or method to be accessed
+   * @return number of returned objects
    * @throws Exception
    */
   public static int classIndex(int luaState, Class clazz, String searchName)
@@ -186,9 +186,9 @@ public final class LuaJavaAPI
   /**
    * Pushes a new instance of a java Object of the type className
    * 
-   * @param luaState - int that represents the state to be used
-   * @param className - name of the class
-   * @return int - number of returned objects
+   * @param luaState int that represents the state to be used
+   * @param className name of the class
+   * @return number of returned objects
    * @throws Exception
    */
   public static int javaNewInstance(int luaState, String className)
@@ -218,9 +218,9 @@ public final class LuaJavaAPI
   /**
    * javaNew returns a new instance of a given clazz
    * 
-   * @param luaState - int that represents the state to be used
-   * @param clazz - class to be instanciated
-   * @return int - number of returned objects
+   * @param luaState int that represents the state to be used
+   * @param clazz class to be instanciated
+   * @return number of returned objects
    * @throws LuaException
    */
   public static int javaNew(int luaState, Class clazz) throws LuaException
@@ -308,10 +308,10 @@ public final class LuaJavaAPI
   /**
    * Checks if there is a field on the obj with the given name
    * 
-   * @param luaState - int that represents the state to be used
-   * @param obj - object to be inspected
-   * @param fieldName - name of the field to be inpected
-   * @return int - number of returned objects
+   * @param luaState int that represents the state to be used
+   * @param obj object to be inspected
+   * @param fieldName name of the field to be inpected
+   * @return number of returned objects
    */
   public static int checkField(int luaState, Object obj, String fieldName)
   	throws LuaException
@@ -370,10 +370,10 @@ public final class LuaJavaAPI
   /**
    * Checks to see if there is a method with the given name.
    * 
-   * @param luaState - int that represents the state to be used
-   * @param obj - object to be inspected
-   * @param methodName - name of the field to be inpected
-   * @return int - number of returned objects
+   * @param luaState int that represents the state to be used
+   * @param obj object to be inspected
+   * @param methodName name of the field to be inpected
+   * @return number of returned objects
    */
   public static int checkMethod(int luaState, Object obj, String methodName)
   {
@@ -409,13 +409,13 @@ public final class LuaJavaAPI
   /**
    * Function that creates an object proxy and pushes it into the stack
    * 
-   * @param luaState - int that represents the state to be used
-   * @param implem - interfaces implemented separated by comma (<code>,</code>)
-   * @return int - number of returned objects
+   * @param luaState int that represents the state to be used
+   * @param implem interfaces implemented separated by comma (<code>,</code>)
+   * @return number of returned objects
    * @throws LuaException
    */
   public static int createProxyObject(int luaState, String implem)
-      throws LuaException
+    throws LuaException
   {
     LuaState L = LuaStateFactory.getExistingState(luaState);
 
@@ -442,7 +442,7 @@ public final class LuaJavaAPI
   }
 
   private static Object compareTypes(LuaState L, Class parameter, int idx)
-      throws LuaException
+    throws LuaException
   {
     boolean okType = true;
     Object obj = null;
@@ -468,7 +468,10 @@ public final class LuaJavaAPI
       {
         okType = false;
       }
-      obj = L.toString(idx);
+      else
+      {
+        obj = L.toString(idx);
+      }
     }
     else if (L.isFunction(idx))
     {
@@ -476,7 +479,10 @@ public final class LuaJavaAPI
       {
         okType = false;
       }
-      obj = L.getLuaObject(idx);
+      else
+      {
+        obj = L.getLuaObject(idx);
+      }
     }
     else if (L.isTable(idx))
     {
@@ -484,71 +490,19 @@ public final class LuaJavaAPI
       {
         okType = false;
       }
-      obj = L.getLuaObject(idx);
+      else
+      {
+        obj = L.getLuaObject(idx);
+      }
     }
     else if (L.type(idx) == LuaState.LUA_TNUMBER.intValue())
     {
-      if (parameter.isPrimitive())
-      {
-        Double db = new Double(L.toNumber(idx));
-
-        if (parameter == Integer.TYPE)
-        {
-          obj = new Integer(db.intValue());
-        }
-        else if (parameter == Long.TYPE)
-        {
-          obj = new Long(db.longValue());
-        }
-        else if (parameter == Float.TYPE)
-        {
-          obj = new Float(db.floatValue());
-        }
-        else if (parameter == Double.TYPE)
-        {
-          obj = db;
-        }
-        else if (parameter == Byte.TYPE)
-        {
-          obj = new Long(db.byteValue());
-        }
-        else if (parameter == Short.TYPE)
-        {
-          obj = new Long(db.shortValue());
-        }
-      }
-
-      else if (!parameter.isAssignableFrom(Number.class))
+      Double db = new Double(L.toNumber(idx));
+      
+      obj = LuaState.convertLuaNumber(db, parameter);
+      if (obj == null)
       {
         okType = false;
-      }
-
-      Double db = new Double(L.toNumber(idx));
-
-      // Checks all possibilities of native types
-      if (parameter.isAssignableFrom(Integer.class))
-      {
-        obj = new Integer(db.intValue());
-      }
-      else if (parameter.isAssignableFrom(Long.class))
-      {
-        obj = new Long(db.longValue());
-      }
-      else if (parameter.isAssignableFrom(Float.class))
-      {
-        obj = new Float(db.floatValue());
-      }
-      else if (parameter.isAssignableFrom(Double.class))
-      {
-        obj = db;
-      }
-      else if (parameter.isAssignableFrom(Byte.class))
-      {
-        obj = new Byte(db.byteValue());
-      }
-      else if (parameter.isAssignableFrom(Short.class))
-      {
-        obj = new Short(db.shortValue());
       }
     }
     else if (L.isUserdata(idx))
@@ -560,13 +514,20 @@ public final class LuaJavaAPI
         {
           okType = false;
         }
-        obj = userObj;
+        else
+        {
+          obj = userObj;
+        }
       }
       else
       {
         if (!parameter.isAssignableFrom(LuaObject.class))
         {
           okType = false;
+        }
+        else
+        {
+          obj = L.getLuaObject(idx);
         }
       }
     }
