@@ -2599,7 +2599,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1doBuffer
 
    pushJNIEnv( env , L );
 
-   ret = lua_dobuffer( L , ( const char * ) buff, ( int ) sz, name );
+   ret = lua_dobuffer( L , ( const char * ) cBuff, ( int ) sz, name );
 
    ( *env )->ReleaseStringUTFChars( env , n , name );
 
@@ -2978,7 +2978,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1LloadBuffer
 
    pushJNIEnv( env , L );
 
-   ret = lua_dobuffer( L , ( const char * ) buff, ( int ) sz, name );
+   ret = lua_dobuffer( L , ( const char * ) cBuff, ( int ) sz, name );
 
    ( *env )->ReleaseStringUTFChars( env , n , name );
 
