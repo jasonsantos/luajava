@@ -8,9 +8,9 @@
 #JDK     = C:\j2sdk1.4.1_01
 JDK	= $(JAVA_HOME)
 
-LUA5=/home/t/tecgraf/lib/lua5
-LUA5INC=$(LUA5)/include
-LUA5LIB=$(LUA5)/lib/Linux24
+LUA5=
+LUA5INC=/usr/local/include
+LUA5LIB=/usr/local/lib
 
 CC=/usr/bin/gcc
 
