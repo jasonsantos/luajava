@@ -15,6 +15,8 @@ public class Console
 		{
 			LuaState L = LuaStateFactory.newLuaState();
 			L.openBasicLibraries();
+			L.openDebug();
+			L.openLoadLib();
 
 			if (args.length > 0)
 			{
