@@ -1806,13 +1806,15 @@ JNIEXPORT jobject JNICALL Java_luajava_LuaState__1newthread
    lua_State * newThread;
    
    jobject obj;
+   jclass tempClass;
     
    newThread = lua_newthread( L );
 
-   obj = ( *env )->AllocObject( env , ( *env )->FindClass( env , "CPtr" ) );
+   tempClass = ( *env )->FindClass( env , "luajava/CPtr" );
+   obj = ( *env )->AllocObject( env , tempClass );
    if ( obj )
    {
-      ( *env )->SetLongField( env , obj , ( *env )->GetFieldID( env , ( *env )->FindClass( env , "CPtr" ) ,
+      ( *env )->SetLongField( env , obj , ( *env )->GetFieldID( env , tempClass ,
                                                         "peer" , "J" ), ( jlong ) L );
    }
 
