@@ -724,7 +724,7 @@ public class LuaState
   /**
    * Gets a Object from a userdata
    * @param L
-   * @param idx
+   * @param idx index of the lua stack
    * @return Object
    */
   private synchronized native Object _getObjectFromUserdata(CPtr L, int idx) throws LuaException;
@@ -732,7 +732,7 @@ public class LuaState
   /**
    * Returns whether a userdata contains a Java Object
    * @param L
-   * @param idx
+   * @param idx index of the lua stack
    * @return boolean
    */
   private synchronized native boolean _isObject(CPtr L, int idx);
@@ -754,15 +754,16 @@ public class LuaState
   /**
    * Returns whether a userdata contains a Java Function
    * @param L
-   * @param idx
+   * @param idx index of the lua stack
    * @return boolean
    */
   private synchronized native boolean _isJavaFunction(CPtr L, int idx);
 
   /**
    * Gets a Object from Lua
-   * @param idx
+   * @param idx index of the lua stack
    * @return Object
+   * @throws LuaException if the lua object does not represent a java object.
    */
   public Object getObjectFromUserdata(int idx) throws LuaException
   {
@@ -771,7 +772,7 @@ public class LuaState
 
   /**
    * Tells whether a lua index contains a java Object
-   * @param idx
+   * @param idx index of the lua stack
    * @return boolean
    */
   public boolean isObject(int idx)
@@ -780,8 +781,10 @@ public class LuaState
   }
 
   /**
-   * Pushs a Java Object into the lua stack
-   * @param obj
+   * Pushes a Java Object into the lua stack.<br>
+   * This function does not check if the object is from a class that could
+   * be represented by a lua type. Eg: java.lang.String could be a lua string.
+   * @param obj Object to be pushed into lua
    */
   public void pushJavaObject(Object obj)
   {
@@ -799,7 +802,7 @@ public class LuaState
 
   /**
    * Returns whether a userdata contains a Java Function
-   * @param idx
+   * @param idx index of the lua stack
    * @return boolean
    */
   public boolean isJavaFunction(int idx)
@@ -808,7 +811,9 @@ public class LuaState
   }
 
   /**
-   * Pushes into the stack any object value
+   * Pushes into the stack any object value.<br>
+   * This function checks if the object could be pushed as a lua type, if not
+   * pushes the java object.
    * @param obj
    */
   public void pushObjectValue(Object obj) throws LuaException
