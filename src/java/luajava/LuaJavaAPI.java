@@ -25,6 +25,7 @@ package luajava;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 /**
  * Class that contains functions accessed by lua.
@@ -114,6 +115,11 @@ public final class LuaJavaAPI
       Object ret;
       try
       {
+        if(Modifier.isPublic(method.getModifiers()))
+        {
+          method.setAccessible(true);
+        }
+        
         if (obj instanceof Class)
         {
           ret = method.invoke(null, objs);
