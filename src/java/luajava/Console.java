@@ -52,7 +52,27 @@ public class Console
 				{
 					int res = L.doFile(args[i]);
 					if (res != 0)
-						throw new LuaException("Error on file " + args[i]);
+					{
+					  String str;
+			      if (res == LuaState.LUA_ERRRUN.intValue())
+			      {
+			        str = "Runtime error. ";
+			      }
+			      else if (res == LuaState.LUA_ERRMEM.intValue())
+			      {
+			        str = "Memory allocation error. ";
+			      }
+			      else if (res == LuaState.LUA_ERRERR.intValue())
+			      {
+			        str = "Error while running the error handler function. ";
+			      }
+			      else
+			      {
+			        str = "Lua Error code " + res + ". ";
+			      }
+
+					  throw new LuaException(str + "Error on file " + args[i]);
+					}
 				}
 
 				return;
