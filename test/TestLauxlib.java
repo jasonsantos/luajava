@@ -25,10 +25,11 @@ package test;
 
 import java.io.FileInputStream;
 
+import org.keplerproject.luajava.LuaException;
+import org.keplerproject.luajava.LuaState;
+import org.keplerproject.luajava.LuaStateFactory;
+
 import junit.framework.TestCase;
-import luajava.LuaException;
-import luajava.LuaState;
-import luajava.LuaStateFactory;
 
 /**
  * Tests the use of lauxlib functions.

@@ -85,7 +85,7 @@ luajava-$(VERSION).dll: $(OBJS)
 src/c/luajava.c: src/c/luajava.h
 
 src/c/luajava.h:
-	$(JDK)\bin\javah -o src/c/luajava.h -classpath "luajava-$(VERSION).jar" luajava.LuaState
+	$(JDK)\bin\javah -o src/c/luajava.h -classpath "luajava-$(VERSION).jar" org.keplerproject.luajava.LuaState
   
 
 #

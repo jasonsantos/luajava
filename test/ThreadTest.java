@@ -23,9 +23,9 @@
 
 package test;
 
-import luajava.LuaObject;
-import luajava.LuaState;
-import luajava.LuaStateFactory;
+import org.keplerproject.luajava.LuaObject;
+import org.keplerproject.luajava.LuaState;
+import org.keplerproject.luajava.LuaStateFactory;
 
 /**
  * Tests LuaJava running as a multithreaded application.<br>

@@ -26,7 +26,8 @@ package test.node;
 import java.util.Iterator;
 import java.util.List;
 
-import luajava.LuaException;
+import org.keplerproject.luajava.LuaException;
+
 
 /**
  * Uses the node example with a file that is a representation of a 

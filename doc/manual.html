@@ -120,7 +120,8 @@ of this function is to allow users to write libraries in Java and then load them
 </p>
 <p>
 What loadLib does is call a static function in a given class and execute a given method, which
-should receive LuaState as parameter.
+should receive LuaState as parameter. If this function returns a integer, LuaJava takes it as 
+the number of parameters returned by the the function, otherwise nothing is returned.
 </p>
 Example:<br>
 <pre>
@@ -130,7 +131,7 @@ Lua:
 
 Java:
     <code>
-  public static void open(LuaState L) throws LuaException
+  public static int open(LuaState L) throws LuaException
   {
     L.newTable();
     L.pushValue(-1);
@@ -158,7 +159,7 @@ Java:
   
     L.setTable(-3);
     
-    L.pop(1);
+    return 1;
   }
     </code>
 </pre>

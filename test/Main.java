@@ -26,10 +26,11 @@ package test;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import luajava.LuaException;
-import luajava.LuaObject;
-import luajava.LuaState;
-import luajava.LuaStateFactory;
+import org.keplerproject.luajava.LuaException;
+import org.keplerproject.luajava.LuaObject;
+import org.keplerproject.luajava.LuaState;
+import org.keplerproject.luajava.LuaStateFactory;
+
 
 public class Main 
 {

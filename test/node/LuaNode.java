@@ -26,10 +26,11 @@ package test.node;
 import java.util.ArrayList;
 import java.util.List;
 
-import luajava.LuaException;
-import luajava.LuaObject;
-import luajava.LuaState;
-import luajava.LuaStateFactory;
+import org.keplerproject.luajava.LuaException;
+import org.keplerproject.luajava.LuaObject;
+import org.keplerproject.luajava.LuaState;
+import org.keplerproject.luajava.LuaStateFactory;
+
 
 /**
  * Example that ilustrate the usage of Lua as a configuration file.

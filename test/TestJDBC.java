@@ -27,8 +27,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
-import luajava.LuaState;
-import luajava.LuaStateFactory;
+import org.keplerproject.luajava.LuaState;
+import org.keplerproject.luajava.LuaStateFactory;
+
 
 /**
  * Uses JDBC statement to execute queries inside Lua.

@@ -23,7 +23,7 @@
 
 package test.node;
 
-import luajava.LuaObject;
+import org.keplerproject.luajava.LuaObject;
 
 /**
  * Interface that is implemented in Lua.

@@ -24,10 +24,10 @@
 
 package test;
 
-import luajava.JavaFunction;
-import luajava.LuaException;
-import luajava.LuaState;
-import luajava.LuaStateFactory;
+import org.keplerproject.luajava.JavaFunction;
+import org.keplerproject.luajava.LuaException;
+import org.keplerproject.luajava.LuaState;
+import org.keplerproject.luajava.LuaStateFactory;
 
 public class TestClass
 {

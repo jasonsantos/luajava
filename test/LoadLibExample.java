@@ -2,9 +2,10 @@ package test;
 
 import java.util.Date;
 
-import luajava.JavaFunction;
-import luajava.LuaException;
-import luajava.LuaState;
+import org.keplerproject.luajava.JavaFunction;
+import org.keplerproject.luajava.LuaException;
+import org.keplerproject.luajava.LuaState;
+
 
 /**
  * Example of a library in Java openned in Lua using loadLib 

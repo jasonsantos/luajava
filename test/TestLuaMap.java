@@ -29,12 +29,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.keplerproject.luajava.LuaException;
+import org.keplerproject.luajava.LuaObject;
+import org.keplerproject.luajava.LuaState;
+import org.keplerproject.luajava.LuaStateFactory;
+
 import junit.framework.TestCase;
 
-import luajava.LuaException;
-import luajava.LuaObject;
-import luajava.LuaState;
-import luajava.LuaStateFactory;
 
 /**
  * Implementation of a java.util.Map in Lua.<br>
