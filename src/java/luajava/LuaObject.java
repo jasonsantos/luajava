@@ -60,8 +60,7 @@ public class LuaObject
    */
 	protected LuaObject(LuaObject parent, String name) throws LuaException
   {
-    synchronized(parent.getLuaState())
-    //synchronized(LuaState.class)
+	  synchronized(parent.getLuaState())
     {
 	    this.L = parent.getLuaState();
 	
@@ -101,11 +100,37 @@ public class LuaObject
 	    L.pop(1);
     }
   }
+	
+  /**
+   * This constructor creates a LuaObject from a table that is indexed by a LuaObject.
+   * @param parent The Lua Table or Userdata that contains the Field.
+   * @param name The name (LuaObject) that index the field
+   * @throws LuaException When the parent object isn't a Table or Userdata
+   */
+	protected LuaObject(LuaObject parent, LuaObject name) throws LuaException
+	{
+	  if (parent.getLuaState() != name.getLuaState())
+	    throw new LuaException("LuaStates must be the same!");
+	  synchronized(parent.getLuaState())
+	  {
+	    if (!parent.isTable() && !parent.isUserdata())
+	      throw new LuaException("Object parent should be a table or userdata .");
+	    
+	    this.L = parent.getLuaState();
+	    
+	    parent.push();
+	    name.push();
+	    L.getTable(-2);
+	    L.remove(-2);
+	    registerValue(-1);
+	    L.pop(1);
+	  }
+	}
   
   /**
    * Creates a reference to an object in the given index of the stack
    * @param L
-   * @param index
+   * @param index of the object on the lua stack
    */
 	protected LuaObject(LuaState L, int index)
   {
@@ -127,7 +152,7 @@ public class LuaObject
 
   /**
    * Creates the reference to the object in the registry table
-   * @param index
+   * @param index of the object on the lua stack
    */
   private void registerValue(int index)
   {
@@ -291,7 +316,7 @@ public class LuaObject
     }
   }
 
-  public Object getObject()
+  public Object getObject() throws LuaException
   {
     synchronized(L)
     {
@@ -332,7 +357,7 @@ public class LuaObject
 		    if (args != null)
 		    {
 		      nargs = args.length;
-		      for (int i = 0; i < args.length; i++)
+		      for (int i = 0; i < nargs; i++)
 		      {
 		        Object obj = (Object) args[i];
 		        L.pushObjectValue(obj);
@@ -340,12 +365,25 @@ public class LuaObject
 		    }
 		    else
 		      nargs = 0;
-		
+
 		    int err = L.pcall(nargs, nres, 0);
 		
 		    if (err != 0)
 		    {
 		      String str = L.toString(-1);
+		      L.pop(1);
+		      if (err == LuaState.LUA_ERRRUN.intValue())
+		      {
+		        str = "Runtime error. " + str;
+		      }
+		      else if (err == LuaState.LUA_ERRMEM.intValue())
+		      {
+		        str = "Memory allocation error. " + str;
+		      }
+		      else if (err == LuaState.LUA_ERRERR.intValue())
+		      {
+		        str = "Error while running the error handler function. " + str;
+		      }
 		      throw new LuaException(str);
 		    }
 		
@@ -381,26 +419,33 @@ public class LuaObject
   {
     synchronized(L)
     {
-	    if (isNil())
-	      return "nil";
-	    else if (isBoolean())
-	      return String.valueOf(getBoolean());
-	    else if (isNumber())
-	      return String.valueOf(getNumber());
-	    else if (isString())
-	      return getString();
-	    else if (isFunction())
-	      return "Lua Function";
-	    else if (isJavaObject())
-	      return getObject().toString();
-	    else if (isUserdata())
-	      return "Userdata";
-	    else if (isTable())
-	      return "Lua Table";
-	    else if (isJavaFunction())
-	      return "Java Function";
-	    else
-	      return null;
+      try
+      {
+		    if (isNil())
+		      return "nil";
+		    else if (isBoolean())
+		      return String.valueOf(getBoolean());
+		    else if (isNumber())
+		      return String.valueOf(getNumber());
+		    else if (isString())
+		      return getString();
+		    else if (isFunction())
+		      return "Lua Function";
+		    else if (isJavaObject())
+		      return getObject().toString();
+		    else if (isUserdata())
+		      return "Userdata";
+		    else if (isTable())
+		      return "Lua Table";
+		    else if (isJavaFunction())
+		      return "Java Function";
+		    else
+		      return null;
+      }
+      catch(LuaException e)
+      {
+        return null;
+      }
     }
   }
 
