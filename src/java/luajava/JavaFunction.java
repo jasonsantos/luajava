@@ -77,9 +77,9 @@ public abstract class JavaFunction
 	{
 	  synchronized (L)
 	  {
-			L.pushString(name);
 			L.pushJavaFunction(this);
-			L.setGlobal();
+			L.setGlobal(name);
+			L.pop(1);
 	  }
 	}
 }

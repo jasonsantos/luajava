@@ -667,8 +667,10 @@ public class LuaState
     getTable(LUA_GLOBALSINDEX.intValue());
   }
 
-  public synchronized void setGlobal()
+  public synchronized void setGlobal(String name)
   {
+    pushString(name);
+    insert(-2);
     setTable(LUA_GLOBALSINDEX.intValue());
   }
 
