@@ -44,10 +44,13 @@ public class LuaObject
    */
   protected LuaObject(LuaState L, String globalName)
   {
-    this.L = L;
-    L.getGlobal(globalName);
-    registerValue(-1);
-    L.pop(1);
+  	 synchronized(L)
+	 {
+	    this.L = L;
+	    L.getGlobal(globalName);
+	    registerValue(-1);
+	    L.pop(1);
+	 }
   }
 
   /**
@@ -57,19 +60,23 @@ public class LuaObject
    */
 	protected LuaObject(LuaObject parent, String name) throws LuaException
   {
-    this.L = parent.getLuaState();
-
-    if (!parent.isTable() && !parent.isUserdata())
+    synchronized(parent.getLuaState())
+    //synchronized(LuaState.class)
     {
-      throw new LuaException("Object parent should be a table or userdata .");
+	    this.L = parent.getLuaState();
+	
+	    if (!parent.isTable() && !parent.isUserdata())
+	    {
+	      throw new LuaException("Object parent should be a table or userdata .");
+	    }
+	
+	    parent.push();
+	    L.pushString(name);
+	    L.getTable(-2);
+	    L.remove(-2);
+	    registerValue(-1);
+	    L.pop(1);
     }
-
-    parent.push();
-    L.pushString(name);
-    L.getTable(-2);
-    L.remove(-2);
-    registerValue(-1);
-    L.pop(1);
   }
 
   /**
@@ -80,16 +87,19 @@ public class LuaObject
    */
 	protected LuaObject(LuaObject parent, Number name) throws LuaException
   {
-    this.L = parent.getLuaState();
-    if (!parent.isTable() && !parent.isUserdata())
-      throw new LuaException("Object parent should be a table or userdata .");
-
-    parent.push();
-    L.pushNumber(name.doubleValue());
-    L.getTable(-2);
-    L.remove(-2);
-    registerValue(-1);
-    L.pop(1);
+	  synchronized(parent.getLuaState())
+	  {
+	    this.L = parent.getLuaState();
+	    if (!parent.isTable() && !parent.isUserdata())
+	      throw new LuaException("Object parent should be a table or userdata .");
+	
+	    parent.push();
+	    L.pushNumber(name.doubleValue());
+	    L.getTable(-2);
+	    L.remove(-2);
+	    registerValue(-1);
+	    L.pop(1);
+    }
   }
   
   /**
@@ -99,9 +109,12 @@ public class LuaObject
    */
 	protected LuaObject(LuaState L, int index)
   {
-    this.L = L;
-
-    registerValue(index);
+	  synchronized(L)
+	  {
+	    this.L = L;
+	
+	    registerValue(index);
+    }
   }
 
   /**
@@ -118,9 +131,12 @@ public class LuaObject
    */
   private void registerValue(int index)
   {
-    L.pushValue(index);
-    int key = L.ref(LuaState.LUA_REGISTRYINDEX.intValue());
-    ref = new Integer(key);
+    synchronized(L)
+    {
+	    L.pushValue(index);
+	    int key = L.ref(LuaState.LUA_REGISTRYINDEX.intValue());
+	    ref = new Integer(key);
+    }
   }
 
   protected void finalize()
@@ -145,106 +161,145 @@ public class LuaObject
 
   public boolean isNil()
   {
-    push();
-    boolean bool = L.isNil(-1);
-    L.pop(1);
-    return bool;
+    synchronized(L)
+    {
+	    push();
+	    boolean bool = L.isNil(-1);
+	    L.pop(1);
+	    return bool;
+    }
   }
 
   public boolean isBoolean()
   {
-    push();
-    boolean bool = L.isBoolean(-1);
-    L.pop(1);
-    return bool;
+    synchronized(L)
+    {
+		  push();
+		  boolean bool = L.isBoolean(-1);
+		  L.pop(1);
+		  return bool;
+    }
   }
 
   public boolean isNumber()
   {
-    push();
-    boolean bool = L.isNumber(-1);
-    L.pop(1);
-    return bool;
+    synchronized(L)
+    {
+	    push();
+	    boolean bool = L.isNumber(-1);
+	    L.pop(1);
+	    return bool;
+    }
   }
 
   public boolean isString()
   {
-    push();
-    boolean bool = L.isString(-1);
-    L.pop(1);
-    return bool;
+    synchronized(L)
+    {
+	    push();
+	    boolean bool = L.isString(-1);
+	    L.pop(1);
+	    return bool;
+    }
   }
 
   public boolean isFunction()
   {
-    push();
-    boolean bool = L.isFunction(-1);
-    L.pop(1);
-    return bool;
+    synchronized(L)
+    {
+	    push();
+	    boolean bool = L.isFunction(-1);
+	    L.pop(1);
+	    return bool;
+    }
   }
 
   public boolean isJavaObject()
   {
-    push();
-    boolean bool = L.isObject(-1);
-    L.pop(1);
-    return bool;
+    synchronized(L)
+    {
+	    push();
+	    boolean bool = L.isObject(-1);
+	    L.pop(1);
+	    return bool;
+    }
   }
 
   public boolean isJavaFunction()
   {
-    push();
-    boolean bool = L.isJavaFunction(-1);
-    L.pop(1);
-    return bool;
+    synchronized(L)
+    {
+		  push();
+		  boolean bool = L.isJavaFunction(-1);
+		  L.pop(1);
+		  return bool;
+    }
   }
 
   public boolean isTable()
   {
-    push();
-    boolean bool = L.isTable(-1);
-    L.pop(1);
-    return bool;
+    synchronized(L)
+    {
+	    push();
+	    boolean bool = L.isTable(-1);
+	    L.pop(1);
+	    return bool;
+    }
   }
 
   public boolean isUserdata()
   {
-    push();
-    boolean bool = L.isUserdata(-1);
-    L.pop(1);
-    return bool;
+    synchronized(L)
+    {
+	    push();
+	    boolean bool = L.isUserdata(-1);
+	    L.pop(1);
+	    return bool;
+    }
   }
 
   public boolean getBoolean()
   {
-    push();
-    boolean bool = L.toBoolean(-1);
-    L.pop(1);
-    return bool;
+    synchronized(L)
+    {
+	    push();
+	    boolean bool = L.toBoolean(-1);
+	    L.pop(1);
+	    return bool;
+    }
   }
 
   public double getNumber()
   {
-    push();
-    double db = L.toNumber(-1);
-    L.pop(1);
-    return db;
+    synchronized(L)
+    {
+	    push();
+	    double db = L.toNumber(-1);
+	    L.pop(1);
+	    return db;
+    }
   }
 
   public String getString()
   {
-    push();
-    String str = L.toString(-1);
-    L.pop(1);
-    return str;
+    synchronized(L)
+    {
+	    push();
+	    String str = L.toString(-1);
+	    L.pop(1);
+	    return str;
+    }
   }
 
   public Object getObject()
   {
-    push();
-    Object obj = L.getObjectFromUserdata(-1);
-    L.pop(1);
-    return obj;
+    synchronized(L)
+    {
+	    push();
+	    Object obj = L.getObjectFromUserdata(-1);
+	    L.pop(1);
+	    return obj;
+    }
   }
 
   /**
@@ -266,45 +321,48 @@ public class LuaObject
 	 */
   public Object[] call(Object[] args, int nres) throws LuaException
   {
-    if (!isFunction() && !isTable() && !isUserdata())
-      throw new LuaException("Invalid object. Not a function, table or userdata .");
-
-    int top = L.getTop();
-    push();
-    int nargs;
-    if (args != null)
+    synchronized(L)
     {
-      nargs = args.length;
-      for (int i = 0; i < args.length; i++)
-      {
-        Object obj = (Object) args[i];
-        L.pushObjectValue(obj);
-      }
+		    if (!isFunction() && !isTable() && !isUserdata())
+		      throw new LuaException("Invalid object. Not a function, table or userdata .");
+		
+		    int top = L.getTop();
+		    push();
+		    int nargs;
+		    if (args != null)
+		    {
+		      nargs = args.length;
+		      for (int i = 0; i < args.length; i++)
+		      {
+		        Object obj = (Object) args[i];
+		        L.pushObjectValue(obj);
+		      }
+		    }
+		    else
+		      nargs = 0;
+		
+		    int err = L.pcall(nargs, nres, 0);
+		
+		    if (err != 0)
+		    {
+		      String str = L.toString(-1);
+		      throw new LuaException(str);
+		    }
+		
+		    if (L.getTop() - top < nres)
+		    {
+		      throw new LuaException("Invalid Number of Results .");
+		    }
+		
+		    Object[] res = new Object[nres];
+		
+		    for (int i = 0; i < nres; i++)
+		    {
+		      res[i] = L.toJavaObject(-1);
+		      L.pop(1);
+		    }
+		    return res;
     }
-    else
-      nargs = 0;
-
-    int err = L.pcall(nargs, nres, 0);
-
-    if (err != 0)
-    {
-      String str = L.toString(-1);
-      throw new LuaException(str);
-    }
-
-    if (L.getTop() - top < nres)
-    {
-      throw new LuaException("Invalid Number of Results .");
-    }
-
-    Object[] res = new Object[nres];
-
-    for (int i = 0; i < nres; i++)
-    {
-      res[i] = L.toJavaObject(-1);
-      L.pop(1);
-    }
-    return res;
   }
   
 	/**
@@ -321,26 +379,29 @@ public class LuaObject
 
   public String toString()
   {
-    if (isNil())
-      return "nil";
-    else if (isBoolean())
-      return String.valueOf(getBoolean());
-    else if (isNumber())
-      return String.valueOf(getNumber());
-    else if (isString())
-      return getString();
-    else if (isFunction())
-      return "Lua Function";
-    else if (isJavaObject())
-      return getObject().toString();
-    else if (isUserdata())
-      return "Userdata";
-    else if (isTable())
-      return "Lua Table";
-    else if (isJavaFunction())
-      return "Java Function";
-    else
-      return null;
+    synchronized(L)
+    {
+	    if (isNil())
+	      return "nil";
+	    else if (isBoolean())
+	      return String.valueOf(getBoolean());
+	    else if (isNumber())
+	      return String.valueOf(getNumber());
+	    else if (isString())
+	      return getString();
+	    else if (isFunction())
+	      return "Lua Function";
+	    else if (isJavaObject())
+	      return getObject().toString();
+	    else if (isUserdata())
+	      return "Userdata";
+	    else if (isTable())
+	      return "Lua Table";
+	    else if (isJavaFunction())
+	      return "Java Function";
+	    else
+	      return null;
+    }
   }
 
   /**
@@ -349,19 +410,22 @@ public class LuaObject
   public Object createProxy(String implem)
     throws ClassNotFoundException, LuaException
   {
-    if (!isTable())
-      throw new LuaException("Invalid Object. Must be Table.");
-
-    StringTokenizer st = new StringTokenizer(implem, ",");
-    Class[] interfaces = new Class[st.countTokens()];
-    for (int i = 0; st.hasMoreTokens(); i++)
-      interfaces[i] = Class.forName(st.nextToken());
-
-    InvocationHandler handler = new LuaInvocationHandler(this);
-
-    return Proxy.newProxyInstance(
-      this.getClass().getClassLoader(),
-      interfaces,
-      handler);
+    synchronized(L)
+    {
+	    if (!isTable())
+	      throw new LuaException("Invalid Object. Must be Table.");
+	
+	    StringTokenizer st = new StringTokenizer(implem, ",");
+	    Class[] interfaces = new Class[st.countTokens()];
+	    for (int i = 0; st.hasMoreTokens(); i++)
+	      interfaces[i] = Class.forName(st.nextToken());
+	
+	    InvocationHandler handler = new LuaInvocationHandler(this);
+	
+	    return Proxy.newProxyInstance(
+	      this.getClass().getClassLoader(),
+	      interfaces,
+	      handler);
+    }
   }
 }
