@@ -51,7 +51,7 @@ public final class LuaJavaAPI
   {
     LuaState L = LuaStateFactory.getExistingState(luaState);
 
-    synchronized (L.getClass())
+    synchronized (L)
     {
       int top = L.getTop();
 
@@ -155,7 +155,7 @@ public final class LuaJavaAPI
   public static int classIndex(int luaState, Class clazz, String searchName)
       throws Exception
   {
-    synchronized (LuaStateFactory.getExistingState(luaState).getClass())
+    synchronized (LuaStateFactory.getExistingState(luaState))
     {
       int res;
 
@@ -190,7 +190,7 @@ public final class LuaJavaAPI
   {
     LuaState L = LuaStateFactory.getExistingState(luaState);
 
-    synchronized (L.getClass())
+    synchronized (L)
     {
       Class clazz = Class.forName(className);
 
@@ -214,7 +214,7 @@ public final class LuaJavaAPI
   {
     LuaState L = LuaStateFactory.getExistingState(luaState);
 
-    synchronized (L.getClass())
+    synchronized (L)
     {
       Object ret = getObjInstance(L, clazz);
 
@@ -228,66 +228,68 @@ public final class LuaJavaAPI
   private static Object getObjInstance(LuaState L, Class clazz)
       throws LuaException
   {
-    int top = L.getTop();
-
-    Object[] objs = new Object[top - 1];
-
-    Constructor[] constructors = clazz.getConstructors();
-    Constructor constructor = null;
-
-    // gets method and arguments
-    for (int i = 0; i < constructors.length; i++)
+    synchronized (L)
     {
-      Class[] parameters = constructors[i].getParameterTypes();
-      if (parameters.length != top - 1)
-        continue;
-
-      boolean okConstruc = true;
-
-      for (int j = 0; j < parameters.length; j++)
-      {
-        try
-        {
-          objs[j] = compareTypes(L, parameters[j], j + 2);
-        }
-        catch (Exception e)
-        {
-          okConstruc = false;
-          break;
-        }
-
-      }
-
-      if (okConstruc)
-      {
-        constructor = constructors[i];
-        break;
-      }
-
+	    int top = L.getTop();
+	
+	    Object[] objs = new Object[top - 1];
+	
+	    Constructor[] constructors = clazz.getConstructors();
+	    Constructor constructor = null;
+	
+	    // gets method and arguments
+	    for (int i = 0; i < constructors.length; i++)
+	    {
+	      Class[] parameters = constructors[i].getParameterTypes();
+	      if (parameters.length != top - 1)
+	        continue;
+	
+	      boolean okConstruc = true;
+	
+	      for (int j = 0; j < parameters.length; j++)
+	      {
+	        try
+	        {
+	          objs[j] = compareTypes(L, parameters[j], j + 2);
+	        }
+	        catch (Exception e)
+	        {
+	          okConstruc = false;
+	          break;
+	        }
+	      }
+	
+	      if (okConstruc)
+	      {
+	        constructor = constructors[i];
+	        break;
+	      }
+	
+	    }
+	
+	    // If method is null means there isn't one receiving the given arguments
+	    if (constructor == null)
+	    {
+	      throw new LuaException("Invalid method call . No such method .");
+	    }
+	
+	    Object ret;
+	    try
+	    {
+	      ret = constructor.newInstance(objs);
+	    }
+	    catch (Exception e)
+	    {
+	      throw new LuaException(e);
+	    }
+	
+	    if (ret == null)
+	    {
+	      throw new LuaException("Couldn't instantiate java Object");
+	    }
+	
+	    return ret;
     }
-
-    // If method is null means there isn't one receiving the given arguments
-    if (constructor == null)
-    {
-      throw new LuaException("Invalid method call . No such method .");
-    }
-
-    Object ret;
-    try
-    {
-      ret = constructor.newInstance(objs);
-    }
-    catch (Exception e)
-    {
-      throw new LuaException(e);
-    }
-
-    if (ret == null)
-    {
-      throw new LuaException("Couldn't instantiate java Object");
-    }
-
-    return ret;
   }
 
   /**
@@ -302,7 +304,7 @@ public final class LuaJavaAPI
   {
     LuaState L = LuaStateFactory.getExistingState(luaState);
 
-    synchronized (L.getClass())
+    synchronized (L)
     {
       Field field = null;
       Class objClass;
@@ -363,7 +365,7 @@ public final class LuaJavaAPI
   {
     LuaState L = LuaStateFactory.getExistingState(luaState);
 
-    synchronized (L.getClass())
+    synchronized (L)
     {
       Class clazz;
 
@@ -403,7 +405,7 @@ public final class LuaJavaAPI
   {
     LuaState L = LuaStateFactory.getExistingState(luaState);
 
-    synchronized (L.getClass())
+    synchronized (L)
     {
       try
       {
