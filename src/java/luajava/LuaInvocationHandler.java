@@ -71,6 +71,10 @@ public class LuaInvocationHandler implements InvocationHandler
 	  	else
 	  	{
 	  		ret = func.call(args, 1)[0];
+	  		if( ret != null && ret instanceof Double )
+	  		{
+	  		  ret = LuaState.convertLuaNumber((Double) ret, retType);
+	  		}
 	  	}
 	  	
 	  	return ret;
