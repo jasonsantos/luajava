@@ -238,6 +238,45 @@ public final class LuaJavaAPI
     }
   }
 
+  /**
+   * Calls the static method <code>methodName</code> in class <code>className</code>
+   * that receives a LuaState as first parameter.
+   * @param luaState int that represents the state to be used
+   * @param className name of the class that has the open library method
+   * @param methodName method to open library
+   * @return number of returned objects
+   * @throws LuaException
+   */
+  public static int javaLoadLib(int luaState, String className, String methodName)
+  	throws LuaException
+  {
+    LuaState L = LuaStateFactory.getExistingState(luaState);
+    
+    synchronized (L)
+    {
+      Class clazz;
+      try
+      {
+        clazz = Class.forName(className);
+      }
+      catch (ClassNotFoundException e)
+      {
+        throw new LuaException(e);
+      }
+
+      try
+      {
+        Method mt = clazz.getMethod(methodName, new Class[] {LuaState.class});
+        mt.invoke(null, new Object[] {L});
+      }
+      catch (Exception e)
+      {
+        throw new LuaException("Error on calling method. Library could not be loaded. " + e.getMessage());
+      }
+    }
+
+    return 0;
+  }
 
   private static Object getObjInstance(LuaState L, Class clazz)
       throws LuaException
