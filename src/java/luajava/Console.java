@@ -90,7 +90,26 @@ public class Console
 			{
 				int ret = L.doString(line);
 				if (ret != 0)
-					System.out.println("Invalid Input : " + line);
+				{
+				  String str;
+		      if (ret == LuaState.LUA_ERRRUN.intValue())
+		      {
+		        str = "Runtime error. ";
+		      }
+		      else if (ret == LuaState.LUA_ERRMEM.intValue())
+		      {
+		        str = "Memory allocation error. ";
+		      }
+		      else if (ret == LuaState.LUA_ERRERR.intValue())
+		      {
+		        str = "Error while running the error handler function. ";
+		      }
+		      else
+		      {
+		        str = "Lua Error code " + ret + ". ";
+		      }
+					System.out.println(str + line);
+				}
 			  System.out.print("> ");
 			}
 			
