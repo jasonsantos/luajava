@@ -1344,11 +1344,12 @@ JNIEXPORT void JNICALL Java_luajava_LuaState_luajava_1open
   lua_pushnumber( L , (lua_Number)stateId );
   lua_settable( L , LUA_REGISTRYINDEX );
 
-  luaopen_base( L );
-  luaopen_io( L );
-  luaopen_math( L );
-  luaopen_string( L );
-  luaopen_table( L );
+  luaopen_base   ( L );
+  luaopen_io     ( L );
+  luaopen_math   ( L );
+  luaopen_string ( L );
+  luaopen_table  ( L );
+  luaopen_loadlib( L );
 
   lua_newtable( L );
 
@@ -1948,6 +1949,8 @@ JNIEXPORT jstring JNICALL Java_luajava_LuaState__1toString
   (JNIEnv * env , jclass clazz , jobject cptr , jint idx)
 {
    lua_State * L = getStateFromCPtr( env , cptr );
+
+   pushJNIEnv( env , L );
 
    const char * str = lua_tostring( L , idx );
    return ( *env )->NewStringUTF( env , str );
