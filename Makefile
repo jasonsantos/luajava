@@ -17,29 +17,29 @@ CC=/usr/bin/gcc
 #
 # Other variables.
 #
-VERSION	= 1.0b3
+VERSION	= 1.0b4
 LUAJAVA_JAR	= luajava-$(VERSION).jar
 LUAJAVA_SO	= libluajava-$(VERSION).so
 
 CLASSES     = \
-	src/java/luajava/CPtr.class \
-	src/java/luajava/JavaFunction.class \
-	src/java/luajava/LuaException.class \
-	src/java/luajava/LuaInvocationHandler.class \
-	src/java/luajava/LuaJavaAPI.class \
-	src/java/luajava/LuaObject.class \
-	src/java/luajava/LuaState.class \
-	src/java/luajava/LuaStateFactory.class \
-	src/java/luajava/Console.class
+	src/java/org/keplerproject/luajava/CPtr.class \
+	src/java/org/keplerproject/luajava/JavaFunction.class \
+	src/java/org/keplerproject/luajava/LuaException.class \
+	src/java/org/keplerproject/luajava/LuaInvocationHandler.class \
+	src/java/org/keplerproject/luajava/LuaJavaAPI.class \
+	src/java/org/keplerproject/luajava/LuaObject.class \
+	src/java/org/keplerproject/luajava/LuaState.class \
+	src/java/org/keplerproject/luajava/LuaStateFactory.class \
+	src/java/org/keplerproject/luajava/Console.class
 
 DOC_CLASSES	= \
-	src/java/luajava/JavaFunction.java \
-	src/java/luajava/LuaException.java \
-	src/java/luajava/LuaInvocationHandler.java \
-	src/java/luajava/LuaObject.java \
-	src/java/luajava/LuaState.java \
-	src/java/luajava/LuaStateFactory.java \
-	src/java/luajava/Console.java
+	src/java/org/keplerproject/luajava/JavaFunction.java \
+	src/java/org/keplerproject/luajava/LuaException.java \
+	src/java/org/keplerproject/luajava/LuaInvocationHandler.java \
+	src/java/org/keplerproject/luajava/LuaObject.java \
+	src/java/org/keplerproject/luajava/LuaState.java \
+	src/java/org/keplerproject/luajava/LuaStateFactory.java \
+	src/java/org/keplerproject/luajava/Console.java
 
 OBJS        = src/c/luajava.o
 CFLAGS      = -I$(JDK)/include -I$(JDK)/include/linux -I$(LUA5INC)
@@ -59,14 +59,14 @@ build: checkjdk $(LUAJAVA_JAR) apidoc $(LUAJAVA_SO)
 # Build .class files.
 #
 .java.class:
-	$(JDK)/bin/javac src/java/luajava/*.java
+	$(JDK)/bin/javac src/java/org/keplerproject/luajava/*.java
 	
 #
 # Create the JAR
 #
 $(LUAJAVA_JAR): $(CLASSES)
 	cd src/java; \
-	$(JDK)/bin/jar cvf ../../$(LUAJAVA_JAR) luajava/*.class; \
+	$(JDK)/bin/jar cvf ../../$(LUAJAVA_JAR) org/keplerproject/luajava/*.class; \
 	cd ../..;
   
 #
@@ -84,7 +84,7 @@ $(LUAJAVA_SO): $(OBJS)
 src/c/luajava.c: src/c/luajava.h
 
 src/c/luajava.h:
-	$(JDK)/bin/javah -o src/c/luajava.h -classpath "$(LUAJAVA_JAR)" luajava.LuaState
+	$(JDK)/bin/javah -o src/c/luajava.h -classpath "$(LUAJAVA_JAR)" org.keplerproject.luajava.LuaState
   
 
 ## regras implicitas para compilacao
@@ -105,5 +105,5 @@ clean:
 	rm -f $(LUAJAVA_JAR)
 	rm -f $(LUAJAVA_SO)
 	rm -rf doc/API
-	rm -f src/java/luajava/*.class src/c/*.o src/c/luajava.h
+	rm -f src/java/org/keplerproject/luajava/*.class src/c/*.o src/c/luajava.h
 

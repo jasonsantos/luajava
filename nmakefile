@@ -38,9 +38,9 @@ LUAINCLUDES=h:\Personal\lua\lua-5.0.2\include
 #
 # Other variables.
 #
-VERSION     = 1.0b3
-CLASSES     = src/java/luajava/CPtr.class src/java/luajava/JavaFunction.class src/java/luajava/LuaException.class src/java/luajava/LuaInvocationHandler.class src/java/luajava/LuaJavaAPI.class src/java/luajava/LuaObject.class src/java/luajava/LuaState.class src/java/luajava/LuaStateFactory.class src/java/luajava/Console.class
-DOC_CLASSES = src/java/luajava/JavaFunction.java src/java/luajava/LuaException.java src/java/luajava/LuaInvocationHandler.java src/java/luajava/LuaObject.java src/java/luajava/LuaState.java src/java/luajava/LuaStateFactory.java src/java/luajava/Console.java
+VERSION     = 1.0b4
+CLASSES     = src/java/org/keplerproject/luajava/CPtr.class src/java/org/keplerproject/luajava/JavaFunction.class src/java/org/keplerproject/luajava/LuaException.class src/java/org/keplerproject/luajava/LuaInvocationHandler.class src/java/org/keplerproject/luajava/LuaJavaAPI.class src/java/org/keplerproject/luajava/LuaObject.class src/java/org/keplerproject/luajava/LuaState.class src/java/org/keplerproject/luajava/LuaStateFactory.class src/java/org/keplerproject/luajava/Console.class
+DOC_CLASSES = src/java/org/keplerproject/luajava/JavaFunction.java src/java/org/keplerproject/luajava/LuaException.java src/java/org/keplerproject/luajava/LuaInvocationHandler.java src/java/org/keplerproject/luajava/LuaObject.java src/java/org/keplerproject/luajava/LuaState.java src/java/org/keplerproject/luajava/LuaStateFactory.java src/java/org/keplerproject/luajava/Console.java
 OBJS        = src/c/luajava.obj
 CFLAGS      = -nologo -DWIN32 -I$(JDK)\include -I$(JDK)\include\win32 -I"$(INCLUDES)" -I"$(LUAINCLUDES)" -Fosrc\C\\ -MT
 .SUFFIXES: .java .class
@@ -59,14 +59,14 @@ build: checkjdk $(CLASSES) luajava-$(VERSION).jar apidoc luajava-$(VERSION).dll 
 # Build .class files.
 #
 .java.class:
-	$(JDK)\bin\javac src/java/luajava/*.java
+	$(JDK)\bin\javac src/java/org/keplerproject/luajava/*.java
 	
 #
 # Create the JAR
 #
 luajava-$(VERSION).jar:
   cd src/java
-  $(JDK)\bin\jar cvf ../../luajava-$(VERSION).jar luajava/*.class
+  $(JDK)\bin\jar cvf ../../luajava-$(VERSION).jar org/keplerproject/luajava/*.class
   cd ..
   cd..
   
@@ -103,4 +103,4 @@ FORCE: ;
 # Cleanliness.
 #
 clean:
-	-del src\java\luajava\*.class src\c\*.obj *.pdb *.exp *.lib *.exp *.ilk
+	-del src\java\org\keplerproject\luajava\*.class src\c\*.obj *.pdb *.exp *.lib *.exp *.ilk
