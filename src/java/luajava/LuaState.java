@@ -94,10 +94,10 @@ public class LuaState
   /**
    * Closes state and removes the object from the LuaStateFactory
    */
-  public void close()
+  public synchronized void close()
   {
-    _close(luaState);
     LuaStateFactory.removeLuaState(stateId);
+    _close(luaState);
     this.luaState = null;
   }
 
