@@ -703,11 +703,14 @@ public class LuaState
    */
   public void openBasicLibraries()
   {
+  	int top = getTop();
     _openBase(luaState);
     _openTable(luaState);
     _openIo(luaState);
     _openString(luaState);
-    _openMath(luaState); 
+    _openMath(luaState);
+    
+    setTop(top);
   }
 
   /********************** Luajava API Library **********************/
