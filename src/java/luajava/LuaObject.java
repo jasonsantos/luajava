@@ -145,7 +145,7 @@ public class LuaObject
   /**
    * Gets the Object's State
    */
-  protected LuaState getLuaState()
+  public LuaState getLuaState()
   {
     return L;
   }
@@ -284,6 +284,17 @@ public class LuaObject
 	    boolean bool = L.isUserdata(-1);
 	    L.pop(1);
 	    return bool;
+    }
+  }
+  
+  public int type()
+  {
+    synchronized(L)
+    {
+      push();
+      int type = L.type(-1);
+      L.pop(1);
+      return type;
     }
   }
 
