@@ -86,7 +86,7 @@ checkjdk: $(JDK)/bin/java
 clean:
 	rm -f $(JAR_FILE)
 	rm -f $(SO_FILE)
-	rm -rf doc/API
+	rm -rf doc/us/API
 	rm -f src/java/org/keplerproject/luajava/*.class src/c/*.o src/c/luajava.h
 	rm -f $(TAR_FILE) $(ZIP_FILE)
 
