@@ -21,7 +21,7 @@
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package luajava;
+package org.keplerproject.luajava;
 
 import java.util.ArrayList;
 import java.util.List;

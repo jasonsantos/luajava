@@ -21,7 +21,7 @@
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package luajava;
+package org.keplerproject.luajava;
 
 /**
  * An abstraction for a C pointer data type.  A CPtr instance represents, on

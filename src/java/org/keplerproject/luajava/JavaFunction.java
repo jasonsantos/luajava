@@ -21,7 +21,7 @@
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package luajava;
+package org.keplerproject.luajava;
 
 /**
  * This interface represents a `function' that can be called from Lua. Any

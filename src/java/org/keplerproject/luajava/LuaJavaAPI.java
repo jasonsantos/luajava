@@ -21,7 +21,7 @@
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package luajava;
+package org.keplerproject.luajava;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
