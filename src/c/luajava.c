@@ -1,6 +1,6 @@
 
 /******************************************************************************
-* Copyright (C) 2003 Thiago Ponte, Rafael Rizzato.  All rights reserved.
+* Copyright (C) 2004 Kepler Project.
 *
 * Permission is hereby granted, free of charge, to any person obtaining
 * a copy of this software and associated documentation files (the
