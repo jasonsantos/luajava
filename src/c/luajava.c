@@ -63,11 +63,12 @@
 
 
 
-static JNIEnv * javaEnv = NULL;
-static jclass throwable_class = NULL;
-static jmethodID get_message_method = NULL;
-static jclass java_function_class = NULL;
+static JNIEnv * javaEnv               = NULL;
+static jclass throwable_class         = NULL;
+static jmethodID get_message_method   = NULL;
+static jclass java_function_class     = NULL;
 static jmethodID java_function_method = NULL;
+static jclass luajava_api_class       = NULL;
 
 
 /***************************************************************************
@@ -328,7 +329,6 @@ int objectIndex( lua_State * L )
 {
    lua_Number stateIndex;
    const char * key;
-   jclass clazz;
    jmethodID method;
    int checkField;
    jobject * obj;
@@ -367,13 +367,12 @@ int objectIndex( lua_State * L )
 
    obj = ( jobject * ) lua_touserdata( L , 1 );
 
-   clazz  = ( *javaEnv )->FindClass( javaEnv , "luajava/LuaJavaAPI" );
-   method = ( *javaEnv )->GetStaticMethodID( javaEnv , clazz , "checkField" ,
+   method = ( *javaEnv )->GetStaticMethodID( javaEnv , luajava_api_class , "checkField" ,
                                              "(ILjava/lang/Object;Ljava/lang/String;)I" );
 
    str = ( *javaEnv )->NewStringUTF( javaEnv , key );
 
-   checkField = ( *javaEnv )->CallStaticIntMethod( javaEnv , clazz , method ,
+   checkField = ( *javaEnv )->CallStaticIntMethod( javaEnv , luajava_api_class , method ,
                                                    (jint)stateIndex , *obj , str );
 
    exp = ( *javaEnv )->ExceptionOccurred( javaEnv );
@@ -430,7 +429,6 @@ int objectIndexReturn( lua_State * L )
 {
    lua_Number stateIndex;
    jobject * pObject;
-   jclass clazz;
    jmethodID method;
    jthrowable exp;
    const char * methodName;
@@ -494,13 +492,12 @@ int objectIndexReturn( lua_State * L )
    pObject = ( jobject* ) lua_touserdata( L , 1 );
 
    /* Gets method */
-   clazz  = ( *javaEnv )->FindClass( javaEnv , "luajava/LuaJavaAPI" );
-   method = ( *javaEnv )->GetStaticMethodID( javaEnv , clazz , "objectIndex" ,
+   method = ( *javaEnv )->GetStaticMethodID( javaEnv , luajava_api_class , "objectIndex" ,
                                              "(ILjava/lang/Object;Ljava/lang/String;)I" );
 
    str = ( *javaEnv )->NewStringUTF( javaEnv , methodName );
 
-   ret = ( *javaEnv )->CallStaticIntMethod( javaEnv , clazz , method , (jint)stateIndex , 
+   ret = ( *javaEnv )->CallStaticIntMethod( javaEnv , luajava_api_class , method , (jint)stateIndex , 
                                             *pObject , str );
 
    exp = ( *javaEnv )->ExceptionOccurred( javaEnv );
@@ -537,7 +534,6 @@ int classIndex( lua_State * L )
 {
    lua_Number stateIndex;
    jobject * obj;
-   jclass clazz;
    jmethodID method;
    const char * fieldName;
    jstring str;
@@ -579,14 +575,13 @@ int classIndex( lua_State * L )
    /* Gets the object reference */
    obj = ( jobject* ) lua_touserdata( L , 1 );
 
-   clazz  = ( *javaEnv )->FindClass( javaEnv , "luajava/LuaJavaAPI" );
-   method = ( *javaEnv )->GetStaticMethodID( javaEnv , clazz , "classIndex" ,
+   method = ( *javaEnv )->GetStaticMethodID( javaEnv , luajava_api_class , "classIndex" ,
                                              "(ILjava/lang/Class;Ljava/lang/String;)I" );
 
    str = ( *javaEnv )->NewStringUTF( javaEnv , fieldName );
 
    /* Return 1 for field, 2 for method or 0 for error */
-   ret = ( *javaEnv )->CallStaticIntMethod( javaEnv , clazz , method, (jint)stateIndex , 
+   ret = ( *javaEnv )->CallStaticIntMethod( javaEnv , luajava_api_class , method, (jint)stateIndex , 
                                             *obj , str );
 
    exp = ( *javaEnv )->ExceptionOccurred( javaEnv );
@@ -732,7 +727,6 @@ int createProxy( lua_State * L )
   int ret;
   lua_Number stateIndex;
   const char * impl;
-  jclass clazz;
   jmethodID method;
   jthrowable exp;
   jstring str;
@@ -765,15 +759,14 @@ int createProxy( lua_State * L )
       return error;
    }
 
-   clazz  = ( *javaEnv )->FindClass( javaEnv , "luajava/LuaJavaAPI" );
-   method = ( *javaEnv )->GetStaticMethodID( javaEnv , clazz , "createProxyObject" ,
+   method = ( *javaEnv )->GetStaticMethodID( javaEnv , luajava_api_class , "createProxyObject" ,
                                              "(ILjava/lang/String;)I" );
 
    impl = lua_tostring( L , 1 );
 
    str = ( *javaEnv )->NewStringUTF( javaEnv , impl );
 
-   ret = ( *javaEnv )->CallStaticIntMethod( javaEnv , clazz , method, (jint)stateIndex , str );
+   ret = ( *javaEnv )->CallStaticIntMethod( javaEnv , luajava_api_class , method, (jint)stateIndex , str );
    
    exp = ( *javaEnv )->ExceptionOccurred( javaEnv );
 
@@ -858,8 +851,7 @@ int javaNew( lua_State * L )
       return error;
    }
 
-   clazz  = ( *javaEnv )->FindClass( javaEnv , "luajava/LuaJavaAPI" );
-   method = ( *javaEnv )->GetStaticMethodID( javaEnv , clazz , "javaNew" , 
+   method = ( *javaEnv )->GetStaticMethodID( javaEnv , luajava_api_class , "javaNew" , 
                                              "(ILjava/lang/Class;)I" );
 
    if ( clazz == NULL || method == NULL )
@@ -903,7 +895,6 @@ int javaNew( lua_State * L )
 int javaNewInstance( lua_State * L )
 {
    int ret;
-   jclass clazz;
    jmethodID method;
    const char * className;
    jstring javaClassName;
@@ -934,13 +925,12 @@ int javaNewInstance( lua_State * L )
 
    className = lua_tostring( L , 1 );
 
-   clazz  = ( *javaEnv )->FindClass( javaEnv , "luajava/LuaJavaAPI" );
-   method = ( *javaEnv )->GetStaticMethodID( javaEnv , clazz , "javaNewInstance" ,
+   method = ( *javaEnv )->GetStaticMethodID( javaEnv , luajava_api_class , "javaNewInstance" ,
                                              "(ILjava/lang/String;)I" );
 
    javaClassName = ( *javaEnv )->NewStringUTF( javaEnv , className );
    
-   ret = ( *javaEnv )->CallStaticIntMethod( javaEnv , clazz , method, (jint)stateIndex , 
+   ret = ( *javaEnv )->CallStaticIntMethod( javaEnv , luajava_api_class , method, (jint)stateIndex , 
                                             javaClassName );
 
    exp = ( *javaEnv )->ExceptionOccurred( javaEnv );
@@ -1199,54 +1189,85 @@ JNIEXPORT void JNICALL Java_luajava_LuaState_luajava_1open
 
   lua_pop( L , 1 );
 
-  tempClass = ( *env )->FindClass( env , "luajava/JavaFunction" );
-
-  if ( tempClass == NULL )
+  if ( luajava_api_class == NULL )
   {
-    fprintf( stderr , "Could not find JavaFunction interface\n" );
-    exit( 1 );
+    tempClass = ( *env )->FindClass( env , "luajava/LuaJavaAPI" );
+
+    if ( tempClass == NULL )
+    {
+      fprintf( stderr , "Could not find LuaJavaAPI class\n" );
+      exit( 1 );
+    }
+
+    if ( ( luajava_api_class = ( *env )->NewGlobalRef( env , tempClass ) ) == NULL )
+    {
+      fprintf( stderr , "Could not bind to LuaJavaAPI class\n" );
+      exit( 1 );
+    }
   }
 
-  if ( ( java_function_class = ( *env )->NewGlobalRef( env , tempClass ) ) == NULL )
+  if ( java_function_class == NULL )
   {
-    fprintf( stderr , "Could not bind to JavaFunction interface\n" );
-    exit( 1 );
+    tempClass = ( *env )->FindClass( env , "luajava/JavaFunction" );
+
+    if ( tempClass == NULL )
+    {
+      fprintf( stderr , "Could not find JavaFunction interface\n" );
+      exit( 1 );
+    }
+
+    if ( ( java_function_class = ( *env )->NewGlobalRef( env , tempClass ) ) == NULL )
+    {
+      fprintf( stderr , "Could not bind to JavaFunction interface\n" );
+      exit( 1 );
+    }
   }
 
-  java_function_method = ( *env )->GetMethodID( env , java_function_class , "foo" , "()I");
-  if ( !java_function_method )
+  if ( java_function_method == NULL )
   {
-    fprintf( stderr , "Could not find <foo> method in JavaFunction\n" );
-    exit( 1 );
+    java_function_method = ( *env )->GetMethodID( env , java_function_class , "foo" , "()I");
+    if ( !java_function_method )
+    {
+      fprintf( stderr , "Could not find <foo> method in JavaFunction\n" );
+      exit( 1 );
+    }
   }
 
-
-  tempClass = ( *env )->FindClass( env , "java/lang/Throwable" );
-
-  if ( tempClass == NULL )
+  if( throwable_class == NULL )
   {
-     fprintf( stderr , "Error. Couldn't bind java class java.lang.Throwable\n" );
-     exit( 1 );
+    tempClass = ( *env )->FindClass( env , "java/lang/Throwable" );
+
+    if ( tempClass == NULL )
+    {
+       fprintf( stderr , "Error. Couldn't bind java class java.lang.Throwable\n" );
+       exit( 1 );
+    }
+
+    throwable_class = ( *env )->NewGlobalRef( env , tempClass );
+
+    if ( throwable_class == NULL )
+    {
+       fprintf( stderr , "Error. Couldn't bind java class java.lang.Throwable\n" );
+       exit( 1 );
+    }
   }
-
-  throwable_class = ( *env )->NewGlobalRef( env , tempClass );
-
-  if ( throwable_class == NULL )
-  {
-     fprintf( stderr , "Error. Couldn't bind java class java.lang.Throwable\n" );
-     exit( 1 );
-  }
-
-  get_message_method = ( *env )->GetMethodID( env , throwable_class , "getMessage" ,
-                                              "()Ljava/lang/String;" );
 
   if ( get_message_method == NULL )
   {
-    fprintf(stderr, "Could not find <getMessage> method in java.lang.Throwable\n");
-    exit(1);
+    get_message_method = ( *env )->GetMethodID( env , throwable_class , "getMessage" ,
+                                                "()Ljava/lang/String;" );
+
+    if ( get_message_method == NULL )
+    {
+      fprintf(stderr, "Could not find <getMessage> method in java.lang.Throwable\n");
+      exit(1);
+    }
   }
 
-  javaEnv = env;
+  if ( javaEnv == NULL )
+  {
+    javaEnv = env;
+  }
   
 }
 
@@ -2071,7 +2092,6 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1concat
 }
 
 
-
 /************************************************************************
 *   JNI Called function
 *      Lua Exported Function
@@ -2124,7 +2144,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1ref
 {
    lua_State * L = getStateFromCPtr( env , cptr );
 
-   return (jint) luaL_ref( L , (int)t );
+   return (jint) luaL_ref( L , (int) t );
 }
 
 
