@@ -32,6 +32,7 @@ import java.lang.reflect.Method;
  * When a proxy object is accessed, the method invoked is
  * called from Lua
  * @author Rizzato
+ * @author Thiago Ponte
  */
 public class LuaInvocationHandler implements InvocationHandler
 {

@@ -5,10 +5,15 @@ import java.io.InputStreamReader;
 
 /**
  * Console LuaJava
+ * @author Thiago Ponte
  */
 public class Console
 {
 
+  /**
+   * Creates a lua console for user interaction
+   * @param args - names of the lua files to be executed
+   */
 	public static void main(String[] args)
 	{
 		try

@@ -24,9 +24,9 @@
 package luajava;
 
 /**
- * Program exception
+ * LuaJava exception
  *  
- * @author Thiago
+ * @author Thiago Ponte
  *
  */
 public class LuaException extends Exception

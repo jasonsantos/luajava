@@ -30,7 +30,7 @@ import java.util.StringTokenizer;
 /**
  * Class that represents a Lua Object.
  * @author Rizzato
- * @author Thiago
+ * @author Thiago Ponte
  */
 public class LuaObject
 {

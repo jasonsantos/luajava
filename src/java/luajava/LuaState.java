@@ -26,7 +26,7 @@ package luajava;
 /**
  * Class that represents a lua state. This class gives access to all
  * lua's functions and some of LuaJava's functions implemented in C.
- * @author Thiago
+ * @author Thiago Ponte
  */
 public class LuaState
 {
@@ -809,7 +809,7 @@ public class LuaState
 
   /**
    * Pushes into the stack any object value
-   * @param Obj Object
+   * @param obj
    */
   public void pushObjectValue(Object obj) throws LuaException
   {

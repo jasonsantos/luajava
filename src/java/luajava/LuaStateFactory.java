@@ -32,7 +32,8 @@ import java.util.List;
  * and an index is returned. This index is registred in Lua
  * and it is used to find the right LuaState when lua calls
  * a Java Function.
- * @author Thiago
+ * 
+ * @author Thiago Ponte
  */
 public final class LuaStateFactory
 {

@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
 /**
  * Class that contains functions accessed by lua.
  * 
- * @author Thiago
+ * @author Thiago Ponte
  */
 public final class LuaJavaAPI
 {
@@ -41,10 +41,10 @@ public final class LuaJavaAPI
   /**
    * Java implementation of the metamethod __index
    * 
-   * @param luaState
-   * @param obj
-   * @param method
-   * @return int
+   * @param luaState - int that indicates the state used
+   * @param obj - Object to be indexed
+   * @param methodName - the name of the method
+   * @return int - number of returned objects
    */
   public static int objectIndex(int luaState, Object obj, String methodName)
       throws LuaException
@@ -146,10 +146,10 @@ public final class LuaJavaAPI
    * This function returns 1 if there is a field with searchName and 2 if there
    * is a method if the searchName
    * 
-   * @param luaState
-   * @param clazz
-   * @param fieldName
-   * @return int
+   * @param luaState - int that represents the state to be used
+   * @param clazz - class to be indexed
+   * @param searchName - name of the field or method to be accessed
+   * @return int - number of returned objects
    * @throws Exception
    */
   public static int classIndex(int luaState, Class clazz, String searchName)
@@ -180,9 +180,9 @@ public final class LuaJavaAPI
   /**
    * Pushes a new instance of a java Object of the type className
    * 
-   * @param luaState
-   * @param className
-   * @return int
+   * @param luaState - int that represents the state to be used
+   * @param className - name of the class
+   * @return int - number of returned objects
    * @throws Exception
    */
   public static int javaNewInstance(int luaState, String className)
@@ -212,9 +212,9 @@ public final class LuaJavaAPI
   /**
    * javaNew returns a new instance of a given clazz
    * 
-   * @param luaState
-   * @param clazz
-   * @return int
+   * @param luaState - int that represents the state to be used
+   * @param clazz - class to be instanciated
+   * @return int - number of returned objects
    * @throws LuaException
    */
   public static int javaNew(int luaState, Class clazz) throws LuaException
@@ -302,10 +302,10 @@ public final class LuaJavaAPI
   /**
    * Checks if there is a field on the obj with the given name
    * 
-   * @param luaState
-   * @param obj
-   * @param fieldName
-   * @return int
+   * @param luaState - int that represents the state to be used
+   * @param obj - object to be inspected
+   * @param fieldName - name of the field to be inpected
+   * @return int - number of returned objects
    */
   public static int checkField(int luaState, Object obj, String fieldName)
   	throws LuaException
@@ -364,12 +364,12 @@ public final class LuaJavaAPI
   /**
    * Checks to see if there is a method with the given name.
    * 
-   * @param luaState
-   * @param obj
-   * @param fieldName
-   * @return int
+   * @param luaState - int that represents the state to be used
+   * @param obj - object to be inspected
+   * @param methodName - name of the field to be inpected
+   * @return int - number of returned objects
    */
-  public static int checkMethod(int luaState, Object obj, String fieldName)
+  public static int checkMethod(int luaState, Object obj, String methodName)
   {
     LuaState L = LuaStateFactory.getExistingState(luaState);
 
@@ -392,7 +392,7 @@ public final class LuaJavaAPI
 
       for (int i = 0; i < methods.length; i++)
       {
-        if (methods[i].getName().equals(fieldName))
+        if (methods[i].getName().equals(methodName))
           return 1;
       }
 
@@ -403,9 +403,9 @@ public final class LuaJavaAPI
   /**
    * Function that creates an object proxy and pushes it into the stack
    * 
-   * @param luaState
-   * @param implem
-   * @return int
+   * @param luaState - int that represents the state to be used
+   * @param implem - interfaces implemented separated by comma (<code>,</code>)
+   * @return int - number of returned objects
    * @throws LuaException
    */
   public static int createProxyObject(int luaState, String implem)
