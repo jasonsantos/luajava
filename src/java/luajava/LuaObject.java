@@ -374,8 +374,15 @@ public class LuaObject
 		
 		    if (err != 0)
 		    {
-		      String str = L.toString(-1);
-		      L.pop(1);
+		      String str;
+		      if (L.isString(-1))
+		      {
+		        str = L.toString(-1);
+			      L.pop(1);
+		      }
+		      else
+		        str = "";
+		      
 		      if (err == LuaState.LUA_ERRRUN.intValue())
 		      {
 		        str = "Runtime error. " + str;
@@ -388,6 +395,11 @@ public class LuaObject
 		      {
 		        str = "Error while running the error handler function. " + str;
 		      }
+		      else
+		      {
+		        str = "Lua Error code " + err + ". " + str;
+		      }
+		      
 		      throw new LuaException(str);
 		    }
 		

@@ -100,6 +100,14 @@ public class LuaState
     _close(luaState);
     this.luaState = null;
   }
+  
+  /**
+   * Returns <code>true</code> if state is closed.
+   */
+  public synchronized boolean isClosed()
+  {
+    return luaState == null;
+  }
 
   /**
    * Return the long representing the LuaState pointer
@@ -304,7 +312,7 @@ public class LuaState
     return (_isFunction(luaState, idx)!=0);
   }
   
-  public boolean ifCFunction(int idx)
+  public boolean isCFunction(int idx)
   {
     return (_isCFunction(luaState, idx)!=0);
   }
