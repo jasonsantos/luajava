@@ -2251,7 +2251,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1pushString__Lluajava_CPtr_2_3BI
    
    cBytes = ( char * ) ( *env )->GetByteArrayElements( env , bytes, NULL );
    
-   lua_pushstring( L , cBytes );
+   lua_pushlstring( L , cBytes , n );
    
    ( *env )->ReleaseByteArrayElements( env , bytes , cBytes , 0 );
 }
