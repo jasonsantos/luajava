@@ -20,6 +20,8 @@ CC=/usr/bin/gcc
 VERSION	= 1.0b4
 LUAJAVA_JAR	= luajava-$(VERSION).jar
 LUAJAVA_SO	= libluajava-$(VERSION).so
+TAR_FILE= luajava-$(VERSION).tar.gz
+ZIP_FILE= luajava-$(VERSION).zip
 
 CLASSES     = \
 	src/java/org/keplerproject/luajava/CPtr.class \
@@ -106,4 +108,8 @@ clean:
 	rm -f $(LUAJAVA_SO)
 	rm -rf doc/API
 	rm -f src/java/org/keplerproject/luajava/*.class src/c/*.o src/c/luajava.h
+	rm -f $(TAR_FILE) $(ZIP_FILE)
 
+dist:
+	tar -czf $(TAR_FILE) --exclude \*CVS\* --exclude $(TAR_FILE) --exclude $(ZIP_FILE) .
+	zip -lqr luajava-1.0b4.zip ./* -x ./\*CVS\*
