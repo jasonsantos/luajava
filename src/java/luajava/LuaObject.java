@@ -168,7 +168,8 @@ public class LuaObject
   {
     try
     {
-      L.unRef(LuaState.LUA_REGISTRYINDEX.intValue(), ref.intValue());
+      if (L.getCPtrPeer() != 0)
+        L.unRef(LuaState.LUA_REGISTRYINDEX.intValue(), ref.intValue());
     }
     catch (Exception e)
     {

@@ -98,6 +98,7 @@ public class LuaState
   {
     _close(luaState);
     LuaStateFactory.removeLuaState(stateId);
+    this.luaState = null;
   }
 
   /**
@@ -106,7 +107,7 @@ public class LuaState
    */
   public long getCPtrPeer()
   {
-    return luaState.getPeer();
+    return (luaState != null)? luaState.getPeer() : 0;
   }
 
 
