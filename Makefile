@@ -93,5 +93,12 @@ clean:
 	rm -f $(TAR_FILE) $(ZIP_FILE)
 
 dist:
-	tar -czf $(TAR_FILE) --exclude \*CVS\* --exclude $(TAR_FILE) --exclude $(ZIP_FILE) .
-	zip -qr $(ZIP_FILE) ./* -x ./\*CVS\* ./$(TAR_FILE) ./$(ZIP_FILE)
+	tar -czf $(TAR_FILE) --exclude \*CVS\* --exclude *.class --exclude $(TAR_FILE) --exclude $(ZIP_FILE) $(DIST_DIR)
+	zip -qr $(ZIP_FILE) $(DIST_DIR)/* -x ./\*CVS\* *.class ./$(TAR_FILE) ./$(ZIP_FILE)
+
+dist_dir:	apidoc
+	mkdir -p $(DIST_DIR)
+	cp -R src $(DIST_DIR)
+	cp -R doc $(DIST_DIR)
+	cp -R test $(DIST_DIR)
+	cp config License.txt Makefile nmakefile $(DIST_DIR)

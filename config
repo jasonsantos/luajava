@@ -33,10 +33,9 @@ TAR_FILE= $(PKG).tar.gz
 ZIP_FILE= $(PKG).zip
 JAR_FILE= $(PKG).jar
 SO_FILE= $(LIB_PREFIX)$(PKG)$(LIB_EXT)
-
-DIST_DIR= ../$(PKG)/$T
+DIST_DIR= $(PKG)
 
 CL_LIBS= -llua -llualib -lm $(DLLIB)
 LIBS= $(CL_LIBS)
 
-# $Id: config,v 1.1 2004-11-24 20:19:02 tuler Exp $
+# $Id: config,v 1.2 2004-11-24 21:54:24 tuler Exp $
