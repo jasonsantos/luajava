@@ -65,12 +65,13 @@ public class Console
 
 			String line;
 
+		  System.out.print("> ");
 			while ((line = inp.readLine()) != null && !line.equals("exit"))
 			{
 				int ret = L.doString(line);
 				if (ret != 0)
 					System.out.println("Invalid Input : " + line);
-				//throw new LuaException("Invalid Input .");
+			  System.out.print("> ");
 			}
 			
 			L.close();
