@@ -75,9 +75,12 @@ public abstract class JavaFunction
 	 */
 	public void register(String name) throws LuaException
 	{
-		L.pushString(name);
-		L.pushJavaFunction(this);
-		L.setGlobal();
+	  synchronized (L)
+	  {
+			L.pushString(name);
+			L.pushJavaFunction(this);
+			L.setGlobal();
+	  }
 	}
 }
 
