@@ -1,0 +1,106 @@
+#
+# NMake makefile for the Lua Java Windows Distribution
+# JNI.
+#
+
+#
+# Change this to reflect your setting.  Or override it at the make
+# command line:
+#	C:> nmake JDK=x:\path\to\your\jdk
+#
+JDK     = c:\j2sdk1.4.2_04
+
+#
+# Change this to reflect your setting.  Or override it at the make
+# command line:
+#	C:> nmake INCLUDES=x:\path\to\your\includes_dir
+#
+INCLUDES = C:\Program Files\Microsoft Visual Studio\VC98\include
+
+#
+# Change this to reflect your setting.  Or override it at the make
+# command line:
+#	C:> nmake INCLUDES=x:\path\to\your\syslib_path
+#
+SYSLIBPATH = C:\Program Files\Microsoft Visual Studio\VC98\lib
+
+#
+# Path to lua libraries (lua.lib e lualib.lib)
+#
+LUALIB=H:\Personal\Lua\lib
+
+#
+# Path to lua includes
+#
+LUAINCLUDES=h:\Personal\lua\lua-5.0.2\include
+
+
+#
+# Other variables.
+#
+VERSION     = 1.0b3
+CLASSES     = src/java/luajava/CPtr.class src/java/luajava/JavaFunction.class src/java/luajava/LuaException.class src/java/luajava/LuaInvocationHandler.class src/java/luajava/LuaJavaAPI.class src/java/luajava/LuaObject.class src/java/luajava/LuaState.class src/java/luajava/LuaStateFactory.class src/java/luajava/Console.class
+DOC_CLASSES = src/java/luajava/JavaFunction.java src/java/luajava/LuaException.java src/java/luajava/LuaInvocationHandler.java src/java/luajava/LuaObject.java src/java/luajava/LuaState.java src/java/luajava/LuaStateFactory.java src/java/luajava/Console.java
+OBJS        = src/c/luajava.obj
+CFLAGS      = -nologo -DWIN32 -I$(JDK)\include -I$(JDK)\include\win32 -I"$(INCLUDES)" -I"$(LUAINCLUDES)" -Fosrc\C\\ -MT
+.SUFFIXES: .java .class
+
+#
+# Targets
+#
+run: build FORCE
+	@echo ------------------
+	@echo Build Complete
+	@echo ------------------
+
+build: checkjdk $(CLASSES) luajava-$(VERSION).jar apidoc luajava-$(VERSION).dll clean FORCE
+
+#
+# Build .class files.
+#
+.java.class:
+	$(JDK)\bin\javac src/java/luajava/*.java
+	
+#
+# Create the JAR
+#
+luajava-$(VERSION).jar:
+  cd src/java
+  $(JDK)\bin\jar cvf ../../luajava-$(VERSION).jar luajava/*.class
+  cd ..
+  cd..
+  
+#
+# Create the API Documentation
+#
+apidoc:
+	$(JDK)\bin\javadoc -classpath "src/java/" -public -quiet -d "doc/API" $(DOC_CLASSES)
+
+#
+# Build .c files.
+#
+luajava-$(VERSION).dll: $(OBJS)
+	link /LIBPATH:"$(SYSLIBPATH)" /LIBPATH:$(LUALIB)  -nologo -dll -out:$@ $? lua.lib lualib.lib
+
+src/c/luajava.c: src/c/luajava.h
+
+src/c/luajava.h:
+	$(JDK)\bin\javah -o src/c/luajava.h -classpath "luajava-$(VERSION).jar" luajava.LuaState
+  
+
+#
+# Check that the user has a valid JDK install.  This will cause a
+# premature death if JDK is not defined.
+#
+checkjdk: $(JDK)\bin\java.exe
+
+#
+# Help deal with phony targets.
+#
+FORCE: ;
+
+#
+# Cleanliness.
+#
+clean:
+	-del src\java\luajava\*.class src\c\*.obj *.pdb *.exp *.lib *.exp *.ilk
