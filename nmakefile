@@ -8,7 +8,7 @@
 # command line:
 #	C:> nmake JDK=x:\path\to\your\jdk
 #
-JDK     = c:\j2sdk1.4.2_04
+JDK     = c:\j2sdk1.4.2
 
 #
 # Change this to reflect your setting.  Or override it at the make
@@ -27,12 +27,12 @@ SYSLIBPATH = C:\Program Files\Microsoft Visual Studio\VC98\lib
 #
 # Path to lua libraries (lua.lib e lualib.lib)
 #
-LUALIB=H:\Personal\Lua\lib
+LUALIB=..\lua\lib\vc6
 
 #
 # Path to lua includes
 #
-LUAINCLUDES=h:\Personal\lua\lua-5.0.2\include
+LUAINCLUDES=..\lua\include
 
 
 #
@@ -42,7 +42,7 @@ VERSION     = 1.0b4
 CLASSES     = src/java/org/keplerproject/luajava/CPtr.class src/java/org/keplerproject/luajava/JavaFunction.class src/java/org/keplerproject/luajava/LuaException.class src/java/org/keplerproject/luajava/LuaInvocationHandler.class src/java/org/keplerproject/luajava/LuaJavaAPI.class src/java/org/keplerproject/luajava/LuaObject.class src/java/org/keplerproject/luajava/LuaState.class src/java/org/keplerproject/luajava/LuaStateFactory.class src/java/org/keplerproject/luajava/Console.class
 DOC_CLASSES = src/java/org/keplerproject/luajava/JavaFunction.java src/java/org/keplerproject/luajava/LuaException.java src/java/org/keplerproject/luajava/LuaInvocationHandler.java src/java/org/keplerproject/luajava/LuaObject.java src/java/org/keplerproject/luajava/LuaState.java src/java/org/keplerproject/luajava/LuaStateFactory.java src/java/org/keplerproject/luajava/Console.java
 OBJS        = src/c/luajava.obj
-CFLAGS      = -nologo -DWIN32 -I$(JDK)\include -I$(JDK)\include\win32 -I"$(INCLUDES)" -I"$(LUAINCLUDES)" -Fosrc\C\\ -MT
+CFLAGS      = -nologo -DWIN32 -I$(JDK)\include -I$(JDK)\include\win32 -I"$(INCLUDES)" -I"$(LUAINCLUDES)" -Fosrc\C\\ -MD
 .SUFFIXES: .java .class
 
 #
@@ -80,7 +80,7 @@ apidoc:
 # Build .c files.
 #
 luajava-$(VERSION).dll: $(OBJS)
-	link /LIBPATH:"$(SYSLIBPATH)" /LIBPATH:$(LUALIB)  -nologo -dll -out:$@ $? lua.lib lualib.lib
+	link /LIBPATH:"$(SYSLIBPATH)" /LIBPATH:$(LUALIB)  -nologo -dll -out:$@ $? liblua.lib liblualib.lib
 
 src/c/luajava.c: src/c/luajava.h
 
