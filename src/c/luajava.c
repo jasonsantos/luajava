@@ -1542,13 +1542,8 @@ JNIEXPORT jobject JNICALL Java_luajava_LuaState__1getObjectFromUserdata
   (JNIEnv * env , jobject jobj , jobject cptr , jint index )
 {
    /* Get luastate */
-   lua_State* L;
-   jobject* obj;
-   jclass classCPtr = ( *env )->GetObjectClass( env , cptr );
-   jfieldID CPtr_peer_ID = ( *env )->GetFieldID( env , classCPtr , "peer" , "J" );
-   jbyte *peer = ( jbyte * )( *env )->GetLongField( env , cptr , CPtr_peer_ID );
-
-   L = ( lua_State * ) peer ;
+   lua_State * L = getStateFromCPtr( env , cptr );
+   jobject *   obj;
 
    if ( !isJavaObject( L , index ) )
    {
@@ -1572,12 +1567,7 @@ JNIEXPORT jboolean JNICALL Java_luajava_LuaState__1isObject
   (JNIEnv * env , jobject jobj , jobject cptr , jint index )
 {
    /* Get luastate */
-   lua_State* L;
-   jclass classCPtr = ( *env )->GetObjectClass( env , cptr );
-   jfieldID CPtr_peer_ID = ( *env )->GetFieldID( env , classCPtr , "peer" , "J" );
-   jbyte *peer = ( jbyte * )( *env )->GetLongField( env , cptr , CPtr_peer_ID );
-
-   L = ( lua_State * ) peer ;
+   lua_State * L = getStateFromCPtr( env , cptr );
 
    return (isJavaObject( L , index ) ? JNI_TRUE : JNI_FALSE );
 }
@@ -2238,12 +2228,13 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1pushString
   (JNIEnv * env , jobject jobj , jobject cptr , jstring str)
 {
    lua_State * L = getStateFromCPtr( env , cptr );
-
    const char * uniStr;
-   uniStr =  ( *env )->GetStringUTFChars( env , str , NULL );
-   lua_pushstring( L , uniStr );
-   ( *env )->ReleaseStringUTFChars( env , str , uniStr );
 
+   uniStr =  ( *env )->GetStringUTFChars( env , str , NULL );
+
+   lua_pushstring( L , uniStr );
+   
+   ( *env )->ReleaseStringUTFChars( env , str , uniStr );
 }
 
 
