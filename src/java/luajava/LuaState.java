@@ -954,6 +954,12 @@ public class LuaState
 	  return new LuaObject(parent, name);
 	}
 
+	/**
+	 * Creates a reference to an object in the <code>index</code> position
+	 * of the stack
+	 * @param index - position on the stack
+	 * @return LuaObject
+	 */
 	public LuaObject getLuaObject(int index)
 	{
 		return new LuaObject(this, index);
