@@ -3008,7 +3008,7 @@ JNIEXPORT jint JNICALL Java_luajava_LuaState__1LloadBuffer
    const char * name = ( * env )->GetStringUTFChars( env , n , NULL );
    int ret;
 
-   ret = lua_dobuffer( L , ( const char * ) cBuff, ( int ) sz, name );
+   ret = luaL_loadbuffer( L , ( const char * ) cBuff, ( int ) sz, name );
 
    ( *env )->ReleaseStringUTFChars( env , n , name );
 
