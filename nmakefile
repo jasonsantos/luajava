@@ -1,21 +1,8 @@
 #
-# NMake makefile for the Lua Java Windows Distribution
-# JNI.
+# NMake makefile for the LuaJava Windows Distribution
 #
 
-#
-# Change this to reflect your setting.  Or override it at the make
-# command line:
-#	C:> nmake JDK=x:\path\to\your\jdk
-#
-JDK     = c:\j2sdk1.4.2
-
-#
-# Change this to reflect your setting.  Or override it at the make
-# command line:
-#	C:> nmake INCLUDES=x:\path\to\your\includes_dir
-#
-INCLUDES = C:\Program Files\Microsoft Visual Studio\VC98\include
+!include ./config
 
 #
 # Change this to reflect your setting.  Or override it at the make
@@ -34,15 +21,30 @@ LUALIB=..\lua\lib\vc6
 #
 LUAINCLUDES=..\lua\include
 
-
 #
 # Other variables.
 #
-VERSION     = 1.0b4
-CLASSES     = src/java/org/keplerproject/luajava/CPtr.class src/java/org/keplerproject/luajava/JavaFunction.class src/java/org/keplerproject/luajava/LuaException.class src/java/org/keplerproject/luajava/LuaInvocationHandler.class src/java/org/keplerproject/luajava/LuaJavaAPI.class src/java/org/keplerproject/luajava/LuaObject.class src/java/org/keplerproject/luajava/LuaState.class src/java/org/keplerproject/luajava/LuaStateFactory.class src/java/org/keplerproject/luajava/Console.class
-DOC_CLASSES = src/java/org/keplerproject/luajava/JavaFunction.java src/java/org/keplerproject/luajava/LuaException.java src/java/org/keplerproject/luajava/LuaInvocationHandler.java src/java/org/keplerproject/luajava/LuaObject.java src/java/org/keplerproject/luajava/LuaState.java src/java/org/keplerproject/luajava/LuaStateFactory.java src/java/org/keplerproject/luajava/Console.java
+CLASSES     = \
+	src/java/org/keplerproject/luajava/CPtr.class \
+	src/java/org/keplerproject/luajava/JavaFunction.class \
+	src/java/org/keplerproject/luajava/LuaException.class \
+	src/java/org/keplerproject/luajava/LuaInvocationHandler.class \
+	src/java/org/keplerproject/luajava/LuaJavaAPI.class \
+	src/java/org/keplerproject/luajava/LuaObject.class \
+	src/java/org/keplerproject/luajava/LuaState.class \
+	src/java/org/keplerproject/luajava/LuaStateFactory.class \
+	src/java/org/keplerproject/luajava/Console.class
+	
+DOC_CLASSES = \
+	src/java/org/keplerproject/luajava/JavaFunction.java \
+	src/java/org/keplerproject/luajava/LuaException.java \
+	src/java/org/keplerproject/luajava/LuaInvocationHandler.java \
+	src/java/org/keplerproject/luajava/LuaObject.java \
+	src/java/org/keplerproject/luajava/LuaState.java \
+	src/java/org/keplerproject/luajava/LuaStateFactory.java \
+	src/java/org/keplerproject/luajava/Console.java
+	
 OBJS        = src/c/luajava.obj
-CFLAGS      = -nologo -DWIN32 -I$(JDK)\include -I$(JDK)\include\win32 -I"$(INCLUDES)" -I"$(LUAINCLUDES)" -Fosrc\C\\ -MD
 .SUFFIXES: .java .class
 
 #
@@ -53,22 +55,23 @@ run: build FORCE
 	@echo Build Complete
 	@echo ------------------
 
-build: checkjdk $(CLASSES) luajava-$(VERSION).jar apidoc luajava-$(VERSION).dll clean FORCE
+#build: checkjdk $(CLASSES) $(JAR_FILE) apidoc $(SO_FILE) clean FORCE
+build: checkjdk $(CLASSES) $(JAR_FILE) apidoc $(SO_FILE) clean FORCE
 
 #
 # Build .class files.
 #
 .java.class:
-	$(JDK)\bin\javac src/java/org/keplerproject/luajava/*.java
-	
+	$(JDK)\bin\javac -sourcepath ./src/java $*.java
+
 #
 # Create the JAR
 #
-luajava-$(VERSION).jar:
-  cd src/java
-  $(JDK)\bin\jar cvf ../../luajava-$(VERSION).jar org/keplerproject/luajava/*.class
-  cd ..
-  cd..
+$(JAR_FILE):
+	cd src/java
+	$(JDK)\bin\jar cvf ../../$(JAR_FILE) org/keplerproject/luajava/*.class
+	cd ..
+	cd ..
   
 #
 # Create the API Documentation
@@ -79,13 +82,13 @@ apidoc:
 #
 # Build .c files.
 #
-luajava-$(VERSION).dll: $(OBJS)
+$(SO_FILE): $(OBJS)
 	link /LIBPATH:"$(SYSLIBPATH)" /LIBPATH:$(LUALIB)  -nologo -dll -out:$@ $? liblua.lib liblualib.lib
 
 src/c/luajava.c: src/c/luajava.h
 
 src/c/luajava.h:
-	$(JDK)\bin\javah -o src/c/luajava.h -classpath "luajava-$(VERSION).jar" org.keplerproject.luajava.LuaState
+	$(JDK)\bin\javah -o src/c/luajava.h -classpath "$(JAR_FILE)" org.keplerproject.luajava.LuaState
   
 
 #

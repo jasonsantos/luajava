@@ -2,26 +2,9 @@
 # Makefile for LuaJava Linux Distribution
 #
 
-#
-# Change this to reflect your setting.
-#
-#JDK     = C:\j2sdk1.4.1_01
-JDK	= $(JAVA_HOME)
+include ./config
 
-LUA5=
-LUA5INC=/usr/local/include
 LUA5LIB=/usr/local/lib
-
-CC=/usr/bin/gcc
-
-#
-# Other variables.
-#
-VERSION	= 1.0b4
-LUAJAVA_JAR	= luajava-$(VERSION).jar
-LUAJAVA_SO	= libluajava-$(VERSION).so
-TAR_FILE= luajava-$(VERSION).tar.gz
-ZIP_FILE= luajava-$(VERSION).zip
 
 CLASSES     = \
 	src/java/org/keplerproject/luajava/CPtr.class \
@@ -44,7 +27,6 @@ DOC_CLASSES	= \
 	src/java/org/keplerproject/luajava/Console.java
 
 OBJS        = src/c/luajava.o
-CFLAGS      = -I$(JDK)/include -I$(JDK)/include/linux -I$(LUA5INC)
 .SUFFIXES: .java .class
 
 #
@@ -55,20 +37,20 @@ run: build
 	@echo Build Complete
 	@echo ------------------
 
-build: checkjdk $(LUAJAVA_JAR) apidoc $(LUAJAVA_SO)
+build: checkjdk $(JAR_FILE) apidoc $(SO_FILE)
 
 #
 # Build .class files.
 #
 .java.class:
-	$(JDK)/bin/javac src/java/org/keplerproject/luajava/*.java
-	
+	$(JDK)\bin\javac -sourcepath ./src/java $*.java
+
 #
 # Create the JAR
 #
-$(LUAJAVA_JAR): $(CLASSES)
+$(JAR_FILE): $(CLASSES)
 	cd src/java; \
-	$(JDK)/bin/jar cvf ../../$(LUAJAVA_JAR) org/keplerproject/luajava/*.class; \
+	$(JDK)/bin/jar cvf ../../$(JAR_FILE) org/keplerproject/luajava/*.class; \
 	cd ../..;
   
 #
@@ -80,13 +62,13 @@ apidoc:
 #
 # Build .c files.
 #
-$(LUAJAVA_SO): $(OBJS)
+$(SO_FILE): $(OBJS)
 	$(CC) -shared -o$@ $? $(LUA5LIB)/liblua5.a $(LUA5LIB)/liblualib5.a
 
 src/c/luajava.c: src/c/luajava.h
 
 src/c/luajava.h:
-	$(JDK)/bin/javah -o src/c/luajava.h -classpath "$(LUAJAVA_JAR)" org.keplerproject.luajava.LuaState
+	$(JDK)/bin/javah -o src/c/luajava.h -classpath "$(JAR_FILE)" org.keplerproject.luajava.LuaState
   
 
 ## regras implicitas para compilacao
@@ -104,12 +86,12 @@ checkjdk: $(JDK)/bin/java
 # Cleanliness.
 #
 clean:
-	rm -f $(LUAJAVA_JAR)
-	rm -f $(LUAJAVA_SO)
+	rm -f $(JAR_FILE)
+	rm -f $(SO_FILE)
 	rm -rf doc/API
 	rm -f src/java/org/keplerproject/luajava/*.class src/c/*.o src/c/luajava.h
 	rm -f $(TAR_FILE) $(ZIP_FILE)
 
 dist:
 	tar -czf $(TAR_FILE) --exclude \*CVS\* --exclude $(TAR_FILE) --exclude $(ZIP_FILE) .
-	zip -qr luajava-1.0b4.zip ./* -x ./\*CVS\* ./$(TAR_FILE) ./$(ZIP_FILE)
+	zip -qr $(ZIP_FILE) ./* -x ./\*CVS\* ./$(TAR_FILE) ./$(ZIP_FILE)
