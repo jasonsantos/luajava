@@ -42,7 +42,7 @@ public class LoadLibExample
        * Example for loadLib.
        * Prints the time and the first parameter, if any.
        */
-      public int foo() throws LuaException
+      public int execute() throws LuaException
       {
         System.out.println(new Date().toString());
         

@@ -44,7 +44,7 @@ public abstract class JavaFunction
 	 * of the function must be pushed onto the stack.
 	 * @return The number of values pushed onto the stack.
 	 */
-	public abstract int foo() throws LuaException;
+	public abstract int execute() throws LuaException;
 	
 	/**
 	 * Constructor that receives the current LuaState.

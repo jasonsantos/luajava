@@ -40,7 +40,7 @@ public class TestClass
 		this.Lf = L;
 		
 		jf = new JavaFunction( L ) {
-		public int foo()
+		public int execute()
 		{
 			this.L.pushString("Returned String");
 			System.out.println("Printing from Java Function");

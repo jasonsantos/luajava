@@ -1597,10 +1597,10 @@ JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState_luajava_1open
 
   if ( java_function_method == NULL )
   {
-    java_function_method = ( *env )->GetMethodID( env , java_function_class , "foo" , "()I");
+    java_function_method = ( *env )->GetMethodID( env , java_function_class , "execute" , "()I");
     if ( !java_function_method )
     {
-      fprintf( stderr , "Could not find <foo> method in JavaFunction\n" );
+      fprintf( stderr , "Could not find <execute> method in JavaFunction\n" );
       exit( 1 );
     }
   }
