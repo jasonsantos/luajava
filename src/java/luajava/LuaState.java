@@ -490,9 +490,7 @@ public class LuaState
    * @param idx
    * @return Object
    */
-  private synchronized native Object _getObjectFromUserdata(
-    CPtr L,
-    int idx);
+  private synchronized native Object _getObjectFromUserdata(CPtr L, int idx) throws LuaException;
 
   /**
    * Returns whether a userdata contains a Java Object
@@ -514,9 +512,7 @@ public class LuaState
    * @param L
    * @param func
    */
-  private synchronized native void _pushJavaFunction(
-    CPtr L,
-    JavaFunction func);
+  private synchronized native void _pushJavaFunction(CPtr L, JavaFunction func) throws LuaException;
 
   /**
    * Returns whether a userdata contains a Java Function
@@ -531,7 +527,7 @@ public class LuaState
    * @param idx
    * @return Object
    */
-  public Object getObjectFromUserdata(int idx)
+  public Object getObjectFromUserdata(int idx) throws LuaException
   {
     return _getObjectFromUserdata(luaState, idx);
   }
@@ -559,7 +555,7 @@ public class LuaState
    * Pushes a JavaFunction into the state stack
    * @param func
    */
-  public void pushJavaFunction(JavaFunction func)
+  public void pushJavaFunction(JavaFunction func) throws LuaException
   {
     _pushJavaFunction(luaState, func);
   }
@@ -578,7 +574,7 @@ public class LuaState
    * Pushes into the stack any object value
    * @param Obj Object
    */
-  public void pushObjectValue(Object obj)
+  public void pushObjectValue(Object obj) throws LuaException
   {
     if (obj == null)
     {
@@ -619,7 +615,7 @@ public class LuaState
    * @param idx - Index in the Lua Stack
    * @return Object - Java object equivalent to the Lua one
    */
-	public synchronized Object toJavaObject( int idx )
+	public synchronized Object toJavaObject( int idx ) throws LuaException
 	{
 		Object obj = null;
 
@@ -702,6 +698,23 @@ public class LuaState
 			throw new LuaException("Object must have the same LuaState as the parent!");
 
 		return new LuaObject(parent, name);
+	}
+	
+	/**
+	 * This constructor creates a LuaObject from a table that is indexed by any LuaObject.
+	 * @param parent The Lua Table or Userdata that contains the Field.
+	 * @param name The name (LuaObject) that index the field
+	 * @return LuaObject
+	 * @throws LuaException When the parent object isn't a Table or Userdata
+	 */
+	public LuaObject getLuaObject(LuaObject parent, LuaObject name)
+		throws LuaException
+	{
+	  if (parent.getLuaState().getCPtrPeer() != luaState.getPeer() ||
+	      parent.getLuaState().getCPtrPeer() != name.getLuaState().getCPtrPeer())
+	    throw new LuaException("Object must have the same LuaState as the parent!");
+
+	  return new LuaObject(parent, name);//TODO ver se faz sentido
 	}
 
 	public LuaObject getLuaObject(int index)
