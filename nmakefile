@@ -83,7 +83,7 @@ apidoc:
 # Build .c files.
 #
 $(SO_FILE): $(OBJS)
-	link /LIBPATH:"$(SYSLIBPATH)" /LIBPATH:$(LUALIB)  -nologo -dll -out:$@ $? liblua.lib liblualib.lib
+	link /LIBPATH:"$(SYSLIBPATH)" /LIBPATH:$(LUALIB)  -nologo -dll -out:$@ $? lua50.lib lualib50.lib
 
 src/c/luajava.c: src/c/luajava.h
 
