@@ -64,11 +64,12 @@
 
 
 
-static jclass throwable_class         = NULL;
+static jclass    throwable_class      = NULL;
 static jmethodID get_message_method   = NULL;
-static jclass java_function_class     = NULL;
+static jclass    java_function_class  = NULL;
 static jmethodID java_function_method = NULL;
-static jclass luajava_api_class       = NULL;
+static jclass    luajava_api_class    = NULL;
+static jclass    java_lang_class      = NULL;
 
 
 /***************************************************************************
@@ -755,7 +756,6 @@ int gc( lua_State * L )
 int javaBindClass( lua_State * L )
 {
    int top;
-   jclass clazz;
    jmethodID method;
    const char * className;
    jstring javaClassName;
@@ -778,22 +778,21 @@ int javaBindClass( lua_State * L )
       lua_error( L );
    }
 
-   clazz  = ( *javaEnv )->FindClass( javaEnv , "java/lang/Class" );
-   method = ( *javaEnv )->GetStaticMethodID( javaEnv , clazz , "forName" , 
-                                             "(Ljava/lang/String;)Ljava/lang/Class;" );
-
    /* get the string parameter */
-   if ( !lua_isstring(L, 1) )
+   if ( !lua_isstring( L , 1 ) )
    {
       lua_pushstring( L , "Invalid parameter type. String expected ." );
       lua_error( L );
    }
    className = lua_tostring( L , 1 );
 
+   method = ( *javaEnv )->GetStaticMethodID( javaEnv , java_lang_class , "forName" , 
+                                             "(Ljava/lang/String;)Ljava/lang/Class;" );
+
    javaClassName = ( *javaEnv )->NewStringUTF( javaEnv , className );
 
-   classInstance = ( *javaEnv )->CallStaticObjectMethod( javaEnv , clazz , method , 
-                                                         javaClassName );
+   classInstance = ( *javaEnv )->CallStaticObjectMethod( javaEnv , java_lang_class ,
+                                                         method , javaClassName );
 
    exp = ( *javaEnv )->ExceptionOccurred( javaEnv );
 
@@ -849,7 +848,7 @@ int createProxy( lua_State * L )
 
   if ( lua_gettop( L ) != 2 )
   {
-    lua_pushstring( L , "Error. Function createProxy expects 1 argument ." );
+    lua_pushstring( L , "Error. Function createProxy expects 2 arguments ." );
     lua_error( L );
   }
 
@@ -868,7 +867,7 @@ int createProxy( lua_State * L )
 
    if ( !lua_isstring( L , 1 ) || !lua_istable( L , 2 ) )
    {
-      lua_pushstring( L , "Invalid Argument type. Table expected ." );
+      lua_pushstring( L , "Invalid Argument types. Expected (string, table)." );
       lua_error( L );
    }
 
@@ -1481,22 +1480,22 @@ JNIEXPORT void JNICALL Java_luajava_LuaState_luajava_1open
     }
   }
 
-  if( throwable_class == NULL )
+  if ( throwable_class == NULL )
   {
     tempClass = ( *env )->FindClass( env , "java/lang/Throwable" );
 
     if ( tempClass == NULL )
     {
-       fprintf( stderr , "Error. Couldn't bind java class java.lang.Throwable\n" );
-       exit( 1 );
+      fprintf( stderr , "Error. Couldn't bind java class java.lang.Throwable\n" );
+      exit( 1 );
     }
 
     throwable_class = ( *env )->NewGlobalRef( env , tempClass );
 
     if ( throwable_class == NULL )
     {
-       fprintf( stderr , "Error. Couldn't bind java class java.lang.Throwable\n" );
-       exit( 1 );
+      fprintf( stderr , "Error. Couldn't bind java class java.lang.Throwable\n" );
+      exit( 1 );
     }
   }
 
@@ -1509,6 +1508,25 @@ JNIEXPORT void JNICALL Java_luajava_LuaState_luajava_1open
     {
       fprintf(stderr, "Could not find <getMessage> method in java.lang.Throwable\n");
       exit(1);
+    }
+  }
+
+  if ( java_lang_class == NULL )
+  {
+    tempClass = ( *env )->FindClass( env , "java/lang/Class" );
+
+    if ( tempClass == NULL )
+    {
+      fprintf( stderr , "Error. Coundn't bind java class java.lang.Class\n" );
+      exit( 1 );
+    }
+
+    java_lang_class = ( *env )->NewGlobalRef( env , tempClass );
+
+    if ( java_lang_class == NULL )
+    {
+      fprintf( stderr , "Error. Couldn't bind java class java.lang.Throwable\n" );
+      exit( 1 );
     }
   }
 
