@@ -450,7 +450,8 @@ public class LuaObject
   }
 
   /**
-   * Function that creates a java proxy to the object represented by <code>this<code>
+   * Function that creates a java proxy to the object represented by <code>this</code>
+   * @param implem Interfaces that are implemented, separated by <code>,</code>
    */
   public Object createProxy(String implem)
     throws ClassNotFoundException, LuaException
