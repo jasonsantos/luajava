@@ -68,7 +68,7 @@ LuaJava creates a library in Lua called <code>luajava</code>. Inside this librar
 <p><code>newInstance</code> first parameter is the name of the class to be instantiated. The other arguments are passed to the construtctor.</p>
 <p>
 Example :</p>
-<pre><code>  obj = luajava.newInstance("java.lang.Object")
+<pre class="example">  obj = luajava.newInstance("java.lang.Object")
   -- obj is now a reference to the new object
   -- created and any of its methods can be accessed.
 
@@ -84,7 +84,7 @@ Example :</p>
   b
   c
   d
-</code></pre>
+</pre>
 
 <h4>bindClass</h4> 
 
@@ -92,11 +92,11 @@ Example :</p>
 This function retrieves a Java class. The returned object can be used to access static fields and methods of the corresponding class.
 </p>
 <p>Example :</p>
-<pre><code>  sys = luajava.bindClass("java.lang.System")
+<pre class="example">  sys = luajava.bindClass("java.lang.System")
   print ( sys:currentTimeMillis() )
 
   -- this prints the time returned by the function.
-</code></pre>
+</pre>
 
 
 <h4>new</h4>
@@ -106,9 +106,9 @@ This function receives a java.lang.Class and returns a new instance of this clas
 <p><code>new</code> works just like the <code>newInstance</code>, but the first argument is the instance of the class.</p>
 
 <p>Example:</p>
-<pre><code>  str = luajava.bindClass("java.lang.String")
+<pre class="example">  str = luajava.bindClass("java.lang.String")
   strInstance = luajava.new(str)
-</code></pre>
+</pre>
 
 <h4>createProxy</h4>
 <p>
@@ -120,7 +120,7 @@ The function createProxy returns a java Object reference that can be used as a i
 createProxy receives a string that contain the name of the interfaces to be implemented, separated by a comma(,), and a lua object that is the interface implementation.
 </p>
 <p>Example:</p>
-<pre><code>  button = luajava.newInstance("java.awt.Button", "execute")
+<pre class="example">  button = luajava.newInstance("java.awt.Button", "execute")
   button_cb = {}
   function button_cb:actionPerformed(ev)
    . . .
@@ -130,7 +130,7 @@ createProxy receives a string that contain the name of the interfaces to be impl
 
   button:addActionListenet(buttonProxy)
 
-</code></pre>
+</pre>
 
 <p>We can use Lua scripts to write implementations for Java <b>interfaces</b> only.</p>
 
@@ -145,13 +145,13 @@ should receive LuaState as parameter. If this function returns a integer, LuaJav
 the number of parameters returned by the the function, otherwise nothing is returned.
 </p>
 <p>Example:</p>
-<pre>
+<pre class="example">
   Lua:
-      <code>luajava.loadLib("test.LoadLibExample", "open")
-      eg.example(3)</code>
+      luajava.loadLib("test.LoadLibExample", "open")
+      eg.example(3)
 
   Java:
-      <code>
+      
     public static int open(LuaState L) throws LuaException
     {
       L.newTable();
@@ -182,7 +182,7 @@ the number of parameters returned by the the function, otherwise nothing is retu
     
       return 1;
     }
-    </code>
+    
 </pre>
 
 <h2><a name="fromjava"></a>How to use LuaJava from Java</h2>
