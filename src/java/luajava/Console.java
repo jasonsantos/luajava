@@ -24,6 +24,7 @@ public class Console
 					if (res != 0)
 						throw new LuaException("Error on file " + args[i]);
 				}
+				L.close();
 				return;
 			}
 
@@ -41,6 +42,8 @@ public class Console
 					System.out.println("Invalid Input : " + line);
 				//throw new LuaException("Invalid Input .");
 			}
+			
+			L.close();
 		}
 		catch (Exception e)
 		{
