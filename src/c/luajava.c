@@ -2224,7 +2224,7 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1pushNumber
 *      Lua Exported Function
 ************************************************************************/
 
-JNIEXPORT void JNICALL Java_luajava_LuaState__1pushString
+JNIEXPORT void JNICALL Java_luajava_LuaState__1pushString__Lluajava_CPtr_2Ljava_lang_String_2
   (JNIEnv * env , jobject jobj , jobject cptr , jstring str)
 {
    lua_State * L = getStateFromCPtr( env , cptr );
@@ -2235,6 +2235,25 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1pushString
    lua_pushstring( L , uniStr );
    
    ( *env )->ReleaseStringUTFChars( env , str , uniStr );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT void JNICALL Java_luajava_LuaState__1pushString__Lluajava_CPtr_2_3BI
+  (JNIEnv * env , jobject jobj , jobject cptr , jbyteArray bytes , jint n)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+   char * cBytes;
+   
+   cBytes = ( char * ) ( *env )->GetByteArrayElements( env , bytes, NULL );
+   
+   lua_pushstring( L , cBytes );
+   
+   ( *env )->ReleaseByteArrayElements( env , bytes , cBytes , 0 );
 }
 
 
