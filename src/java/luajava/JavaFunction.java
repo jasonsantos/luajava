@@ -79,7 +79,6 @@ public abstract class JavaFunction
 	  {
 			L.pushJavaFunction(this);
 			L.setGlobal(name);
-			L.pop(1);
 	  }
 	}
 }
