@@ -4,22 +4,6 @@
 
 !include ./config
 
-#
-# Change this to reflect your setting.  Or override it at the make
-# command line:
-#	C:> nmake INCLUDES=x:\path\to\your\syslib_path
-#
-SYSLIBPATH = C:\Program Files\Microsoft Visual Studio\VC98\lib
-
-#
-# Path to lua libraries (lua.lib e lualib.lib)
-#
-LUALIB=..\lua\lib\vc6
-
-#
-# Path to lua includes
-#
-LUAINCLUDES=..\lua\include
 
 #
 # Other variables.
@@ -77,13 +61,13 @@ $(JAR_FILE):
 # Create the API Documentation
 #
 apidoc:
-	$(JDK)\bin\javadoc -classpath "src/java/" -public -quiet -d "doc/API" $(DOC_CLASSES)
+	$(JDK)\bin\javadoc -classpath "src/java/" -public -quiet -d "doc/us/API" $(DOC_CLASSES)
 
 #
 # Build .c files.
 #
 $(SO_FILE): $(OBJS)
-	link /LIBPATH:"$(SYSLIBPATH)" /LIBPATH:$(LUALIB)  -nologo -dll -out:$@ $? lua50.lib lualib50.lib
+	link /LIBPATH:"$(SYSLIBPATH)" /LIBPATH:$(LUA_LIBDIR)  -nologo -dll -out:$@ $? $(LIB_LUA) $(LIB_LUALIB)
 
 src/c/luajava.c: src/c/luajava.h
 

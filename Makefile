@@ -57,7 +57,7 @@ $(JAR_FILE): $(CLASSES)
 # Create the API Documentation
 #
 apidoc:
-	$(JDK)/bin/javadoc -public -classpath src/java/ -quiet -d "doc/API" $(DOC_CLASSES)
+	$(JDK)/bin/javadoc -public -classpath src/java/ -quiet -d "doc/us/API" $(DOC_CLASSES)
 
 #
 # Build .c files.

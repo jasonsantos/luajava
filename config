@@ -1,33 +1,51 @@
-# Installation directories
-LUA_DIR= /usr/local/share/lua/5.0
-LUA_LIBDIR= /usr/local/lib/lua/5.0
-JDK= $(JAVA_HOME)
-#JDK= C:\j2sdk1.4.2_04
+#Linux
+#LUA_DIR= /usr/local/share/lua/5.0
+#LUA_LIBDIR= /usr/local/lib/lua/5.0
+#JDK= $(JAVA_HOME)
+JDK= c:/j2sdk1.4.1_02
 
-# OS dependent
-#LIB_PREFIX= 
-LIB_PREFIX= lib
-
-#LIB_EXT= .dll
-#LIB_EXT= .dylib
-LIB_EXT= .so
-#LIB_OPTION= -dynamiclib #for MacOS X
+#LIB_EXT= .so
+#LIB_PREFIX= lib
 LIB_OPTION= -shared #for Linux
 
-# Compilation directives
-# On FreeBSD systems, the following line should be commented
+#############################################################
+## On FreeBSD systems, the following line should be commented
 DLLIB= -ldl
+
 WARN= -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings
-#INCS= -I$(JDK)/include -I$(JDK)/include/win32 -I"C:\Program Files\Microsoft Visual Studio\VC98\include" -I../lua/include
 INCS= -I$(JDK)/include -I$(JDK)/include/linux -I/usr/local/include/lua5
-#CFLAGS= -nologo -DWIN32 $(INCS) -Fosrc\C\\ -MD
 CFLAGS= $(WARN) $(INCS)
 
-#CC= cl
 CC= gcc
 
+
+#Windows
+LUA_DIR= C:\prj\lua\lua5
+LUA_LIBDIR= C:\prj\lua\lua5\lib\dll
+#LUA_INCLUDES= $(LUA_DIR)/include
+#JDK= $(JAVA_HOME)
+#VS_INCDIR= C:\Program Files\Microsoft Visual Studio\VC98\include
+#JDK= C:\j2sdk1.4.2_04
+
+#LIB_LUA= lua5.lib
+#LIB_LUALIB= lualib5.lib
+
+#LIB_EXT= .dll
+#INCS= -I$(JDK)/include -I$(JDK)/include/win32 -I"$(VS_INCDIR)" -I"$(LUA_INCLUDES)"
+#CFLAGS= -nologo -DWIN32 $(INCS) -Fosrc\C\\ -MD
+
+#SYSLIBPATH = C:\Arquivos de programas\Microsoft Visual Studio\VC98\lib
+#CC= cl
+
+
+#Others
+
+#LIB_OPTION= -dynamiclib #for MacOS X
+#LIB_EXT= .dylib
+
+
 #########################################################
-VERSION= 1.0b4
+VERSION= 1.0.0
 PKG= luajava-$(VERSION)
 TAR_FILE= $(PKG).tar.gz
 ZIP_FILE= $(PKG).zip
@@ -38,4 +56,4 @@ DIST_DIR= $(PKG)
 CL_LIBS= -llua -llualib -lm $(DLLIB)
 LIBS= $(CL_LIBS)
 
-# $Id: config,v 1.2 2004-11-24 21:54:24 tuler Exp $
+# $Id: config,v 1.3 2005-04-01 20:50:49 thiago Exp $
