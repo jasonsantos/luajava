@@ -112,4 +112,4 @@ clean:
 
 dist:
 	tar -czf $(TAR_FILE) --exclude \*CVS\* --exclude $(TAR_FILE) --exclude $(ZIP_FILE) .
-	zip -lqr luajava-1.0b4.zip ./* -x ./\*CVS\* ./$(TAR_FILE) ./$(ZIP_FILE)
+	zip -qr luajava-1.0b4.zip ./* -x ./\*CVS\* ./$(TAR_FILE) ./$(ZIP_FILE)
