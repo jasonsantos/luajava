@@ -157,7 +157,7 @@ public final class LuaJavaAPI
    * @param clazz class to be indexed
    * @param searchName name of the field or method to be accessed
    * @return number of returned objects
-   * @throws Exception
+   * @throws LuaException
    */
   public static int classIndex(int luaState, Class clazz, String searchName)
       throws LuaException
@@ -190,7 +190,7 @@ public final class LuaJavaAPI
    * @param luaState int that represents the state to be used
    * @param className name of the class
    * @return number of returned objects
-   * @throws Exception
+   * @throws LuaException
    */
   public static int javaNewInstance(int luaState, String className)
       throws LuaException
@@ -383,8 +383,6 @@ public final class LuaJavaAPI
     synchronized (L)
     {
       Class clazz;
-
-      int top = L.getTop();
 
       if (obj instanceof Class)
       {
