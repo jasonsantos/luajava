@@ -849,8 +849,8 @@ public class LuaState
   /**
    * Function that returns a Java Object equivalent to the one in the given
    * position of the Lua Stack.
-   * @param idx - Index in the Lua Stack
-   * @return Object - Java object equivalent to the Lua one
+   * @param idx Index in the Lua Stack
+   * @return Java object equivalent to the Lua one
    */
 	public synchronized Object toJavaObject( int idx ) throws LuaException
 	{
@@ -910,7 +910,7 @@ public class LuaState
    * @param parent The Lua Table or Userdata that contains the Field.
    * @param name The name that index the field
 	 * @return LuaObject
-	 * @throws LuaException - if parent is not a table or userdata
+	 * @throws LuaException if parent is not a table or userdata
 	 */
 	public LuaObject getLuaObject(LuaObject parent, String name)
 		throws LuaException
@@ -957,7 +957,7 @@ public class LuaState
 	/**
 	 * Creates a reference to an object in the <code>index</code> position
 	 * of the stack
-	 * @param index - position on the stack
+	 * @param index position on the stack
 	 * @return LuaObject
 	 */
 	public LuaObject getLuaObject(int index)
@@ -965,4 +965,75 @@ public class LuaState
 		return new LuaObject(this, index);
 	}
 
+	/**
+	 * When you call a function in lua, it may return a number, and the
+	 * number will be interpreted as a <code>Double</code>.<br>
+	 * This function converts the number into a type specified by 
+	 * <code>retType</code>
+	 * @param db lua number to be converted
+	 * @param retType type to convert to
+	 * @return The converted number
+	 */
+	public static Number convertLuaNumber(Double db, Class retType)
+	{
+	  // checks if retType is a primitive type
+    if (retType.isPrimitive())
+    {
+      if (retType == Integer.TYPE)
+      {
+        return new Integer(db.intValue());
+      }
+      else if (retType == Long.TYPE)
+      {
+        return new Long(db.longValue());
+      }
+      else if (retType == Float.TYPE)
+      {
+        return new Float(db.floatValue());
+      }
+      else if (retType == Double.TYPE)
+      {
+        return db;
+      }
+      else if (retType == Byte.TYPE)
+      {
+        return new Byte(db.byteValue());
+      }
+      else if (retType == Short.TYPE)
+      {
+        return new Short(db.shortValue());
+      }
+    }
+    else if (retType.isAssignableFrom(Number.class))
+    {
+      // Checks all possibilities of number types
+      if (retType.isAssignableFrom(Integer.class))
+      {
+        return new Integer(db.intValue());
+      }
+      else if (retType.isAssignableFrom(Long.class))
+      {
+        return new Long(db.longValue());
+      }
+      else if (retType.isAssignableFrom(Float.class))
+      {
+        return new Float(db.floatValue());
+      }
+      else if (retType.isAssignableFrom(Double.class))
+      {
+        return db;
+      }
+      else if (retType.isAssignableFrom(Byte.class))
+      {
+        return new Byte(db.byteValue());
+      }
+      else if (retType.isAssignableFrom(Short.class))
+      {
+        return new Short(db.shortValue());
+      }
+    }
+    
+    // if all checks fail, return null
+    return null;	  
+	}
 }
