@@ -36,6 +36,10 @@ public class LuaException extends Exception
 		super(str);
 	}
 	
+	/**
+	 * For compatibility with Java 1.3
+	 * Best thing would be to do super(e), but doesn't work on J2SDK 1.3
+	 */
 	public LuaException(Exception e)
 	{
 		super(e.getMessage());
