@@ -301,6 +301,7 @@ public final class LuaJavaAPI
    * @return int
    */
   public static int checkField(int luaState, Object obj, String fieldName)
+  	throws LuaException
   {
     LuaState L = LuaStateFactory.getExistingState(luaState);
 
