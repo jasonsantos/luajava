@@ -152,6 +152,7 @@ public class LuaState
   private synchronized native void _pushNil(CPtr ptr);
   private synchronized native void _pushNumber(CPtr ptr, double number);
   private synchronized native void _pushString(CPtr ptr, String str);
+  private synchronized native void _pushString(CPtr ptr, byte[] bytes, int n);
   private synchronized native void _pushBoolean(CPtr ptr, int bool);
 
   // Get functions
@@ -390,6 +391,14 @@ public class LuaState
       _pushString(luaState, str);
   }
 
+  public void pushString(byte[] bytes)
+  {
+    if (bytes == null)
+      _pushNil(luaState);
+    else
+      _pushString(luaState, bytes, bytes.length);
+  }
+  
   public void pushBoolean(int bool)
   {
     _pushBoolean(luaState, bool);
@@ -822,16 +831,16 @@ public class LuaState
     {
       pushNil();
     }
-    else if (Boolean.class.isAssignableFrom(obj.getClass()))
+    else if (obj instanceof Boolean)
     {
       Boolean bool = (Boolean) obj;
       pushBoolean(bool.booleanValue() ? 1 : 0);
     }
-    else if (Number.class.isAssignableFrom(obj.getClass()))
+    else if (obj instanceof Number)
     {
       pushNumber(((Number) obj).doubleValue());
     }
-    else if (String.class.isAssignableFrom(obj.getClass()))
+    else if (obj instanceof String)
     {
       pushString((String) obj);
     }
@@ -844,6 +853,10 @@ public class LuaState
     {
       LuaObject ref = (LuaObject) obj;
       ref.push();
+    }
+    else if (obj instanceof byte[])
+    {
+      pushString((byte[]) obj);
     }
     else
     {
