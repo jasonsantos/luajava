@@ -1,0 +1,1 @@
+java -cp "../luajava-1.0b.jar" -Djava.library.path=.. luajava.Console swingtest.lua
