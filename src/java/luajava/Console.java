@@ -14,6 +14,7 @@ public class Console
 		try
 		{
 			LuaState L = LuaStateFactory.newLuaState();
+			L.openBasicLibraries();
 
 			if (args.length > 0)
 			{
