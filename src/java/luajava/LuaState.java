@@ -32,26 +32,26 @@ public class LuaState
 {
   private final static String LUAJAVA_LIB = "luajava-1.0b";
 
-  final public static Integer LUA_GLOBALSINDEX = new Integer(-10001);
+  final public static Integer LUA_GLOBALSINDEX  = new Integer(-10001);
   final public static Integer LUA_REGISTRYINDEX = new Integer(-10000);
 
-  final public static Integer LUA_TNIL = new Integer(0);
-  final public static Integer LUA_TBOOLEAN = new Integer(1);
-  final public static Integer LUA_TNUMBER = new Integer(3);
-  final public static Integer LUA_TSTRING = new Integer(4);
-  final public static Integer LUA_TTABLE = new Integer(5);
+  final public static Integer LUA_TNIL      = new Integer(0);
+  final public static Integer LUA_TBOOLEAN  = new Integer(1);
+  final public static Integer LUA_TNUMBER   = new Integer(3);
+  final public static Integer LUA_TSTRING   = new Integer(4);
+  final public static Integer LUA_TTABLE    = new Integer(5);
   final public static Integer LUA_TFUNCTION = new Integer(6);
   final public static Integer LUA_TUSERDATA = new Integer(7);
-  final public static Integer LUA_TTHREAD = new Integer(8);
+  final public static Integer LUA_TTHREAD   = new Integer(8);
 
   /*
    * error codes for `lua_load' and `lua_pcall'
    */
-  final public static Integer LUA_ERRRUN = new Integer(1);
-  final public static Integer LUA_ERRFILE = new Integer(2);
+  final public static Integer LUA_ERRRUN    = new Integer(1);
+  final public static Integer LUA_ERRFILE   = new Integer(2);
   final public static Integer LUA_ERRSYNTAX = new Integer(3);
-  final public static Integer LUA_ERRMEM = new Integer(4);
-  final public static Integer LUA_ERRERR = new Integer(5);
+  final public static Integer LUA_ERRMEM    = new Integer(4);
+  final public static Integer LUA_ERRERR    = new Integer(5);
 
   /**
    * Opens the library containing the luajava API
@@ -117,22 +117,22 @@ public class LuaState
   private synchronized native CPtr _newthread(CPtr ptr);
 
   // Stack manipulation
-  private synchronized native int _getTop(CPtr ptr);
+  private synchronized native int  _getTop(CPtr ptr);
   private synchronized native void _setTop(CPtr ptr, int idx);
   private synchronized native void _pushValue(CPtr ptr, int idx);
   private synchronized native void _remove(CPtr ptr, int idx);
   private synchronized native void _insert(CPtr ptr, int idx);
   private synchronized native void _replace(CPtr ptr, int idx);
-  private synchronized native int _checkStack(CPtr ptr, int sz);
+  private synchronized native int  _checkStack(CPtr ptr, int sz);
 
   // Access functions
-  private synchronized native int _isNumber(CPtr ptr, int idx);
-  private synchronized native int _isString(CPtr ptr, int idx);
-  private synchronized native int _isFunction(CPtr ptr, int idx);
-  private synchronized native int _isUserdata(CPtr ptr, int idx);
-  private synchronized native int _isTable(CPtr ptr, int idx);
-  private synchronized native int _isBoolean(CPtr ptr, int idx);
-  private synchronized native int _type(CPtr ptr, int idx);
+  private synchronized native int    _isNumber(CPtr ptr, int idx);
+  private synchronized native int    _isString(CPtr ptr, int idx);
+  private synchronized native int    _isFunction(CPtr ptr, int idx);
+  private synchronized native int    _isUserdata(CPtr ptr, int idx);
+  private synchronized native int    _isTable(CPtr ptr, int idx);
+  private synchronized native int    _isBoolean(CPtr ptr, int idx);
+  private synchronized native int    _type(CPtr ptr, int idx);
   private synchronized native String _typeName(CPtr ptr, int tp);
 
   private synchronized native int _equal(CPtr ptr, int idx1, int idx2);
@@ -140,9 +140,9 @@ public class LuaState
   private synchronized native int _lessthan(CPtr ptr, int idx1, int idx2);
 
   private synchronized native double _toNumber(CPtr ptr, int idx);
-  private synchronized native int _toBoolean(CPtr ptr, int idx);
+  private synchronized native int    _toBoolean(CPtr ptr, int idx);
   private synchronized native String _toString(CPtr ptr, int idx);
-  private synchronized native int _strlen(CPtr ptr, int idx);
+  private synchronized native int    _strlen(CPtr ptr, int idx);
 
   // Push functions
   private synchronized native void _pushNil(CPtr ptr);
@@ -155,30 +155,30 @@ public class LuaState
   private synchronized native void _rawGet(CPtr ptr, int idx);
   private synchronized native void _rawGetI(CPtr ptr, int idx, int n);
   private synchronized native void _newTable(CPtr ptr);
-  private synchronized native int _getMetaTable(CPtr ptr, int idx);
+  private synchronized native int  _getMetaTable(CPtr ptr, int idx);
   private synchronized native void _getFEnv(CPtr ptr, int idx);
 
   // Set functions
   private synchronized native void _setTable(CPtr ptr, int idx);
   private synchronized native void _rawSet(CPtr ptr, int idx);
   private synchronized native void _rawSetI(CPtr ptr, int idx, int n);
-  private synchronized native int _setMetaTable(CPtr ptr, int idx);
-  private synchronized native int _setFEnv(CPtr ptr, int idx);
+  private synchronized native int  _setMetaTable(CPtr ptr, int idx);
+  private synchronized native int  _setFEnv(CPtr ptr, int idx);
 
   private synchronized native void _call(CPtr ptr, int nArgs, int nResults);
-  private synchronized native int _pcall(CPtr ptr, int nArgs, int Results, int errFunc);
+  private synchronized native int  _pcall(CPtr ptr, int nArgs, int Results, int errFunc);
 
   // Coroutine Functions
   private synchronized native int _yield(CPtr ptr, int nResults);
   private synchronized native int _resume(CPtr ptr, int nargs);
 
   // Miscellaneous Functions
-  private synchronized native int _next(CPtr ptr, int idx);
-  private synchronized native int _error(CPtr ptr);
+  private synchronized native int  _next(CPtr ptr, int idx);
+  private synchronized native int  _error(CPtr ptr);
   private synchronized native void _concat(CPtr ptr, int n);
 
 	// Some macros
-	private synchronized native int _ref(CPtr ptr, int t);
+	private synchronized native int  _ref(CPtr ptr, int t);
 	private synchronized native void _unRef(CPtr ptr , int t , int ref);
 
 
@@ -323,8 +323,8 @@ public class LuaState
   {
     if (str == null)
       _pushNil(luaState);
-
-    _pushString(luaState, str);
+    else
+      _pushString(luaState, str);
   }
 
   public void pushBoolean(int bool)
@@ -714,7 +714,7 @@ public class LuaState
 	      parent.getLuaState().getCPtrPeer() != name.getLuaState().getCPtrPeer())
 	    throw new LuaException("Object must have the same LuaState as the parent!");
 
-	  return new LuaObject(parent, name);//TODO ver se faz sentido
+	  return new LuaObject(parent, name);
 	}
 
 	public LuaObject getLuaObject(int index)
