@@ -4,8 +4,6 @@
 
 include ./config
 
-LUA5LIB=/usr/local/lib
-
 CLASSES     = \
 	src/java/org/keplerproject/luajava/CPtr.class \
 	src/java/org/keplerproject/luajava/JavaFunction.class \

@@ -2,6 +2,7 @@
 #Linux
 LUA_DIR= /usr/local/share/lua/5.0
 LUA_LIBDIR= /usr/local/lib/lua/5.0
+LUA_INCLUDES= /usr/local/lib/lua/5.0/include
 JDK= $(JAVA_HOME)
 
 LIB_LUA= liblua5.a
@@ -15,7 +16,7 @@ LIB_OPTION= -shared
 DLLIB= -ldl
 
 WARN= -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings
-INCS= -I$(JDK)/include -I$(JDK)/include/linux -I/usr/local/include/lua5
+INCS= -I$(JDK)/include -I$(JDK)/include/linux -I$(LUA_INCLUDES)
 CFLAGS= $(WARN) $(INCS)
 
 CC= gcc
@@ -57,4 +58,4 @@ JAR_FILE= $(PKG).jar
 SO_FILE= $(LIB_PREFIX)$(PKG)$(LIB_EXT)
 DIST_DIR= $(PKG)
 
-# $Id: config,v 1.4 2005-04-05 21:23:11 tuler Exp $
+# $Id: config,v 1.5 2005-04-05 21:35:20 tuler Exp $
