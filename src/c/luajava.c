@@ -418,6 +418,8 @@ int objectIndex( lua_State * L )
 
       error = luaL_error( L , str );
 
+      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr , str );
+
       return error;
    }
 
@@ -552,12 +554,13 @@ int objectIndexReturn( lua_State * L )
 
       error = luaL_error( L , str );
 
+      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, str );
+
       return error;
    }
 
    /* pushes new object into lua stack */
    return ret;
-
 }
 
 
@@ -646,6 +649,8 @@ int classIndex( lua_State * L )
       str = ( *javaEnv )->GetStringUTFChars( javaEnv , jstr , NULL );
 
       error = luaL_error( L , str );
+
+      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, str );
 
       return error;
    }
@@ -774,6 +779,8 @@ int javaBindClass( lua_State * L )
 
       error = luaL_error( L , str );
 
+      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, str );
+
       return error;
    }
 
@@ -860,11 +867,12 @@ int createProxy( lua_State * L )
 
       error = luaL_error( L , str );
 
+      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, str );
+
       return error;
    }
 
    return ret;
-   
 }
 
 /***************************************************************************
@@ -1263,7 +1271,6 @@ int luaJavaFunctionCall( lua_State * L )
    }
 
    return ret;
-
 }
 
 
@@ -2499,52 +2506,6 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1concat
 *      Lua Exported Function
 ************************************************************************/
 
-JNIEXPORT jint JNICALL Java_luajava_LuaState__1doFile
-  (JNIEnv * env , jobject jobj , jobject cptr , jstring fileName)
-{
-   lua_State * L = getStateFromCPtr( env , cptr );
-
-   const char * file = ( *env )->GetStringUTFChars( env , fileName, NULL );
-
-   int ret;
-
-   pushJNIEnv( env , L );
-
-   ret = lua_dofile( L , file );
-
-   ( *env )->ReleaseStringUTFChars( env , fileName , file );
-
-   return ret;
-}
-
-
-/************************************************************************
-*   JNI Called function
-*      Lua Exported Function
-************************************************************************/
-
-JNIEXPORT jint JNICALL Java_luajava_LuaState__1doString
-  (JNIEnv * env , jobject jobj , jobject cptr , jstring str)
-{
-   lua_State * L = getStateFromCPtr( env , cptr );
-
-   const char * utfStr = ( * env )->GetStringUTFChars( env , str , NULL );
-
-   int ret;
-
-   pushJNIEnv( env , L );
-
-   ret = lua_dostring( L , utfStr );
-
-   return ret;
-}
-
-
-/************************************************************************
-*   JNI Called function
-*      Lua Exported Function
-************************************************************************/
-
 JNIEXPORT jint JNICALL Java_luajava_LuaState__1ref
   (JNIEnv * env , jobject jobj , jobject cptr , jint t)
 {
@@ -2569,4 +2530,459 @@ JNIEXPORT void JNICALL Java_luajava_LuaState__1unRef
    pushJNIEnv( env , L );
 
    luaL_unref( L , ( int ) t , ( int ) ref );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jint JNICALL Java_luajava_LuaState__1doFile
+  (JNIEnv * env , jobject jobj , jobject cptr , jstring fileName)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+
+   const char * file = ( *env )->GetStringUTFChars( env , fileName, NULL );
+
+   int ret;
+
+   pushJNIEnv( env , L );
+
+   ret = lua_dofile( L , file );
+
+   ( *env )->ReleaseStringUTFChars( env , fileName , file );
+
+   return ( jint ) ret;
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jint JNICALL Java_luajava_LuaState__1doString
+  (JNIEnv * env , jobject jobj , jobject cptr , jstring str)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+
+   const char * utfStr = ( * env )->GetStringUTFChars( env , str , NULL );
+
+   int ret;
+
+   pushJNIEnv( env , L );
+
+   ret = lua_dostring( L , utfStr );
+
+   ( *env )->ReleaseStringUTFChars( env , str , utfStr );
+
+   return ( jint ) ret;
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jint JNICALL Java_luajava_LuaState__1doBuffer
+  (JNIEnv * env , jobject jobj , jobject cptr , jbyteArray buff , jlong sz , jstring n)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+   
+   jbyte * cBuff = ( *env )->GetByteArrayElements( env , buff, NULL );
+
+   const char * name = ( * env )->GetStringUTFChars( env , n , NULL );
+
+   int ret;
+
+   pushJNIEnv( env , L );
+
+   ret = lua_dobuffer( L , ( const char * ) buff, ( int ) sz, name );
+
+   ( *env )->ReleaseStringUTFChars( env , n , name );
+
+   ( *env )->ReleaseByteArrayElements( env , buff , cBuff , 0 );
+
+   return ( jint ) ret;
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jint JNICALL Java_luajava_LuaState__1LgetMetaField
+  (JNIEnv * env , jobject jobj , jobject cptr , jint obj , jstring e)
+{
+   lua_State * L    = getStateFromCPtr( env , cptr );
+   const char * str = ( *env )->GetStringUTFChars( env , e , NULL );
+   int ret;
+
+   pushJNIEnv( env , L );
+
+   ret = luaL_getmetafield( L , ( int ) obj , str );
+
+   ( *env )->ReleaseStringUTFChars( env , e , str );
+
+   return ( jint ) ret;
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jint JNICALL Java_luajava_LuaState__1LcallMeta
+  (JNIEnv * env , jobject jobj , jobject cptr , jint obj , jstring e)
+{
+   lua_State * L    = getStateFromCPtr( env , cptr );
+   const char * str = ( *env )->GetStringUTFChars( env , e , NULL );
+   int ret;
+
+   pushJNIEnv( env , L );
+
+   ret = luaL_callmeta( L , ( int ) obj, str );
+
+   ( *env )->ReleaseStringUTFChars( env , e , str );
+
+   return ( jint ) ret;
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jint JNICALL Java_luajava_LuaState__1Ltyperror
+  (JNIEnv * env , jobject jobj , jobject cptr , jint nArg , jstring tName)
+{
+   lua_State * L     = getStateFromCPtr( env , cptr );
+   const char * name = ( *env )->GetStringUTFChars( env , tName , NULL );
+   int ret;
+
+   pushJNIEnv( env , L );
+
+   ret = luaL_typerror( L , ( int ) nArg , name );
+
+   ( *env )->ReleaseStringUTFChars( env , tName , name );
+
+   return ( jint ) ret;
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jint JNICALL Java_luajava_LuaState__1LargError
+  (JNIEnv * env , jobject jobj , jobject cptr , jint numArg , jstring extraMsg)
+{
+   lua_State * L    = getStateFromCPtr( env , cptr );
+   const char * msg = ( *env )->GetStringUTFChars( env , extraMsg , NULL );
+   int ret;
+
+   pushJNIEnv( env , L );
+
+   ret = luaL_argerror( L , ( int ) numArg , msg );
+
+   ( *env )->ReleaseStringUTFChars( env , extraMsg , msg );
+
+   return ( jint ) ret;;
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jstring JNICALL Java_luajava_LuaState__1LcheckString
+  (JNIEnv * env , jobject jobj , jobject cptr , jint numArg)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+   const char * res;
+
+   pushJNIEnv( env , L );
+
+   res = luaL_checkstring( L , ( int ) numArg );
+
+   return ( *env )->NewStringUTF( env , res );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jstring JNICALL Java_luajava_LuaState__1LoptString
+  (JNIEnv * env , jobject jobj , jobject cptr , jint numArg , jstring def)
+{
+   lua_State * L  = getStateFromCPtr( env , cptr );
+   const char * d = ( *env )->GetStringUTFChars( env , def , NULL );
+   const char * res;
+   jstring ret;
+
+   pushJNIEnv( env , L );
+
+   res = luaL_optstring( L , ( int ) numArg , d );
+
+   ret = ( *env )->NewStringUTF( env , res );
+
+   ( *env )->ReleaseStringUTFChars( env , def , d );
+
+   return ret;
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jdouble JNICALL Java_luajava_LuaState__1LcheckNumber
+  (JNIEnv * env , jobject jobj , jobject cptr , jint numArg)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+
+   pushJNIEnv( env , L );
+
+   return ( jdouble ) luaL_checknumber( L , ( int ) numArg );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jdouble JNICALL Java_luajava_LuaState__1LoptNumber
+  (JNIEnv * env , jobject jobj , jobject cptr , jint numArg , jdouble def)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+
+   pushJNIEnv( env , L );
+
+   return ( jdouble ) luaL_optnumber( L , ( int ) numArg , ( lua_Number ) def );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT void JNICALL Java_luajava_LuaState__1LcheckStack
+  (JNIEnv * env , jobject jobj , jobject cptr , jint sz , jstring msg)
+{
+   lua_State * L  = getStateFromCPtr( env , cptr );
+   const char * m = ( *env )->GetStringUTFChars( env , msg , NULL );
+
+   pushJNIEnv( env , L );
+
+   luaL_checkstack( L , ( int ) sz , m );
+
+   ( *env )->ReleaseStringUTFChars( env , msg , m );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT void JNICALL Java_luajava_LuaState__1LcheckType
+  (JNIEnv * env , jobject jobj , jobject cptr , jint nArg , jint t)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+
+   pushJNIEnv( env , L );
+
+   luaL_checktype( L , ( int ) nArg , ( int ) t );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT void JNICALL Java_luajava_LuaState__1LcheckAny
+  (JNIEnv * env , jobject jobj , jobject cptr , jint nArg)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+
+   pushJNIEnv( env , L );
+
+   luaL_checkany( L , ( int ) nArg );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jint JNICALL Java_luajava_LuaState__1LnewMetatable
+  (JNIEnv * env , jobject jobj , jobject cptr , jstring tName)
+{
+   lua_State * L     = getStateFromCPtr( env , cptr );
+   const char * name = ( *env )->GetStringUTFChars( env , tName , NULL );
+   int ret;
+
+   pushJNIEnv( env , L );
+
+   ret = luaL_newmetatable( L , name );
+
+   ( *env )->ReleaseStringUTFChars( env , tName , name );
+
+   return ( jint ) ret;;
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT void JNICALL Java_luajava_LuaState__1LgetMetatable
+  (JNIEnv * env , jobject jobj , jobject cptr , jstring tName)
+{
+   lua_State * L     = getStateFromCPtr( env , cptr );
+   const char * name = ( *env )->GetStringUTFChars( env , tName , NULL );
+
+   pushJNIEnv( env , L );
+
+   luaL_getmetatable( L , name );
+
+   ( *env )->ReleaseStringUTFChars( env , tName , name );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT void JNICALL Java_luajava_LuaState__1Lwhere
+  (JNIEnv * env , jobject jobj , jobject cptr , jint lvl)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+
+   pushJNIEnv( env , L );
+
+   luaL_where( L , ( int ) lvl );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jint JNICALL Java_luajava_LuaState__1Lref
+  (JNIEnv * env , jobject jobj , jobject cptr , jint t)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+
+   return ( jint ) luaL_ref( L , ( int ) t );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT void JNICALL Java_luajava_LuaState__1LunRef
+  (JNIEnv * env , jobject jobj , jobject cptr , jint t , jint ref)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+
+   luaL_unref( L , ( int ) t , ( int ) ref );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jint JNICALL Java_luajava_LuaState__1LgetN
+  (JNIEnv * env , jobject jobj , jobject cptr , jint t)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+
+   pushJNIEnv( env , L );
+
+   return ( jint ) luaL_getn( L , ( int ) t );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT void JNICALL Java_luajava_LuaState__1LsetN
+  (JNIEnv * env , jobject jobj , jobject cptr , jint t , jint n)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+
+   pushJNIEnv( env , L );
+
+   luaL_setn( L , ( int ) t , ( int ) n );
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jint JNICALL Java_luajava_LuaState__1LloadFile
+  (JNIEnv * env , jobject jobj , jobject cptr , jstring fileName)
+{
+   lua_State * L   = getStateFromCPtr( env , cptr );
+   const char * fn = ( *env )->GetStringUTFChars( env , fileName , NULL );
+   int ret;
+
+   pushJNIEnv( env , L );
+
+   ret = luaL_loadfile( L , fn );
+
+   ( *env )->ReleaseStringUTFChars( env , fileName , fn );
+
+   return ( jint ) ret;
+}
+
+
+/************************************************************************
+*   JNI Called function
+*      Lua Exported Function
+************************************************************************/
+
+JNIEXPORT jint JNICALL Java_luajava_LuaState__1LloadBuffer
+  (JNIEnv * env , jobject jobj , jobject cptr , jbyteArray buff , jlong sz , jstring n)
+{
+   lua_State * L = getStateFromCPtr( env , cptr );
+   jbyte * cBuff = ( *env )->GetByteArrayElements( env , buff, NULL );
+   const char * name = ( * env )->GetStringUTFChars( env , n , NULL );
+   int ret;
+
+   pushJNIEnv( env , L );
+
+   ret = lua_dobuffer( L , ( const char * ) buff, ( int ) sz, name );
+
+   ( *env )->ReleaseStringUTFChars( env , n , name );
+
+   ( *env )->ReleaseByteArrayElements( env , buff , cBuff , 0 );
+
+   return ( jint ) ret;
 }
