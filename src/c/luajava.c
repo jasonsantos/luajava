@@ -423,10 +423,12 @@ int objectIndex( lua_State * L )
    if ( exp != NULL )
    {
       jobject jstr;
-      const char * str;
+      const char * cStr;
       
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
+
+      ( *javaEnv )->DeleteLocalRef( javaEnv , str );
 
       if ( jstr == NULL )
       {
@@ -436,14 +438,17 @@ int objectIndex( lua_State * L )
          jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , methodId );
       }
 
-      str = ( *javaEnv )->GetStringUTFChars( javaEnv , jstr , NULL );
+      cStr = ( *javaEnv )->GetStringUTFChars( javaEnv , jstr , NULL );
 
-      lua_pushstring( L , str );
+      lua_pushstring( L , cStr );
 
-      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, str );
+      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, cStr );
 
       lua_error( L );
    }
+
+   ( *javaEnv )->DeleteLocalRef( javaEnv , str );
+
    if ( checkField != 0 )
    {
       return checkField;
@@ -559,10 +564,12 @@ int objectIndexReturn( lua_State * L )
    if ( exp != NULL )
    {
       jobject jstr;
-      const char * str;
+      const char * cStr;
       
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
+
+      ( *javaEnv )->DeleteLocalRef( javaEnv , str );
 
       if ( jstr == NULL )
       {
@@ -572,14 +579,16 @@ int objectIndexReturn( lua_State * L )
          jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , methodId );
       }
 
-      str = ( *javaEnv )->GetStringUTFChars( javaEnv , jstr , NULL );
+      cStr = ( *javaEnv )->GetStringUTFChars( javaEnv , jstr , NULL );
 
-      lua_pushstring( L , str );
+      lua_pushstring( L , cStr );
 
-      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, str );
+      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, cStr );
 
       lua_error( L );
    }
+
+   ( *javaEnv )->DeleteLocalRef( javaEnv , str );
 
    /* pushes new object into lua stack */
    return ret;
@@ -657,10 +666,12 @@ int classIndex( lua_State * L )
    if ( exp != NULL )
    {
       jobject jstr;
-      const char * str;
+      const char * cStr;
       
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
+
+      ( *javaEnv )->DeleteLocalRef( javaEnv , str );
 
       if ( jstr == NULL )
       {
@@ -670,14 +681,17 @@ int classIndex( lua_State * L )
          jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , methodId );
       }
 
-      str = ( *javaEnv )->GetStringUTFChars( javaEnv , jstr , NULL );
+      cStr = ( *javaEnv )->GetStringUTFChars( javaEnv , jstr , NULL );
 
-      lua_pushstring( L , str );
+      lua_pushstring( L , cStr );
 
-      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, str );
+      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, cStr );
 
       lua_error( L );
    }
+
+   ( *javaEnv )->DeleteLocalRef( javaEnv , str );
+
    if ( ret == 0 )
    {
       lua_pushstring( L , "Name is not a static field or function ." );
@@ -787,10 +801,12 @@ int javaBindClass( lua_State * L )
    if ( exp != NULL )
    {
       jobject jstr;
-      const char * str;
+      const char * cStr;
       
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
+
+      ( *javaEnv )->DeleteLocalRef( javaEnv , javaClassName );
 
       if ( jstr == NULL )
       {
@@ -800,14 +816,17 @@ int javaBindClass( lua_State * L )
          jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , methodId );
       }
 
-      str = ( *javaEnv )->GetStringUTFChars( javaEnv , jstr , NULL );
+      cStr = ( *javaEnv )->GetStringUTFChars( javaEnv , jstr , NULL );
 
-      lua_pushstring( L , str );
+      lua_pushstring( L , cStr );
 
-      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, str );
+      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, cStr );
 
       lua_error( L );
    }
+
+   ( *javaEnv )->DeleteLocalRef( javaEnv , javaClassName );
+
    /* pushes new object into lua stack */
 
    return pushJavaClass( L , classInstance );
@@ -876,10 +895,12 @@ int createProxy( lua_State * L )
    if ( exp != NULL )
    {
       jobject jstr;
-      const char * str;
+      const char * cStr;
       
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
+
+      ( *javaEnv )->DeleteLocalRef( javaEnv , str );
 
       if ( jstr == NULL )
       {
@@ -889,14 +910,17 @@ int createProxy( lua_State * L )
          jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , methodId );
       }
 
-      str = ( *javaEnv )->GetStringUTFChars( javaEnv , jstr , NULL );
+      cStr = ( *javaEnv )->GetStringUTFChars( javaEnv , jstr , NULL );
 
-      lua_pushstring( L , str );
+      lua_pushstring( L , cStr );
 
-      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, str );
+      ( *javaEnv )->ReleaseStringUTFChars( javaEnv , jstr, cStr );
 
       lua_error( L );
    }
+
+   ( *javaEnv )->DeleteLocalRef( javaEnv , str );
+
    return ret;
 }
 
@@ -1071,6 +1095,8 @@ int javaNewInstance( lua_State * L )
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
+      ( *javaEnv )->DeleteLocalRef( javaEnv , javaClassName );
+
       if ( jstr == NULL )
       {
          jmethodID methodId;
@@ -1087,6 +1113,9 @@ int javaNewInstance( lua_State * L )
 
       lua_error( L );
    }
+
+   ( *javaEnv )->DeleteLocalRef( javaEnv , javaClassName );
+
    return 1;
 }
 
