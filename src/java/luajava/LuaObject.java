@@ -363,7 +363,7 @@ public class LuaObject
 		      nargs = args.length;
 		      for (int i = 0; i < nargs; i++)
 		      {
-		        Object obj = (Object) args[i];
+		        Object obj = args[i];
 		        L.pushObjectValue(obj);
 		      }
 		    }
