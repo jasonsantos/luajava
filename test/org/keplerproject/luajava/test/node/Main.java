@@ -21,7 +21,7 @@
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package test.node;
+package org.keplerproject.luajava.test.node;
 
 import java.util.Iterator;
 import java.util.List;

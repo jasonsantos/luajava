@@ -1,4 +1,4 @@
-package test;
+package org.keplerproject.luajava.test;
 
 import java.util.Date;
 

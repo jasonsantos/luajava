@@ -21,35 +21,41 @@
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package test;
+package org.keplerproject.luajava.test;
+
+import org.keplerproject.luajava.LuaObject;
+import org.keplerproject.luajava.LuaState;
+import org.keplerproject.luajava.LuaStateFactory;
 
 /**
- *
+ * Tests LuaJava running as a multithreaded application.<br>
+ * The objective of the test is to see that LuaJava behaves
+ * properly when being executed from diferent threads.
+ * 
+ * @author thiago
  */
-public class ObjPrint implements Printable
+public class ThreadTest
 {
-	Printable p;
-	public ObjPrint()
-	{
-		this(null);
-	}
-	public ObjPrint(Printable p)
-	{
-		this.p = p;
-	}
-	public void print(String str)
-	{
-		if (p != null)
-		  p.print(str);
-		else
-			System.out.println("Printing from Java1..."+str);
-	}
+	private static String lua = "function run() io.write('test\\n');" +
+			"io.stdout:flush();" +
+			"luajava.bindClass('java.lang.Thread'):sleep(100);" +
+			" end;table={run=run}";
 	
-	public void print(String str, int i)
+	public static void main(String[] args) throws Exception
 	{
-		if (p != null)
-			p.print(str, 1);
-		else
-			System.out.println("Printing from Java2..."+str);
+		LuaState L = LuaStateFactory.newLuaState();
+		L.openBase();
+		L.openIo();
+		
+		L.doString(lua);
+		
+		for(int i = 0 ;i < 100; i++)
+		{
+		  LuaObject obj = L.getLuaObject("table");
+		  Object runnable = obj.createProxy("java.lang.Runnable");
+			Thread thread = new Thread((Runnable) runnable);
+			thread.start();
+		}
+		System.out.println("end main");
 	}
 }

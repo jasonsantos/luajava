@@ -21,28 +21,46 @@
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package test.node;
 
-import org.keplerproject.luajava.LuaObject;
+package org.keplerproject.luajava.test;
 
-/**
- * Interface that is implemented in Lua.
- * 
- * @author thiago
- */
-interface IConfig
+import org.keplerproject.luajava.JavaFunction;
+import org.keplerproject.luajava.LuaException;
+import org.keplerproject.luajava.LuaState;
+import org.keplerproject.luajava.LuaStateFactory;
+
+public class TestClass
 {
-  LuaObject processConfigFile(String fileName);
-  
-  String getName(LuaObject t);
-  
-  LuaObject getChild(LuaObject t, String childName);
-  
-  LuaObject getChildren(LuaObject t);
-
-  LuaObject getChildren(LuaObject t, String childName);
-  
-  String getAttribute(LuaObject t, String attributeName);
-  
-  String getValue(LuaObject t);
+	public final LuaState Lf;
+	
+	public JavaFunction jf;
+	
+	public TestClass(LuaState L)
+	{
+		this.Lf = L;
+		
+		jf = new JavaFunction( L ) {
+		public int execute()
+		{
+			this.L.pushString("Returned String");
+			System.out.println("Printing from Java Function");
+			return 1;
+		}
+	};
+	}
+	
+	public static void main(String[] args) throws LuaException
+	{
+		LuaState L = LuaStateFactory.newLuaState();
+		L.openBase();
+		
+		TestClass test = new TestClass(L);
+		
+		test.jf.register("javaFuncTest");
+		
+		test.Lf.doString(" f=javaFuncTest(); print(f) ");
+		
+		L.close();
+	}
+	
 }

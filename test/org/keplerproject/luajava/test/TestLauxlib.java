@@ -21,7 +21,7 @@
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package test;
+package org.keplerproject.luajava.test;
 
 import java.io.FileInputStream;
 

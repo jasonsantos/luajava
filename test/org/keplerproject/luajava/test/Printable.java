@@ -21,46 +21,12 @@
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+package org.keplerproject.luajava.test;
 
-package test;
-
-import org.keplerproject.luajava.JavaFunction;
-import org.keplerproject.luajava.LuaException;
-import org.keplerproject.luajava.LuaState;
-import org.keplerproject.luajava.LuaStateFactory;
-
-public class TestClass
+public interface Printable
 {
-	public final LuaState Lf;
+	public void print(String str);
 	
-	public JavaFunction jf;
-	
-	public TestClass(LuaState L)
-	{
-		this.Lf = L;
-		
-		jf = new JavaFunction( L ) {
-		public int execute()
-		{
-			this.L.pushString("Returned String");
-			System.out.println("Printing from Java Function");
-			return 1;
-		}
-	};
-	}
-	
-	public static void main(String[] args) throws LuaException
-	{
-		LuaState L = LuaStateFactory.newLuaState();
-		L.openBase();
-		
-		TestClass test = new TestClass(L);
-		
-		test.jf.register("javaFuncTest");
-		
-		test.Lf.doString(" f=javaFuncTest(); print(f) ");
-		
-		L.close();
-	}
-	
+	void print(String str, int i);
+
 }

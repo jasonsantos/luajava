@@ -21,12 +21,28 @@
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package test;
+package org.keplerproject.luajava.test.node;
 
-public interface Printable
+import org.keplerproject.luajava.LuaObject;
+
+/**
+ * Interface that is implemented in Lua.
+ * 
+ * @author thiago
+ */
+interface IConfig
 {
-	public void print(String str);
-	
-	void print(String str, int i);
+  LuaObject processConfigFile(String fileName);
+  
+  String getName(LuaObject t);
+  
+  LuaObject getChild(LuaObject t, String childName);
+  
+  LuaObject getChildren(LuaObject t);
 
+  LuaObject getChildren(LuaObject t, String childName);
+  
+  String getAttribute(LuaObject t, String attributeName);
+  
+  String getValue(LuaObject t);
 }

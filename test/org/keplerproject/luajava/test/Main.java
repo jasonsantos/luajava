@@ -21,7 +21,7 @@
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package test;
+package org.keplerproject.luajava.test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,13 +40,14 @@ public class Main
 	"c = 'campo c';" +
 	"tab= { a='tab a'; b='tab b'; c='tab c', d={ e='tab d e'} } ;"+
 	"function imprime (str)	print(str);	return 'joao', 1	end;" + 
-	"luaPrint={implements='test.Printable', print=function(str)print('Printing from lua :'..str)end  }";
+	"luaPrint={implements='org.keplerproject.luajava.test.Printable', print=function(str)print('Printing from lua :'..str)end  }";
 
 
   public static void main(String[] main_args)
     throws IOException, FileNotFoundException, ClassNotFoundException, LuaException
   {
   	LuaState L = LuaStateFactory.newLuaState();
+  	L.openBase();
   	
   	L.doString(str);
 
@@ -60,7 +61,7 @@ public class Main
     p.print("TESTE 1");
      
 	  LuaObject o = L.getLuaObject("luaPrint");
-    p = (Printable) o.createProxy("test.Printable");
+    p = (Printable) o.createProxy("org.keplerproject.luajava.test.Printable");
     p.print("Teste 2");
     
     L.close();
