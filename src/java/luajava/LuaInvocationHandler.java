@@ -48,28 +48,32 @@ public class LuaInvocationHandler implements InvocationHandler
 	 */
   public Object invoke(Object proxy, Method method, Object[] args) throws LuaException
   {
-  	String methodName = method.getName();
-  	LuaObject func    = obj.getField(methodName);
-  	
-  	if ( func.isNil() )
-  	{
-  		return null;
-  	}
-  	
-  	Class retType = method.getReturnType();
-  	Object ret;
-  	
-  	// Checks if returned type is void. if it is returns null.
-  	if ( retType.equals( Void.class ) )
-  	{
-  		func.call( args , 0 );
-  		ret = null;
-  	}
-  	else
-  	{
-  		ret = func.call(args, 1)[0];
-  	}
-  	
-  	return ret;
-  }  	
+    //synchronized(obj.L)
+    synchronized(LuaState.class)
+    {
+	  	String methodName = method.getName();
+	  	LuaObject func    = obj.getField(methodName);
+	  	
+	  	if ( func.isNil() )
+	  	{
+	  		return null;
+	  	}
+	  	
+	  	Class retType = method.getReturnType();
+	  	Object ret;
+	  	
+	  	// Checks if returned type is void. if it is returns null.
+	  	if ( retType.equals( Void.class ) )
+	  	{
+	  		func.call( args , 0 );
+	  		ret = null;
+	  	}
+	  	else
+	  	{
+	  		ret = func.call(args, 1)[0];
+	  	}
+	  	
+	  	return ret;
+	  }
+  }
 }

@@ -466,13 +466,13 @@ public class LuaState
     setTop(- (n) - 1);
   }
 
-  public void getGlobal(String global)
+  public synchronized void getGlobal(String global)
   {
     pushString(global);
     getTable(LUA_GLOBALSINDEX.intValue());
   }
 
-  public void setGlobal()
+  public synchronized void setGlobal()
   {
     setTable(LUA_GLOBALSINDEX.intValue());
   }
@@ -626,7 +626,7 @@ public class LuaState
    * @param idx - Index in the Lua Stack
    * @return Object - Java object equivalent to the Lua one
    */
-	public Object toJavaObject( int idx )
+	public synchronized Object toJavaObject( int idx )
 	{
 		Object obj = null;
 
