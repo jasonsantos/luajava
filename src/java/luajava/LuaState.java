@@ -195,6 +195,34 @@ public class LuaState
   // LuaLibAux
   private synchronized native int _doFile(CPtr ptr, String fileName);
   private synchronized native int _doString(CPtr ptr, String string);
+  private synchronized native int _doBuffer(CPtr ptr, byte[] buff, long sz, String n);
+  
+  private synchronized native int    _LgetMetaField(CPtr ptr, int obj, String e);
+  private synchronized native int    _LcallMeta(CPtr ptr, int obj, String e);
+  private synchronized native int    _Ltyperror(CPtr ptr, int nArg, String tName);
+  private synchronized native int    _LargError(CPtr ptr, int numArg, String extraMsg);
+  private synchronized native String _LcheckString(CPtr ptr, int numArg);
+  private synchronized native String _LoptString(CPtr ptr, int numArg, String def);
+  private synchronized native double _LcheckNumber(CPtr ptr, int numArg);
+  private synchronized native double _LoptNumber(CPtr ptr, int numArg, double def);
+  
+  private synchronized native void _LcheckStack(CPtr ptr, int sz, String msg);
+  private synchronized native void _LcheckType(CPtr ptr, int nArg, int t);
+  private synchronized native void _LcheckAny(CPtr ptr, int nArg);
+  
+  private synchronized native int  _LnewMetatable(CPtr ptr, String tName);
+  private synchronized native void _LgetMetatable(CPtr ptr, String tName);
+  
+  private synchronized native void _Lwhere(CPtr ptr, int lvl);
+  
+  private synchronized native int  _Lref(CPtr ptr, int t);
+  private synchronized native void _LunRef(CPtr ptr, int t, int ref);
+  
+  private synchronized native int  _LgetN(CPtr ptr, int t);
+  private synchronized native void _LsetN(CPtr ptr, int t, int n);
+  
+  private synchronized native int _LloadFile(CPtr ptr, String fileName);
+  private synchronized native int _LloadBuffer(CPtr ptr, byte[] buff, long sz, String name);
   
   
   // Open Libraries Functions
@@ -483,18 +511,6 @@ public class LuaState
   	_concat(luaState, n);
   }
 
-  // returns 0 if ok
-  public int doFile(String fileName)
-  {
-    return _doFile(luaState, fileName);
-  }
-
-  // returns 0 if ok
-  public int doString(String str)
-  {
-    return _doString(luaState, str);
-  }
-
   // returns ref number in table
   public int ref(int t)
   {
@@ -506,7 +522,128 @@ public class LuaState
   {
   	_unRef(luaState , t , ref);
   }
+  
 
+  // FUNCTION FROM lauxlib
+  // returns 0 if ok
+  public int doFile(String fileName)
+  {
+    return _doFile(luaState, fileName);
+  }
+
+  // returns 0 if ok
+  public int doString(String str)
+  {
+    return _doString(luaState, str);
+  }
+  
+  // return 0 if ok
+  public int doBuffer(byte[] buff, String name)
+  {
+    return _doBuffer(luaState, buff, buff.length, name);
+  }
+  
+  public int LgetMetaField(int obj, String e)
+  {
+    return _LgetMetaField(luaState, obj, e);
+  }
+  
+  public int LcallMeta(int obj, String e)
+  {
+    return _LcallMeta(luaState, obj, e);
+  }
+  
+  public int Ltyperror(int nArg, String tName)
+  {
+    return _Ltyperror(luaState, nArg, tName);
+  }
+  
+  public int LargError(int numArg, String extraMsg)
+  {
+    return _LargError(luaState, numArg, extraMsg);
+  }
+  
+  public String LcheckString(int numArg)
+  {
+    return _LcheckString(luaState, numArg);
+  }
+  
+  public String LoptString(int numArg, String def)
+  {
+    return _LoptString(luaState, numArg, def);
+  }
+  
+  public double LcheckNumber(int numArg)
+  {
+    return _LcheckNumber(luaState, numArg);
+  }
+  
+  public double LoptNumber(int numArg, double def)
+  {
+    return _LoptNumber(luaState, numArg, def);
+  }
+  
+  public void LcheckStack(int sz, String msg)
+  {
+    _LcheckStack(luaState, sz, msg);
+  }
+  
+  public void LcheckType(int nArg, int t)
+  {
+    _LcheckType(luaState, nArg, t);
+  }
+  
+  public void LcheckAny(int nArg)
+  {
+    _LcheckAny(luaState, nArg);
+  }
+  
+  public int LnewMetatable(String tName)
+  {
+    return _LnewMetatable(luaState, tName);
+  }
+  
+  public void LgetMetatable(String tName)
+  {
+    _LgetMetatable(luaState, tName);
+  }
+  
+  public void Lwhere(int lvl)
+  {
+    _Lwhere(luaState, lvl);
+  }
+  
+  public int Lref(int t)
+  {
+    return _Lref(luaState, t);
+  }
+  
+  public void LunRef(int t, int ref)
+  {
+    _LunRef(luaState, t, ref);
+  }
+  
+  public int LgetN(int t)
+  {
+    return _LgetN(luaState, t);
+  }
+  
+  public void LsetN(int t, int n)
+  {
+    _LsetN(luaState, t, n);
+  }
+  
+  public int LloadFile(String fileName)
+  {
+    return _LloadFile(luaState, fileName);
+  }
+  
+  public int LloadBuffer(byte[] buff, String name)
+  {
+    return _LloadBuffer(luaState, buff, buff.length, name);
+  }
+  
+  
   //IMPLEMENTED C MACROS
 
   public void pop(int n)
