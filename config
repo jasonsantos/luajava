@@ -5,8 +5,7 @@ LUA_LIBDIR= /usr/local/lib/lua/5.0
 LUA_INCLUDES= /usr/local/lib/lua/5.0/include
 JDK= $(JAVA_HOME)
 
-LIB_LUA= liblua5.a
-LIB_LUALIB= liblualib5.a
+LIB_LUA= liblua50.a
 
 LIB_EXT= .so
 LIB_PREFIX= lib
@@ -24,15 +23,14 @@ CC= gcc
 
 #############################################################
 #Windows
-#LUA_DIR= ..\external-src\lua5
-#LUA_LIBDIR= ..\external-src\lua5\lib\dll
+#LUA_DIR= ..\external-src\lua50
+#LUA_LIBDIR= ..\external-src\lua50\lib\dll
 #LUA_INCLUDES= $(LUA_DIR)\include
 #JDK= $(JAVA_HOME)
 #VS_INCDIR= C:\Program Files\Microsoft Visual Studio\VC98\include
 #JDK= C:\j2sdk1.4.2_06
 
-#LIB_LUA= lua5.lib
-#LIB_LUALIB= lualib5.lib
+#LIB_LUA= lua50.lib
 
 #LIB_EXT= .dll
 #INCS= -I$(JDK)/include -I$(JDK)/include/win32 -I"$(VS_INCDIR)" -I"$(LUA_INCLUDES)"
@@ -58,4 +56,4 @@ JAR_FILE= $(PKG).jar
 SO_FILE= $(LIB_PREFIX)$(PKG)$(LIB_EXT)
 DIST_DIR= $(PKG)
 
-# $Id: config,v 1.5 2005-04-05 21:35:20 tuler Exp $
+# $Id: config,v 1.6 2005-05-06 20:13:58 tuler Exp $
