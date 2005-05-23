@@ -26,7 +26,7 @@
 	<ul>
 		<li><a href="index.html">Home</a>
 			<ul>
-				<li><a href="index.html#whatis">What is</a></li>
+				<li><a href="index.html#overview">Overview</a></li>
 				<li><a href="index.html#status">Status</a></li>
 				<li><a href="index.html#download">Download</a></li>
 				<li><a href="index.html#credits">Credits</a></li>
@@ -41,7 +41,7 @@
 		</li>
 		<li><strong>Manual</strong>
 			<ul>
-				<li><a href="manual.html#tool">The LuaJava tool</a></li>
+				<li><a href="manual.html#tool">LuaJava tool</a></li>
 				<li><a href="manual.html#fromjava">Use from Java</a></li>
 			</ul>
 		</li>
@@ -53,7 +53,7 @@
 
 <div id="content">
 
-<h2><a name="tool"></a>The LuaJava tool</h2>
+<h2><a name="tool"></a>LuaJava tool</h2>
 
 <p>
 One of the goals of LuaJava is to allow the programmer to manipulate Java objects in the same way as it manipulates native (Lua) objects.
@@ -198,66 +198,41 @@ the number of parameters returned by the the function, otherwise nothing is retu
 
 <h3>LuaObject</h3>
 
-<p>LuaJava has a class luajava.LuaObject . This class represents a Lua object of any type. A LuaObject is constructed by the LuaState object by the overloaded <code>getLuaObject</code> function. Threre are four ways in which you can create a LuaObject.</p>
+<p>LuaJava has a class <code>org.keplerproject.luajava.LuaObject</code>. This class represents a Lua object of any type. A LuaObject is constructed by the LuaState object by the overloaded <code>getLuaObject</code> function.
+There are four ways in which you can create a LuaObject.</p>
 
-<p>
-<b>First Function :</b>
-<code>
-public LuaObject getLuaObject(String globalName);
-</code><br/>
-
-<code>globalName</code> is the name of the global variable that hold the wanted object.
-</p>
-
-<p>
-<b>Second Function :</b>
-<code>
-public LuaObject getLuaObject(LuaObject parent, String name);
-</code><br/>
-
-<code>parent</code> is the LuaObject representing the parent object. The parent object should be either a table or userdata.<br/>
-<code>name</code> is the index name of the wanted object. <br/>
-</p>
+<dl>
+	<dt><strong><code>public LuaObject getLuaObject(String globalName);</code></strong></dt>
+	<dd><code>globalName</code> is the name of the global variable that hold the wanted object.</dd>
 	
-<p>
-
-<b>Third Function :</b>
-<code>
-public LuaObject getLuaObject(LuaObject parent, Number name);
-</code><br/>
-
-<code>parent</code> is the LuaObject representing the parent object. The parent object should be either a table or userdata.<br/>
-<code>name</code> is the numeric index of the wanted object. <br/>
-</p>
+	<dt><strong><code>public LuaObject getLuaObject(LuaObject parent, String name);</code></strong></dt>
+	<dd>
+	<code>parent</code> is the LuaObject representing the parent object. The parent object should be either a table or userdata.<br/>
+	<code>name</code> is the index name of the wanted object.
+	</dd>
 	
-<p>
-
-<b>Fourth Function :</b>
-<code>
-LuaObject getLuaObject(LuaObject parent, LuaObject name);
-</code><br/>
-
-<code>parent</code> is the LuaObject representing the parent object. The parent object should be either a table or userdata.<br/>
-<code>name</code> is the the object that the wanted object is indexed by. <br/>
-</p>
+	<dt><strong><code>public LuaObject getLuaObject(LuaObject parent, Number name);</code></strong></dt>
+	<dd>
+	<code>parent</code> is the LuaObject representing the parent object. The parent object should be either a table or userdata.<br/>
+	<code>name</code> is the numeric index of the wanted object.
+	</dd>
 	
-<p>
-
-<b>Fifth Function :</b>
-<code>
-public LuaObject getLuaObject(int index);
-</code><br/>
-
-<code>index</code> is the index of the object in the Lua stack. The constructor will not pop the object from the stack.
-</p>
+	<dt><strong><code>LuaObject getLuaObject(LuaObject parent, LuaObject name);</code></strong></dt>
+	<dd>
+	<code>parent</code> is the LuaObject representing the parent object. The parent object should be either a table or userdata.<br/>
+	<code>name</code> is the the object that the wanted object is indexed by.
+	</dd>
 	
-<h4>Important:</h4>
-
+	<dt><strong><code>public LuaObject getLuaObject(int index);</code></strong></dt>
+	<dd>
+	<code>index</code> is the index of the object in the Lua stack. The constructor will not pop the object from the stack.
+	</dd>
+</dl>
+	
 <p>The LuaObject will represent only the object itself, not a variable or a stack index, so when you change a string, remember that strings are immutable objects in Lua, and the LuaObject you have will represent the old one.</p>
 
 
 <h3>Proxies</h3>
-
 
 <p>LuaJava allows you to implement a class in Lua, like said before. If you want to create this proxy from Java, you should have a LuaObject representing the table that has the functions that implement the interface. From this LuaObject you can call the <code>createProxy(String implements)</code>. This method receives the string with the name of the interfaces implemented by the object separated by comma.</p>
 
