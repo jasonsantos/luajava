@@ -1,64 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
-  <head>
+<head>
     <title>LuaBSF - A LuaJava extension</title>
-  </head>
-  <body bgcolor="#FFFFFF">
-    <hr>
-    <center>
-    <table border=0 cellspacing=0 cellpadding=0>
-    <tr><td align="center">
+    <link rel="stylesheet" href="http://www.keplerproject.org/doc.css" type="text/css"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
 
-    <a href="http://www.keplerproject.org/luajava">
-    <img border=0 alt="LuaJava" src="luajava_128.png">
-    </a>
-    <tr><td align="center" valign="top">LuaBSF: A LuaJava extension</td></tr>
-    </table>
-      <h2>Scripting with Lua using Apache's Bean Scripting Framework</h2>
-    </center>
-    <hr>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"><a href="http://www.keplerproject.org/luajava/">
+		<img alt="LuaJava" src="luajava_128.png"/>
+	</a></div>
+	<div id="product_name"><big><b>LuaBSF</b></big></div>
+	<div id="product_description">Scripting with Lua using Apache's Bean Scripting Framework</div>
+</div> <!-- id="product" -->
+
+<div id="main">
+<div id="navigation">
+	
+<h1>LuaBSF</h1>
+	<ul>
+		<li><strong>Home</strong>
+			<ul>
+				<li><a href="index.html#overview">Overview</a></li>
+				<li><a href="index.html#status">Manual</a></li>
+				<li><a href="index.html#download">Download</a></li>
+				<li><a href="index.html#credits">Example</a></li>
+			</ul>
+		</li>
+	</ul>
+</div> <!-- id="navigation" -->
+
+<div id="content">
+
+<h2>Overview</h2>
+	
+<p>LuaBSF is an extension of the <a href="http://jakarta.apache.org/bsf/">Bean Scripting Framework (BSF)</a> that
+implements an engine that allows BSF to call Lua. In order to do that, 
+LuaBSF uses <a href="http://www.keplerproject.org/luajava">LuaJava</a>
+to implement the comunication between Lua and Java.</p>
+<p><a href="http://jakarta.apache.org/bsf/">BSF</a>
+is a set of Java classes which provides scripting language support within
+Java applications, and access to Java objects and methods from scripting
+languages. BSF allows one to write JSPs in languages other than Java
+while providing access to the Java class library. In addition, BSF
+permits any Java application to be implemented in part (or dynamically
+extended) by a language that is embedded within it. This is achieved
+by providing an API that permits calling scripting language engines
+from within Java, as well as an object registry that exposes Java
+objects to these scripting language engines.</p>
 
     
-    <h2>What is LuaBSF?</h2>
-    <p>LuaBSF is an extension of <a href="http://jakarta.apache.org/bsf/">BSF</a> that
-    implements an engine that allows BSF to call Lua. In order to do that, 
-    LuaBSF uses <a href="http://www.keplerproject.org/luajava">LuaJava</a>
-    to implement the comunication between Lua and Java.</p>
-    <p><a href="http://jakarta.apache.org/bsf/">Bean Scripting Framework (BSF)</a>
-    is a set of Java classes which provides scripting language support within
-    Java applications, and access to Java objects and methods from scripting
-    languages. BSF allows one to write JSPs in languages other than Java
-    while providing access to the Java class library. In addition, BSF
-    permits any Java application to be implemented in part (or dynamically
-    extended) by a language that is embedded within it. This is achieved
-    by providing an API that permits calling scripting language engines
-    from within Java, as well as an object registry that exposes Java
-    objects to these scripting language engines.</p>
+<h2>Manual</h2>
+<p>There are two ways to use LuaBSF.</p>
+<ul>
+  <li>Change the configuration file <i>Languages.properties</i>, 
+  inside bsf.jar to include this line:<br/>
+	lua = org.keplerproject.luajava.luabsf.LuaEngine, lua
+  <li>Call the <code>BSFManager.registerScriptingEngine()</code> method:<br/>
+
+  <code>registerScriptingEngine("lua", "org.keplerproject.luajava.luabsf.LuaEngine", new String[]{"lua"})</code>
+</ul>
+    
+<h2>Download</h2>
+<p>LuaBSF can be downloaded from its <a href =" http://luaforge.net/projects/luajava/files">LuaForge</a> page.</p>
+    
+<h2>Example</h2>
+<p>BSF offers a taglib to be used to develop Java Server Pages(jsp) 
+using a script language. Here is an example of a jsp page using Lua:</p>
 
     
-    <h2>How can I use BSF with Lua?</h2>
-    <p>There are two ways to use LuaBSF.</p>
-    <ul>
-      <li>Change the configuration file <i>Languages.properties</i>, 
-      inside bsf.jar to include this line:<br/>
-        lua = org.keplerproject.luajava.luabsf.LuaEngine, lua
-      <li>Call the <code>BSFManager.registerScriptingEngine()</code> method:<br/>
-
-      <code>registerScriptingEngine("lua", "org.keplerproject.luajava.luabsf.LuaEngine", new String[]{"lua"})</code>
-    </ul>
+<p>example.jsp</p>
     
-    <h2>Download:</h2>
-    <p>LuaBSF can be downloaded from <a href =" http://luaforge.net/project/showfiles.php?group_id=10">here</a>.</p>
-    
-    <h2>Example:</h2>
-    <p>BSF offers a taglib to be used to develop Java Server Pages(jsp) 
-    using a script language. Here is an example of a jsp page using Lua:</p>
-
-    
-    <p>example.jsp</p>
-    
-    <ul>
-    <code>
-      <pre>
+<pre class="example">
 &lt;%@ taglib uri="/WEB-INF/bsf.tld" prefix="bsf" %&gt;
 &lt;html&gt;
   &lt;body&gt;
@@ -73,19 +91,28 @@
   &lt;/bsf:expression&gt;
   &lt;/body&gt;
 &lt;/html&gt;   
-      </pre>
+</pre>
 
-    </code>
-    </ul>
     
-    <p>The output for this page should be:</p>
-    <pre>
-      This is a scriptlet test in Lua..1
-      This is a scriptlet test in Lua..2
-      This is a scriptlet test in Lua..3
-      This is a scriptlet test in Lua..4
-      This is a scriptlet test in Lua..5
-      Now it's an expression
-    </pre>
-  </body>
-</html>
+<p>The output for this page should be:</p>
+<pre class="example">
+This is a scriptlet test in Lua..1
+This is a scriptlet test in Lua..2
+This is a scriptlet test in Lua..3
+This is a scriptlet test in Lua..4
+This is a scriptlet test in Lua..5
+Now it's an expression
+</pre>
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+	<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->
+
+</body>
+</html> 
