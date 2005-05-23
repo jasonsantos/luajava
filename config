@@ -48,7 +48,7 @@ CC= gcc
 
 
 #########################################################
-VERSION= 1.0.0
+VERSION= 1.0
 PKG= luajava-$(VERSION)
 TAR_FILE= $(PKG).tar.gz
 ZIP_FILE= $(PKG).zip
@@ -56,4 +56,4 @@ JAR_FILE= $(PKG).jar
 SO_FILE= $(LIB_PREFIX)$(PKG)$(LIB_EXT)
 DIST_DIR= $(PKG)
 
-# $Id: config,v 1.6 2005-05-06 20:13:58 tuler Exp $
+# $Id: config,v 1.7 2005-05-23 15:49:39 tuler Exp $
