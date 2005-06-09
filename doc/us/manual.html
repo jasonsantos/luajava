@@ -69,22 +69,24 @@ LuaJava creates a library in Lua called <code>luajava</code>. Inside this librar
 <p><code>newInstance</code> first parameter is the name of the class to be instantiated. The other arguments are passed to the construtctor.</p>
 <p>
 Example :</p>
-<pre class="example">  obj = luajava.newInstance("java.lang.Object")
-  -- obj is now a reference to the new object
-  -- created and any of its methods can be accessed.
+<pre class="example">
+obj = luajava.newInstance("java.lang.Object")
+-- obj is now a reference to the new object
+-- created and any of its methods can be accessed.
 
-  -- this creates a string tokenizer to the "a,b,c,d"
-  -- string using "," as the token separator.
-  strTk = luajava.newInstance("java.util.StringTokenizer", "a,b,c,d", ",")
-  while strTk:hasMoreTokens() do
-      print(strTk:nextToken())
-  end
+-- this creates a string tokenizer to the "a,b,c,d"
+-- string using "," as the token separator.
+strTk = luajava.newInstance("java.util.StringTokenizer", 
+	"a,b,c,d", ",")
+while strTk:hasMoreTokens() do
+    print(strTk:nextToken())
+end
 
-  -- the while loop code should print the following on the screen:
-  a
-  b
-  c
-  d
+-- the while loop code should print the following on the screen:
+a
+b
+c
+d
 </pre>
 
 <h4>bindClass</h4> 
@@ -121,16 +123,17 @@ The function createProxy returns a java Object reference that can be used as a i
 createProxy receives a string that contain the name of the interfaces to be implemented, separated by a comma(,), and a lua object that is the interface implementation.
 </p>
 <p>Example:</p>
-<pre class="example">  button = luajava.newInstance("java.awt.Button", "execute")
-  button_cb = {}
-  function button_cb:actionPerformed(ev)
-   . . .
-  end
+<pre class="example">
+button = luajava.newInstance("java.awt.Button", "execute")
+button_cb = {}
+function button_cb:actionPerformed(ev)
+ . . .
+end
 
-  buttonProxy = luajava.createProxy("java.awt.ActionListener", button_cb)
+buttonProxy = luajava.createProxy("java.awt.ActionListener", 
+	button_cb)
 
-  button:addActionListenet(buttonProxy)
-
+button:addActionListenet(buttonProxy)
 </pre>
 
 <p>We can use Lua scripts to write implementations for Java <b>interfaces</b> only.</p>
