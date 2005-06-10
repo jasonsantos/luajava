@@ -24,8 +24,10 @@
 package org.keplerproject.luajava;
 
 /**
- * Class that represents a lua state. This class gives access to all
- * lua's functions and some of LuaJava's functions implemented in C.
+ * LuaState if the main class of LuaJava for the Java developer.
+ * LuaState is a mapping of most of Lua's C API functions.
+ * LuaState also provides many other functions that will be used to manipulate 
+ * objects between Lua and Java.
  * @author Thiago Ponte
  */
 public class LuaState
@@ -47,10 +49,30 @@ public class LuaState
   /*
    * error codes for `lua_load' and `lua_pcall'
    */
+  /**
+   * a runtime error.
+   */
   final public static Integer LUA_ERRRUN    = new Integer(1);
+  
+  /**
+   * 
+   */
   final public static Integer LUA_ERRFILE   = new Integer(2);
+  
+  /**
+   * syntax error during pre-compilation.
+   */
   final public static Integer LUA_ERRSYNTAX = new Integer(3);
+  
+  /**
+   * memory allocation error. For such errors, Lua does not call 
+   * the error handler function.
+   */
   final public static Integer LUA_ERRMEM    = new Integer(4);
+  
+  /**
+   * error while running the error handler function.
+   */
   final public static Integer LUA_ERRERR    = new Integer(5);
 
   /**
@@ -72,9 +94,7 @@ public class LuaState
   protected LuaState(int stateId)
   {
     luaState = _open();
-
     luajava_open(luaState, stateId);
-
     this.stateId = stateId;
   }
 
@@ -85,9 +105,7 @@ public class LuaState
   protected LuaState(CPtr luaState)
   {
     this.luaState = luaState;
-
     this.stateId = LuaStateFactory.insertLuaState(this);
-
     luajava_open(luaState, stateId);
   }
 
@@ -936,8 +954,8 @@ public class LuaState
 
 	/**
 	 * Creates a reference to an object inside another object
-   * @param parent The Lua Table or Userdata that contains the Field.
-   * @param name The name that index the field
+     * @param parent The Lua Table or Userdata that contains the Field.
+     * @param name The name that index the field
 	 * @return LuaObject
 	 * @throws LuaException if parent is not a table or userdata
 	 */

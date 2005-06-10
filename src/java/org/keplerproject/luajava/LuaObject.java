@@ -28,7 +28,29 @@ import java.lang.reflect.Proxy;
 import java.util.StringTokenizer;
 
 /**
- * Class that represents a Lua Object.
+ * This class represents a Lua object of any type.
+ * A LuaObject is constructed by a {@link LuaState} object using one of the four methods:
+ * <ul>
+ * <li>{@link LuaState#getLuaObject(String globalName)}</li>
+ * <li>{@link LuaState#getLuaObject(LuaObject parent, String name)}</li>
+ * <li>{@link LuaState#getLuaObject(LuaObject parent, Number name)}</li>
+ * <li>{@link LuaState#getLuaObject(LuaObject parent, LuaObject name)}</li>
+ * <li>{@link LuaState#getLuaObject(int index)}</li>
+ * </ul>
+ * The LuaObject will represent only the object itself, not a variable or a 
+ * stack index, so when you change a string, remember that strings are 
+ * immutable objects in Lua, and the LuaObject you have will represent the 
+ * old one.
+ * 
+ * <h2>Proxies</h2>
+ * 
+ * LuaJava allows you to implement a class in Lua, like said before.
+ * If you want to create this proxy from Java, you should have a LuaObject 
+ * representing the table that has the functions that implement the interface.
+ * From this LuaObject you can call the <code>createProxy(String implements)</code>. 
+ * This method receives the string with the name of the interfaces implemented by 
+ * the object separated by comma.
+ * 
  * @author Rizzato
  * @author Thiago Ponte
  */

@@ -24,10 +24,11 @@
 package org.keplerproject.luajava;
 
 /**
- * This interface represents a `function' that can be called from Lua. Any
- * object that implements this interface can be passed as a function to Lua.
- * The method <code>foo</code> is called when Lua tries to execute the
- * function.
+ * JavaFunction is a class that can be used to implement a Lua function in Java.
+ * JavaFunction is an abstract class, so in order to use it you must extend this 
+ * class and implement the <code>execute</code> method. This <code>execute</code> 
+ * method is the method that will be called when you call the function from Lua.
+ * To register the JavaFunction in Lua use the method <code>register(String name)</code>.
  */
 public abstract class JavaFunction
 {
@@ -47,8 +48,8 @@ public abstract class JavaFunction
 	public abstract int execute() throws LuaException;
 	
 	/**
-	 * Constructor that receives the current LuaState.
-	 * @param L
+	 * Constructor that receives a LuaState.
+	 * @param L LuaState object associated with this JavaFunction object
 	 */
 	public JavaFunction(LuaState L)
 	{
@@ -71,7 +72,7 @@ public abstract class JavaFunction
 	/**
 	 * Register a JavaFunction with a given name. This method registers in a
 	 * global variable the JavaFunction specified.
-	 * @param name The name of the function.
+	 * @param name name of the function.
 	 */
 	public void register(String name) throws LuaException
 	{
@@ -82,4 +83,3 @@ public abstract class JavaFunction
 	  }
 	}
 }
-

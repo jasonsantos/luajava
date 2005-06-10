@@ -27,7 +27,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 /**
- * LuaJava console
+ * Simple LuaJava console.
+ * This is also an example on how to use the Java side of LuaJava and how to startup
+ * a LuaJava application.
  * 
  * @author Thiago Ponte
  */
@@ -35,10 +37,9 @@ public class Console
 {
 
    /**
-    * Creates a console for user interaction
+    * Creates a console for user interaction.
     * 
-    * @param args -
-    *           names of the lua files to be executed
+    * @param args	names of the lua files to be executed
     */
    public static void main(String[] args)
    {

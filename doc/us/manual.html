@@ -42,11 +42,10 @@
 		<li><strong>Manual</strong>
 			<ul>
 				<li><a href="manual.html#luareference">Lua Reference</a></li>
-				<li><a href="manual.html#fromjava">Use from Java</a></li>
+				<li><a href="API/index.html">Java Reference</a></li>
 			</ul>
 		</li>
 		<li><a href="examples.html">Examples</a></li>
-		<li><a href="API/index.html">Java Reference</a></li>
 		<li><a href="history.html">History</a></li>
 		<li><a href="license.html">License</a></li>
 	</ul>
@@ -198,68 +197,6 @@ the number of parameters returned by the the function, otherwise nothing is retu
 </dd>
 
 </dl>
-
-<h2><a name="fromjava"></a>How to use LuaJava from Java</h2>
-
-<p>Since Java is a compiled and typed language, the usage of scripting languages can be very useful. We have seen how to write Lua code using Java objects.
-</p>
-<p>Now we are going to see how to use Lua objects and proxies in Java.</p>
-
-
-<h3>LuaState</h3>
-
-<p>LuaState if the main class of LuaJava for the Java developer. LuaState is a mapping of most of Lua's C API functions. LuaState also provides many other functions that will be used to manipulate objects between Lua and Java.</p>
-
-<h3>LuaObject</h3>
-
-<p>LuaJava has a class <code>org.keplerproject.luajava.LuaObject</code>. This class represents a Lua object of any type. A LuaObject is constructed by the LuaState object by the overloaded <code>getLuaObject</code> function.
-There are four ways in which you can create a LuaObject.</p>
-
-<dl>
-	<dt><strong><code>public LuaObject getLuaObject(String globalName);</code></strong></dt>
-	<dd><code>globalName</code> is the name of the global variable that hold the wanted object.</dd>
-	
-	<dt><strong><code>public LuaObject getLuaObject(LuaObject parent, String name);</code></strong></dt>
-	<dd>
-	<code>parent</code> is the LuaObject representing the parent object. The parent object should be either a table or userdata.<br/>
-	<code>name</code> is the index name of the wanted object.
-	</dd>
-	
-	<dt><strong><code>public LuaObject getLuaObject(LuaObject parent, Number name);</code></strong></dt>
-	<dd>
-	<code>parent</code> is the LuaObject representing the parent object. The parent object should be either a table or userdata.<br/>
-	<code>name</code> is the numeric index of the wanted object.
-	</dd>
-	
-	<dt><strong><code>LuaObject getLuaObject(LuaObject parent, LuaObject name);</code></strong></dt>
-	<dd>
-	<code>parent</code> is the LuaObject representing the parent object. The parent object should be either a table or userdata.<br/>
-	<code>name</code> is the the object that the wanted object is indexed by.
-	</dd>
-	
-	<dt><strong><code>public LuaObject getLuaObject(int index);</code></strong></dt>
-	<dd>
-	<code>index</code> is the index of the object in the Lua stack. The constructor will not pop the object from the stack.
-	</dd>
-</dl>
-	
-<p>The LuaObject will represent only the object itself, not a variable or a stack index, so when you change a string, remember that strings are immutable objects in Lua, and the LuaObject you have will represent the old one.</p>
-
-
-<h3>Proxies</h3>
-
-<p>LuaJava allows you to implement a class in Lua, like said before. If you want to create this proxy from Java, you should have a LuaObject representing the table that has the functions that implement the interface. From this LuaObject you can call the <code>createProxy(String implements)</code>. This method receives the string with the name of the interfaces implemented by the object separated by comma.</p>
-
-
-<h3>JavaFunction</h3>
-
-<p>JavaFunction is a class that can be used to implement a Lua function in Java.
-
-JavaFunction is an abstract class, so in order to use it you must extend this class and implement the <code>execute</code> method. This <code>execute</code> method is the method that will be called when you call the function from Lua.
-
-To register the JavaFunction in Lua use the method <code>register(String name)</code>.
-</p>
-
 
 </div> <!-- id="content" -->
 
