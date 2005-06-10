@@ -41,12 +41,12 @@
 		</li>
 		<li><strong>Manual</strong>
 			<ul>
-				<li><a href="manual.html#tool">LuaJava tool</a></li>
+				<li><a href="manual.html#luareference">Lua Reference</a></li>
 				<li><a href="manual.html#fromjava">Use from Java</a></li>
 			</ul>
 		</li>
 		<li><a href="examples.html">Examples</a></li>
-		<li><a href="API/index.html">API</a></li>
+		<li><a href="API/index.html">Java Reference</a></li>
 		<li><a href="history.html">History</a></li>
 		<li><a href="license.html">License</a></li>
 	</ul>
@@ -54,7 +54,7 @@
 
 <div id="content">
 
-<h2><a name="tool"></a>LuaJava tool</h2>
+<h2><a name="luareference"></a>Lua Reference</h2>
 
 <p>
 One of the goals of LuaJava is to allow the programmer to manipulate Java objects in the same way as it manipulates native (Lua) objects.
@@ -62,11 +62,13 @@ Lua, like most interpreted languages, is dynamically typed. Variables have no ty
 
 LuaJava creates a library in Lua called <code>luajava</code>. Inside this library 5 functions are available.
 </p>
- 
-<h4>newInstance</h4>
 
+<dl>
+
+<dt><strong>newInstance</strong></dt>
+<dd>
 <p>This function creates a new Java object, and returns a Lua object that is a reference to the actual Java object. Now we can access this object with the regular syntax used to access object oriented functions in Lua objects.</p>
-<p><code>newInstance</code> first parameter is the name of the class to be instantiated. The other arguments are passed to the construtctor.</p>
+<p><code>newInstance</code> first parameter is the name of the class to be instantiated. The other arguments are passed to the constructor.</p>
 <p>
 Example :</p>
 <pre class="example">
@@ -88,9 +90,10 @@ b
 c
 d
 </pre>
+</dd>
 
-<h4>bindClass</h4> 
-
+<dt><strong>bindClass</strong></dt>
+<dd>
 <p>
 This function retrieves a Java class. The returned object can be used to access static fields and methods of the corresponding class.
 </p>
@@ -100,10 +103,10 @@ This function retrieves a Java class. The returned object can be used to access 
 
   -- this prints the time returned by the function.
 </pre>
+</dd>
 
-
-<h4>new</h4>
-
+<dt><strong>new</strong></dt>
+<dd>
 <p>
 This function receives a java.lang.Class and returns a new instance of this class.</p>
 <p><code>new</code> works just like the <code>newInstance</code>, but the first argument is the instance of the class.</p>
@@ -112,8 +115,10 @@ This function receives a java.lang.Class and returns a new instance of this clas
 <pre class="example">  str = luajava.bindClass("java.lang.String")
   strInstance = luajava.new(str)
 </pre>
+</dd>
 
-<h4>createProxy</h4>
+<dt><strong>createProxy</strong></dt>
+<dd>
 <p>
 We can also, instead of creating a Java object to be manipulated by Lua, create a Lua object that will be manipulated by Java. We can do that in LuaJava by creating a proxy to that object. This is done by the createProxy function.</p>
 <p>
@@ -137,8 +142,10 @@ button:addActionListenet(buttonProxy)
 </pre>
 
 <p>We can use Lua scripts to write implementations for Java <b>interfaces</b> only.</p>
+</dd>
 
-<h4>loadLib</h4>
+<dt><strong>loadLib</strong></dt>
+<dd>
 <p>
 loadLib is a function that has a use similar to Lua's loadlib function. The purpose
 of this function is to allow users to write libraries in Java and then load them into Lua.
@@ -188,6 +195,9 @@ the number of parameters returned by the the function, otherwise nothing is retu
     }
     
 </pre>
+</dd>
+
+</dl>
 
 <h2><a name="fromjava"></a>How to use LuaJava from Java</h2>
 
