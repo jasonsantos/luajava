@@ -2,7 +2,7 @@
 <html>
 <head>
 <!--
-  $Id: package.html,v 1.1 2005-06-10 19:44:53 tuler Exp $
+  $Id: package.html,v 1.2 2005-06-10 19:57:58 tuler Exp $
 
   Copyright (C) 2005 Kepler Project
 
@@ -28,11 +28,21 @@
 </head>
 <body bgcolor="white">
 
-##### THIS IS THE TEMPLATE FOR THE PACKAGE DOC COMMENTS. #####
-##### TYPE YOUR PACKAGE COMMENTS HERE.  BEGIN WITH A     #####
-##### ONE-SENTENCE SUMMARY STARTING WITH A VERB LIKE:    #####
-Provides for.... 
+<p>LuaJava is a scripting tool for Java. The goal of this tool is to allow scripts written in Lua to manipulate components developed in Java.</p>
 
+<p>
+LuaJava allows Java components to be accessed from Lua using the same syntax 
+that is used for accessing Lua`s native objects, without any need for 
+declarations or any kind of preprocessing.
+For this check <a href="http://www.keplerproject.org/luajava/manual.html">LuaJava's Lua Reference</a>.
+</p>
+
+<p>
+LuaJava also allows Java to implement an interface using Lua.
+This way any interface can be implemented in Lua and passed as parameter to 
+any method, and when called, the equivalent function will be called in Lua, 
+and it's result passed back to Java.
+</p>
 
 <h2>Related Documentation</h2>
 
