@@ -75,13 +75,22 @@ c:\luajava-1.0>nmake -f nmakefile
 
 <pre class="example">
 make
-make install
 </pre>
 
 
 <h2><a name="install"></a>Installing</h2>
 
-<p><em>!!!!!!!!!!!!!!!!!!!!!!</em></p>
+<p>LuaJava compilation generates two files: <code>luajava-1.0.jar</code> and <code>luajava-1.0.dll</code>.</p>
+<dl>
+<dt><strong>luajava-1.0.jar</strong></dt>
+<dd>This file must be copied to a path in the java application CLASSPATH.</dd>
+
+<dt><strong>luajava-1.0.dll</strong></dt>
+<dd>This file must be copied to a path in your system path, that depends on your OS. 
+Windows users can place it in the JRE bin directory, or the windows system folder. Unix
+users can place it in the JRE bin directory or a directory pointed by LD_LIBRARY_PATH 
+environment variable.</dd>
+</dl>
 
 
 <h2><a name="console"></a>Running the LuaJava Console</h2>
@@ -180,14 +189,14 @@ strInstance = luajava.new(str)
 <pre class="example">
 button = luajava.newInstance("java.awt.Button", "execute")
 button_cb = {}
-function button_cb:actionPerformed(ev)
+function button_cb.actionPerformed(ev)
  . . .
 end
 
 buttonProxy = luajava.createProxy("java.awt.ActionListener", 
     button_cb)
 
-button:addActionListenet(buttonProxy)
+button:addActionListener(buttonProxy)
 </pre>
     
     <p>We can use Lua scripts to write implementations only for Java interfaces.</p>
