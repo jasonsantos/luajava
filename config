@@ -13,12 +13,12 @@ LIB_LUA= /home/mascarenhas/lua50/lib/Linux26/liblua50.a
 #Linux/BSD
 LIB_EXT= .so
 #Mac OS
-LIB_EXT= .jnilib
+#LIB_EXT= .jnilib
 LIB_PREFIX= lib
 #Linux/BSD
 LIB_OPTION= -shared
-#BSD
-LIB_OPTION= -dynamiclib -all_load
+#Mac OS
+#LIB_OPTION= -dynamiclib -all_load
 
 ## On FreeBSD and Mac OS systems, the following line should be commented
 DLLIB= -ldl
@@ -58,4 +58,4 @@ JAR_FILE= $(PKG).jar
 SO_FILE= $(LIB_PREFIX)$(PKG)$(LIB_EXT)
 DIST_DIR= $(PKG)
 
-# $Id: config,v 1.8 2005-06-15 19:03:26 mascarenhas Exp $
+# $Id: config,v 1.9 2005-06-15 19:13:17 mascarenhas Exp $
