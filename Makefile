@@ -61,7 +61,7 @@ apidoc:
 # Build .c files.
 #
 $(SO_FILE): $(OBJS)
-	$(CC) -shared -o$@ $? $(LUA_LIBDIR)/$(LIB_LUA)
+	export MACOSX_DEPLOYMENT_TARGET=10.3; $(CC) -shared -o $@ $? $(LIB_LUA)
 
 src/c/luajava.c: src/c/luajava.h
 

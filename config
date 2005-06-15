@@ -1,17 +1,26 @@
 #############################################################
-#Linux
+#Linux/BSD/Mac
 LUA_DIR= /usr/local/share/lua/5.0
 LUA_LIBDIR= /usr/local/lib/lua/5.0
-LUA_INCLUDES= /usr/local/lib/lua/5.0/include
+LUA_INCLUDES= /usr/local/include
 JDK= $(JAVA_HOME)
+# For Mac OS, comment the above line and uncomment this one
+#JDK=/Library/Java/Home
 
-LIB_LUA= liblua50.a
+# Full path to Lua static library
+LIB_LUA= /home/mascarenhas/lua50/lib/Linux26/liblua50.a
 
+#Linux/BSD
 LIB_EXT= .so
+#Mac OS
+LIB_EXT= .jnilib
 LIB_PREFIX= lib
+#Linux/BSD
 LIB_OPTION= -shared
+#BSD
+LIB_OPTION= -dynamiclib -all_load
 
-## On FreeBSD systems, the following line should be commented
+## On FreeBSD and Mac OS systems, the following line should be commented
 DLLIB= -ldl
 
 WARN= -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings
@@ -40,13 +49,6 @@ CC= gcc
 #CC= cl
 
 
-#############################################################
-#Others
-
-#LIB_OPTION= -dynamiclib #for MacOS X
-#LIB_EXT= .dylib
-
-
 #########################################################
 VERSION= 1.0
 PKG= luajava-$(VERSION)
@@ -56,4 +58,4 @@ JAR_FILE= $(PKG).jar
 SO_FILE= $(LIB_PREFIX)$(PKG)$(LIB_EXT)
 DIST_DIR= $(PKG)
 
-# $Id: config,v 1.7 2005-05-23 15:49:39 tuler Exp $
+# $Id: config,v 1.8 2005-06-15 19:03:26 mascarenhas Exp $
