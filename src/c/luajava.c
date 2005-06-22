@@ -1512,6 +1512,23 @@ void pushJNIEnv( JNIEnv * env , lua_State * L )
    }
 }
 
+/*
+** Assumes the table is on top of the stack.
+*/
+static void set_info (lua_State *L) {
+	lua_pushliteral (L, "_COPYRIGHT");
+	lua_pushliteral (L, "Copyright (C) 2003-2005 Kepler Project");
+	lua_settable (L, -3);
+	lua_pushliteral (L, "_DESCRIPTION");
+	lua_pushliteral (L, "LuaJava is a script tool for Java");
+	lua_settable (L, -3);
+	lua_pushliteral (L, "_NAME");
+	lua_pushliteral (L, "LuaJava");
+	lua_settable (L, -3);
+	lua_pushliteral (L, "_VERSION");
+	lua_pushliteral (L, "1.0");
+	lua_settable (L, -3);
+}
 
 /**************************** JNI FUNCTIONS ****************************/
 
@@ -1539,6 +1556,9 @@ JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState_luajava_1open
   lua_setglobal( L , "luajava" );
 
   lua_getglobal( L , "luajava" );
+  
+  set_info( L);
+  
   lua_pushstring( L , "bindClass" );
   lua_pushcfunction( L , &javaBindClass );
   lua_settable( L , -3 );
