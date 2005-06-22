@@ -8,7 +8,7 @@ JDK= $(JAVA_HOME)
 #JDK=/Library/Java/Home
 
 # Full path to Lua static library
-LIB_LUA= /home/mascarenhas/lua50/lib/Linux26/liblua50.a
+LIB_LUA=/usr/local/lib/liblua50.a
 
 #Linux/BSD
 LIB_EXT= .so
@@ -58,4 +58,4 @@ JAR_FILE= $(PKG).jar
 SO_FILE= $(LIB_PREFIX)$(PKG)$(LIB_EXT)
 DIST_DIR= $(PKG)
 
-# $Id: config,v 1.9 2005-06-15 19:13:17 mascarenhas Exp $
+# $Id: config,v 1.10 2005-06-22 17:55:25 tuler Exp $
