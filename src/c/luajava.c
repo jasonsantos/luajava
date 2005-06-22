@@ -1,5 +1,6 @@
 
 /******************************************************************************
+* $Id$
 * Copyright (C) 2005 Kepler Project.
 *
 * Permission is hereby granted, free of charge, to any person obtaining
@@ -22,12 +23,7 @@
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ******************************************************************************/
 
-
 /***************************************************************************
-*
-* File:     luajava.c
-*
-* Author:   Thiago Ponte
 *
 * $ED
 *    This module is the implementation of luajava's dinamic library.
@@ -35,8 +31,7 @@
 *    and also the functions that will be used and exported to lua so that
 *    Java Objects' functions can be called.
 *
-*$. **********************************************************************/
-
+*****************************************************************************/
 
 
 #include <stdio.h>
