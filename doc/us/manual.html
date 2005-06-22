@@ -80,12 +80,16 @@ make
 
 <h2><a name="install"></a>Installing</h2>
 
-<p>LuaJava compilation generates two files: <code>luajava-1.0.jar</code> and <code>luajava-1.0.dll</code>.</p>
+<p>LuaJava compilation generates two files: <code>luajava-1.0.jar</code> and 
+<code>luajava-1.0.dll</code> (or <code>libluajava-1.0.so</code> in Unix, or 
+<code>libluajava-1.0.jnilib</code> in MacOSX).
+</p>
+
 <dl>
 <dt><strong>luajava-1.0.jar</strong></dt>
 <dd>This file must be copied to a path in the java application CLASSPATH.</dd>
 
-<dt><strong>luajava-1.0.dll</strong></dt>
+<dt><strong>luajava-1.0.dll (or libluajava-1.0.so or libluajava-1.0.jnilib)</strong></dt>
 <dd>This file must be copied to a path in your system path, that depends on your OS. 
 Windows users can place it in the JRE bin directory, or the windows system folder. Unix
 users can place it in the JRE bin directory or a directory pointed by LD_LIBRARY_PATH 
