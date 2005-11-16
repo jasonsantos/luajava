@@ -51,9 +51,9 @@ LuaJava - ferramenta de scripts para Java</title>    <link rel="stylesheet" href
 
 <h2>Exemplos</h2>
 
-<h4>Ol&aacute; Mundo usando LuaJava</h4>
+<h4>"Ol&aacute; Mundo" usando LuaJava</h4>
 
-<p>Este exemplo &eacute; um aplicativo simples Ol&aacute; Mundo que usa o LuaJava para imprimir de Lua e Java.</p>
+<p>Este exemplo &eacute; um aplicativo simples "Ol&aacute; Mundo" que usa o LuaJava para imprimir de Lua e Java.</p>
 
 <p><code>Hello.java</code></p>
 <pre class="example">public class Hello
@@ -77,7 +77,7 @@ LuaJava - ferramenta de scripts para Java</title>    <link rel="stylesheet" href
 
 <h4>Acesso a um banco de dados</h4>
 
-<p>Este exemplo usa o Java JDBC para acessar um banco de dados a partir de Lua.</p>
+<p>Este exemplo usa Java JDBC para acessar um banco de dados a partir de Lua.</p>
 
 <p><code>TestJDBC.java</code></p>
 <pre class="example">public class TestJDBC
@@ -85,7 +85,7 @@ LuaJava - ferramenta de scripts para Java</title>    <link rel="stylesheet" href
   
   public static void main(String[] args) throws Exception
   {
-    // obt&eacute;m uma java.sql.Connection e cria uma instru&ccedil;&atilde;o
+    // obt&eacute;m uma java.sql.Connection e cria um Statement
 
     Class.forName(&quot;org.hsqldb.jdbcDriver&quot;);
     Connection con = DriverManager.getConnection(
@@ -136,7 +136,7 @@ LuaJava - ferramenta de scripts para Java</title>    <link rel="stylesheet" href
 
 <p><code>testJDBC.lua</code></p>
 <pre class="example">do
--- testa se a instru&ccedil;&atilde;o do objeto &eacute; nil
+-- testa se o Statement &eacute; nil
 if st == nil then
     print(&quot;Erro. Objeto st &eacute; nil&quot;)
     return
