@@ -63,9 +63,9 @@
   public static void main(String[] args)
   {
     LuaState L = LuaStateFactory.newLuaState();
-    L.openBasicLibraries();
+    L.openLibs();
     
-    L.doFile("hello.lua");
+    L.LdoFile("hello.lua");
     
     System.out.println("Hello World from Java!");
   }
@@ -116,17 +116,16 @@
     // creates a Lua State and register the basic libraries
     
     LuaState L = LuaStateFactory.newLuaState();
-    L.openBasicLibraries();
+    L.openLibs();
     
     // registers the statement in the global 'st'
     
-    L.pushString("st");
     L.pushObjectValue(st);
-    L.setGlobal();
+    L.setGlobal("st");
     
     // execute file testJDBC.lua
     
-    int err = L.doFile("testJDBC.lua");
+    int err = L.LdoFile("testJDBC.lua");
 
     L.close();
     st.close();

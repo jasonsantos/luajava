@@ -78,8 +78,8 @@ public class TestLuaMap extends TestCase
     
     // test using a lua table
     LuaState L = LuaStateFactory.newLuaState();
-    L.openBasicLibraries();
-    int err = L.doFile("testMap.lua");
+    L.openLibs();
+    int err = L.LdoFile("testMap.lua");
     if(err != 0)
     {
       switch (err)
@@ -147,7 +147,7 @@ class LuaMap implements Map
   public LuaMap()
   {
     L = LuaStateFactory.newLuaState();
-    L.openBasicLibraries();
+    L.openLibs();
     L.newTable();
     table = L.getLuaObject(-1);
     L.pop(1);

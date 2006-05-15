@@ -46,7 +46,7 @@ public class TestLauxlib extends TestCase
   {
     // test loadfile
     LuaState L = LuaStateFactory.newLuaState();
-    L.openBasicLibraries();
+    L.openLibs();
     
     int loadRes = L.LloadFile("wrongLuaFile.lua");
     assertEquals(loadRes, LuaState.LUA_ERRSYNTAX.intValue());
@@ -85,7 +85,7 @@ public class TestLauxlib extends TestCase
   public void testChecks()
   {
     LuaState L = LuaStateFactory.newLuaState();
-    L.openBasicLibraries();
+    L.openLibs();
     
     String testCheckStr = "testCheck";
     
@@ -112,12 +112,12 @@ public class TestLauxlib extends TestCase
   public void testMeta() throws LuaException
   {
     LuaState L = LuaStateFactory.newLuaState();
-    L.openBasicLibraries();
+    L.openLibs();
     
     L.newTable();
     L.newTable();
     L.pushString("__index");
-    L.doString("return function()" +
+    L.LdoString("return function()" +
     		"io.write( 'metatest\\n') io.stdout:flush() " +
     		"return 'foo' " +
     		"end");
@@ -135,7 +135,7 @@ public class TestLauxlib extends TestCase
     L.pushValue(-2);
     L.setTable(LuaState.LUA_GLOBALSINDEX.intValue());
     L.pop(1);
-    L.doString("str = testTable.ff; print(str..'fromLua');" +
+    L.LdoString("str = testTable.ff; print(str..'fromLua');" +
     		" io.stdout:flush()");
     
     L.close();

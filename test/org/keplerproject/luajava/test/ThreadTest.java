@@ -39,21 +39,22 @@ public class ThreadTest
 	private static String lua = "function run() io.write('test\\n');" +
 			"io.stdout:flush();" +
 			"luajava.bindClass('java.lang.Thread'):sleep(100);" +
-			" end;table={run=run}";
+			" end;tb={run=run}";
 	
 	public static void main(String[] args) throws Exception
 	{
 		LuaState L = LuaStateFactory.newLuaState();
 		L.openBase();
 		L.openIo();
+		//L.openLibs();
 		
-		L.doString(lua);
+		L.LdoString(lua);
 		
 		for(int i = 0 ;i < 100; i++)
 		{
-		  LuaObject obj = L.getLuaObject("table");
-		  Object runnable = obj.createProxy("java.lang.Runnable");
-			Thread thread = new Thread((Runnable) runnable);
+			LuaObject obj = L.getLuaObject("tb");
+			Object runnable = obj.createProxy("java.lang.Runnable");
+		  	Thread thread = new Thread((Runnable) runnable);
 			thread.start();
 		}
 		System.out.println("end main");

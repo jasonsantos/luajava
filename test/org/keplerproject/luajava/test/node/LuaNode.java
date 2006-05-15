@@ -67,8 +67,8 @@ public class LuaNode
     if (L == null)
     {
       L = LuaStateFactory.newLuaState();
-      L.openBasicLibraries();
-      int err = L.doFile(configFileName);
+      L.openLibs();
+      int err = L.LdoFile(configFileName);
       if (err != 0)
       {
         switch (err)

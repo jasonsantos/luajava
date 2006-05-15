@@ -58,7 +58,7 @@ public class TestClass
 		
 		test.jf.register("javaFuncTest");
 		
-		test.Lf.doString(" f=javaFuncTest(); print(f) ");
+		test.Lf.LdoString(" f=javaFuncTest(); print(f) ");
 		
 		L.close();
 	}

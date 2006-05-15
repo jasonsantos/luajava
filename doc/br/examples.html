@@ -61,9 +61,9 @@ LuaJava - ferramenta de scripts para Java</title>    <link rel="stylesheet" href
   public static void main(String[] args)
   {
     LuaState L = LuaStateFactory.newLuaState();
-    L.openBasicLibraries();
+    L.openLibs();
     
-    L.doFile(&quot;hello.lua&quot;);
+    L.LdoFile(&quot;hello.lua&quot;);
     
     System.out.println(&quot;Ol&aacute; Mundo de Java!&quot;);
   }
@@ -114,17 +114,16 @@ LuaJava - ferramenta de scripts para Java</title>    <link rel="stylesheet" href
     // cria um estado Lua e registra as bibliotecas b&aacute;sicas
     
     LuaState L = LuaStateFactory.newLuaState();
-    L.openBasicLibraries();
+    L.openLibs();
     
     // registra a instru&ccedil;&atilde;o no 'st' global
     
-    L.pushString(&quot;st&quot;);
     L.pushObjectValue(st);
-    L.setGlobal();
+    L.setGlobal(&quot;st&quot;);
     
     // executa o arquivo testJDBC.lua
     
-    int err = L.doFile(&quot;testJDBC.lua&quot;);
+    int err = L.LdoFile(&quot;testJDBC.lua&quot;);
 
     L.close();
     st.close();

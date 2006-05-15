@@ -49,7 +49,7 @@ public class Main
   	LuaState L = LuaStateFactory.newLuaState();
   	L.openBase();
   	
-  	L.doString(str);
+  	L.LdoString(str);
 
 	  LuaObject func = L.getLuaObject("imprime");
 	  Object[] teste = func.call(new Object[] { "TESTANDO"}, 2);

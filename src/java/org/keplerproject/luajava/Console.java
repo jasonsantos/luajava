@@ -1,5 +1,5 @@
 /*
- * $Id: Console.java,v 1.5 2005-06-22 19:22:49 tuler Exp $
+ * $Id: Console.java,v 1.6 2006-05-15 01:46:17 thiago Exp $
  * Copyright (C) 2005 Kepler Project.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -47,9 +47,7 @@ public class Console
       try
       {
          LuaState L = LuaStateFactory.newLuaState();
-         L.openBasicLibraries();
-         L.openDebug();
-         L.openLoadLib();
+         L.openLibs();
 
          if (args.length > 0)
          {

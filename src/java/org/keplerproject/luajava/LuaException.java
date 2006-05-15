@@ -1,5 +1,5 @@
 /*
- * $Id: LuaException.java,v 1.4 2005-06-22 19:22:49 tuler Exp $
+ * $Id: LuaException.java,v 1.5 2006-05-15 01:46:17 thiago Exp $
  * Copyright (C) 2005 Kepler Project.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -32,6 +32,11 @@ package org.keplerproject.luajava;
  */
 public class LuaException extends Exception
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public LuaException(String str)
 	{
 		super(str);

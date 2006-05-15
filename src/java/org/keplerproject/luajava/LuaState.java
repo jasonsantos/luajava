@@ -1,5 +1,5 @@
 /*
- * $Id: LuaState.java,v 1.6 2005-06-22 19:22:49 tuler Exp $
+ * $Id: LuaState.java,v 1.7 2006-05-15 01:46:17 thiago Exp $
  * Copyright (C) 2005 Kepler Project.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -35,11 +35,13 @@ public class LuaState
 {
   private final static String LUAJAVA_LIB = "luajava-1.0";
 
-  final public static Integer LUA_GLOBALSINDEX  = new Integer(-10001);
+  final public static Integer LUA_GLOBALSINDEX  = new Integer(-10002);
   final public static Integer LUA_REGISTRYINDEX = new Integer(-10000);
 
+  final public static Integer LUA_TNONE     = new Integer(-1);
   final public static Integer LUA_TNIL      = new Integer(0);
   final public static Integer LUA_TBOOLEAN  = new Integer(1);
+  final public static Integer LUA_TLIGHTUSERDATA = new Integer(2);
   final public static Integer LUA_TNUMBER   = new Integer(3);
   final public static Integer LUA_TSTRING   = new Integer(4);
   final public static Integer LUA_TTABLE    = new Integer(5);
@@ -47,6 +49,12 @@ public class LuaState
   final public static Integer LUA_TUSERDATA = new Integer(7);
   final public static Integer LUA_TTHREAD   = new Integer(8);
 
+  /**
+   * Specifies that an unspecified (multiple) number of return arguments
+   * will be returned by a call.
+   */
+  final public static Integer LUA_MULTRET   = new Integer(-1);
+  
   /*
    * error codes for `lua_load' and `lua_pcall'
    */
@@ -58,7 +66,7 @@ public class LuaState
   /**
    * 
    */
-  final public static Integer LUA_ERRFILE   = new Integer(2);
+  final public static Integer LUA_YIELD     = new Integer(2);
   
   /**
    * syntax error during pre-compilation.
@@ -158,11 +166,8 @@ public class LuaState
   // Access functions
   private synchronized native int    _isNumber(CPtr ptr, int idx);
   private synchronized native int    _isString(CPtr ptr, int idx);
-  private synchronized native int    _isFunction(CPtr ptr, int idx);
   private synchronized native int    _isCFunction(CPtr ptr, int idx);
   private synchronized native int    _isUserdata(CPtr ptr, int idx);
-  private synchronized native int    _isTable(CPtr ptr, int idx);
-  private synchronized native int    _isBoolean(CPtr ptr, int idx);
   private synchronized native int    _type(CPtr ptr, int idx);
   private synchronized native String _typeName(CPtr ptr, int tp);
 
@@ -171,28 +176,32 @@ public class LuaState
   private synchronized native int _lessthan(CPtr ptr, int idx1, int idx2);
 
   private synchronized native double _toNumber(CPtr ptr, int idx);
+  private synchronized native int    _toInteger(CPtr ptr, int idx);
   private synchronized native int    _toBoolean(CPtr ptr, int idx);
   private synchronized native String _toString(CPtr ptr, int idx);
-  private synchronized native int    _strlen(CPtr ptr, int idx);
+  private synchronized native int    _objlen(CPtr ptr, int idx);
   private synchronized native CPtr   _toThread(CPtr ptr, int idx);
 
   // Push functions
   private synchronized native void _pushNil(CPtr ptr);
   private synchronized native void _pushNumber(CPtr ptr, double number);
+  private synchronized native void _pushInteger(CPtr ptr, int integer);
   private synchronized native void _pushString(CPtr ptr, String str);
   private synchronized native void _pushString(CPtr ptr, byte[] bytes, int n);
   private synchronized native void _pushBoolean(CPtr ptr, int bool);
 
   // Get functions
   private synchronized native void _getTable(CPtr ptr, int idx);
+  private synchronized native void _getField(CPtr ptr, int idx, String k);
   private synchronized native void _rawGet(CPtr ptr, int idx);
   private synchronized native void _rawGetI(CPtr ptr, int idx, int n);
-  private synchronized native void _newTable(CPtr ptr);
+  private synchronized native void _createTable(CPtr ptr, int narr, int nrec);
   private synchronized native int  _getMetaTable(CPtr ptr, int idx);
   private synchronized native void _getFEnv(CPtr ptr, int idx);
 
   // Set functions
   private synchronized native void _setTable(CPtr ptr, int idx);
+  private synchronized native void _setField(CPtr ptr, int idx, String k);
   private synchronized native void _rawSet(CPtr ptr, int idx);
   private synchronized native void _rawSetI(CPtr ptr, int idx, int n);
   private synchronized native int  _setMetaTable(CPtr ptr, int idx);
@@ -204,27 +213,46 @@ public class LuaState
   // Coroutine Functions
   private synchronized native int _yield(CPtr ptr, int nResults);
   private synchronized native int _resume(CPtr ptr, int nargs);
+  private synchronized native int _status(CPtr ptr);
   
   // Gargabe Collection Functions
-  private synchronized native int  _getGcThreshold(CPtr ptr);
-  private synchronized native int  _getGcCount(CPtr ptr);
-  private synchronized native void _setGcThreshold(CPtr ptr, int newThreshold);
+  final public static Integer LUA_GCSTOP       = new Integer(0);
+  final public static Integer LUA_GCRESTART    = new Integer(1);
+  final public static Integer LUA_GCCOLLECT    = new Integer(2);
+  final public static Integer LUA_GCCOUNT      = new Integer(3);
+  final public static Integer LUA_GCCOUNTB     = new Integer(4);
+  final public static Integer LUA_GCSTEP       = new Integer(5);
+  final public static Integer LUA_GCSETPAUSE   = new Integer(6);
+  final public static Integer LUA_GCSETSTEPMUL = new Integer(7);
+  private synchronized native int  _gc(CPtr ptr, int what, int data);
 
   // Miscellaneous Functions
-  private synchronized native String _version();
-  private synchronized native int    _next(CPtr ptr, int idx);
   private synchronized native int    _error(CPtr ptr);
+  private synchronized native int    _next(CPtr ptr, int idx);
   private synchronized native void   _concat(CPtr ptr, int n);
 
-	// Some macros
-	private synchronized native int  _ref(CPtr ptr, int t);
-	private synchronized native void _unRef(CPtr ptr , int t , int ref);
+  // Some macros
+  private synchronized native void _pop(CPtr ptr, int n);
+  private synchronized native void _newTable(CPtr ptr);
+  private synchronized native int  _strlen(CPtr ptr, int idx);
+  private synchronized native int  _isFunction(CPtr ptr, int idx);
+  private synchronized native int  _isTable(CPtr ptr, int idx);
+  private synchronized native int  _isNil(CPtr ptr, int idx);
+  private synchronized native int  _isBoolean(CPtr ptr, int idx);
+  private synchronized native int  _isThread(CPtr ptr, int idx);
+  private synchronized native int  _isNone(CPtr ptr, int idx);
+  private synchronized native int  _isNoneOrNil(CPtr ptr, int idx);
+  
+  private synchronized native void _setGlobal(CPtr ptr, String name);
+  private synchronized native void _getGlobal(CPtr ptr, String name);
+  
+  private synchronized native int  _getGcCount(CPtr ptr);
 
 
   // LuaLibAux
-  private synchronized native int _doFile(CPtr ptr, String fileName);
-  private synchronized native int _doString(CPtr ptr, String string);
-  private synchronized native int _doBuffer(CPtr ptr, byte[] buff, long sz, String n);
+  private synchronized native int _LdoFile(CPtr ptr, String fileName);
+  private synchronized native int _LdoString(CPtr ptr, String string);
+  //private synchronized native int _doBuffer(CPtr ptr, byte[] buff, long sz, String n);
   
   private synchronized native int    _LgetMetaField(CPtr ptr, int obj, String e);
   private synchronized native int    _LcallMeta(CPtr ptr, int obj, String e);
@@ -234,6 +262,9 @@ public class LuaState
   private synchronized native String _LoptString(CPtr ptr, int numArg, String def);
   private synchronized native double _LcheckNumber(CPtr ptr, int numArg);
   private synchronized native double _LoptNumber(CPtr ptr, int numArg, double def);
+  
+  private synchronized native int    _LcheckInteger(CPtr ptr, int numArg);
+  private synchronized native int    _LoptInteger(CPtr ptr, int numArg, int def);
   
   private synchronized native void _LcheckStack(CPtr ptr, int sz, String msg);
   private synchronized native void _LcheckType(CPtr ptr, int nArg, int t);
@@ -252,16 +283,21 @@ public class LuaState
   
   private synchronized native int _LloadFile(CPtr ptr, String fileName);
   private synchronized native int _LloadBuffer(CPtr ptr, byte[] buff, long sz, String name);
+  private synchronized native int _LloadString(CPtr ptr, String s);
+
+  private synchronized native String _Lgsub(CPtr ptr, String s, String p, String r);
+  private synchronized native String _LfindTable(CPtr ptr, int idx, String fname, int szhint);
   
   
-  // Open Libraries Functions
   private synchronized native void _openBase(CPtr ptr);
   private synchronized native void _openTable(CPtr ptr);
   private synchronized native void _openIo(CPtr ptr);
+  private synchronized native void _openOs(CPtr ptr);
   private synchronized native void _openString(CPtr ptr);
   private synchronized native void _openMath(CPtr ptr);
   private synchronized native void _openDebug(CPtr ptr);
-  private synchronized native void _openLoadLib(CPtr ptr);
+  private synchronized native void _openPackage(CPtr ptr);
+  private synchronized native void _openLibs(CPtr ptr);
 
   // Java Interface -----------------------------------------------------
 
@@ -350,6 +386,26 @@ public class LuaState
   {
     return (_isBoolean(luaState, idx)!=0);
   }
+  
+  public boolean isNil(int idx)
+  {
+	  return (_isNil(luaState, idx)!=0);
+  }
+  
+  public boolean isThread(int idx)
+  {
+	  return (_isThread(luaState, idx)!=0);
+  }
+  
+  public boolean isNone(int idx)
+  {
+	  return (_isNone(luaState, idx)!=0);
+  }
+  
+  public boolean isNoneOrNil(int idx)
+  {
+	  return (_isNoneOrNil(luaState, idx)!=0);
+  }
 
   public int type(int idx)
   {
@@ -381,6 +437,11 @@ public class LuaState
     return _toNumber(luaState, idx);
   }
 
+  public int toInteger(int idx)
+  {
+	  return _toInteger(luaState, idx);
+  }
+  
   public boolean toBoolean(int idx)
   {
     return (_toBoolean(luaState, idx)!=0);
@@ -390,16 +451,23 @@ public class LuaState
   {
     return _toString(luaState, idx);
   }
-
+  
   public int strLen(int idx)
   {
     return _strlen(luaState, idx);
+  }
+  
+  public int objLen(int idx)
+  {
+	  return _objlen(luaState, idx);
   }
 
   public LuaState toThread(int idx)
   {
     return new LuaState(_toThread(luaState, idx));
   }
+  
+  //PUSH FUNCTIONS
   
   public void pushNil()
   {
@@ -409,6 +477,11 @@ public class LuaState
   public void pushNumber(double db)
   {
     _pushNumber(luaState, db);
+  }
+  
+  public void pushInteger(int integer)
+  {
+	  _pushInteger(luaState, integer);
   }
 
   public void pushString(String str)
@@ -427,9 +500,9 @@ public class LuaState
       _pushString(luaState, bytes, bytes.length);
   }
   
-  public void pushBoolean(int bool)
+  public void pushBoolean(boolean bool)
   {
-    _pushBoolean(luaState, bool);
+    _pushBoolean(luaState, bool ? 1 : 0);
   }
 
   // GET FUNCTIONS
@@ -437,6 +510,11 @@ public class LuaState
   public void getTable(int idx)
   {
     _getTable(luaState, idx);
+  }
+  
+  public void getField(int idx, String k)
+  {
+	  _getField(luaState, idx, k);
   }
 
   public void rawGet(int idx)
@@ -447,6 +525,11 @@ public class LuaState
   public void rawGetI(int idx, int n)
   {
     _rawGetI(luaState, idx, n);
+  }
+  
+  public void createTable(int narr, int nrec)
+  {
+	  _createTable(luaState, narr, nrec);
   }
 
   public void newTable()
@@ -465,9 +548,16 @@ public class LuaState
     _getFEnv(luaState, idx);
   }
 
+  // SET FUNCTIONS
+  
   public void setTable(int idx)
   {
     _setTable(luaState, idx);
+  }
+  
+  public void setField(int idx, String k)
+  {
+	  _setField(luaState, idx, k);
   }
 
   public void rawSet(int idx)
@@ -513,9 +603,14 @@ public class LuaState
   	return _resume(luaState, nArgs);
   }
   
-  public int getGcThreshold()
+  public int status()
   {
-    return _getGcThreshold(luaState);
+	  return _status(luaState);
+  }
+  
+  public int gc(int what, int data)
+  {
+    return _gc(luaState, what, data);
   }
   
   public int getGcCount()
@@ -523,16 +618,6 @@ public class LuaState
     return _getGcCount(luaState);
   }
   
-  public void setGcThreshold(int newThreshold)
-  {
-    _setGcThreshold(luaState, newThreshold);
-  }
-  
-  public String version()
-  {
-    return _version();
-  }
-
   public int next(int idx)
   {
   	return _next(luaState, idx);
@@ -548,38 +633,20 @@ public class LuaState
   	_concat(luaState, n);
   }
 
-  // returns ref number in table
-  public int ref(int t)
-  {
-  	return _ref(luaState , t);
-  }
-
-  // deletes ref from table
-  public void unRef(int t , int ref)
-  {
-  	_unRef(luaState , t , ref);
-  }
-  
 
   // FUNCTION FROM lauxlib
   // returns 0 if ok
-  public int doFile(String fileName)
+  public int LdoFile(String fileName)
   {
-    return _doFile(luaState, fileName);
+    return _LdoFile(luaState, fileName);
   }
 
   // returns 0 if ok
-  public int doString(String str)
+  public int LdoString(String str)
   {
-    return _doString(luaState, str);
+    return _LdoString(luaState, str);
   }
-  
-  // return 0 if ok
-  public int doBuffer(byte[] buff, String name)
-  {
-    return _doBuffer(luaState, buff, buff.length, name);
-  }
-  
+    
   public int LgetMetaField(int obj, String e)
   {
     return _LgetMetaField(luaState, obj, e);
@@ -618,6 +685,16 @@ public class LuaState
   public double LoptNumber(int numArg, double def)
   {
     return _LoptNumber(luaState, numArg, def);
+  }
+  
+  public int LcheckInteger(int numArg)
+  {
+	  return _LcheckInteger(luaState, numArg);
+  }
+  
+  public int LoptInteger(int numArg, int def)
+  {
+	  return _LoptInteger(luaState, numArg, def);
   }
   
   public void LcheckStack(int sz, String msg)
@@ -675,36 +752,47 @@ public class LuaState
     return _LloadFile(luaState, fileName);
   }
   
+  public int LloadString(String s)
+  {
+    return _LloadString(luaState, s);
+  }
+  
   public int LloadBuffer(byte[] buff, String name)
   {
     return _LloadBuffer(luaState, buff, buff.length, name);
   }
   
+  public String Lgsub(String s, String p, String r)
+  {
+	  return _Lgsub(luaState, s, p, r);
+  }
+  
+  public String LfindTable(int idx, String fname, int szhint)
+  {
+	  return _LfindTable(luaState, idx, fname, szhint);
+  }
   
   //IMPLEMENTED C MACROS
 
   public void pop(int n)
   {
-    setTop(- (n) - 1);
+    //setTop(- (n) - 1);
+	_pop(luaState, n);
   }
 
   public synchronized void getGlobal(String global)
   {
-    pushString(global);
-    getTable(LUA_GLOBALSINDEX.intValue());
+//    pushString(global);
+//    getTable(LUA_GLOBALSINDEX.intValue());
+    _getGlobal(luaState, global);
   }
 
   public synchronized void setGlobal(String name)
   {
-    pushString(name);
-    insert(-2);
-    setTable(LUA_GLOBALSINDEX.intValue());
-  }
-
-  public boolean isNil(int idx)
-  {
-    int type = type(idx);
-    return (type == LUA_TNIL.intValue());
+    //pushString(name);
+    //insert(-2);
+    //setTable(LUA_GLOBALSINDEX.intValue());
+	_setGlobal(luaState, name);
   }
   
   // Functions to open lua libraries
@@ -720,6 +808,10 @@ public class LuaState
   {
     _openIo(luaState);
   }
+  public void openOs()
+  {
+	  _openOs(luaState);
+  }
   public void openString()
   {
     _openString(luaState);
@@ -732,25 +824,15 @@ public class LuaState
   {
     _openDebug(luaState);
   }
-  public void openLoadLib()
+  public void openPackage()
   {
-    _openLoadLib(luaState);
+	  _openPackage(luaState);
   }
-  
-  /**
-   * Open lua libraries, except for loadlib and debug
-   */
-  public void openBasicLibraries()
+  public void openLibs()
   {
-  	int top = getTop();
-    _openBase(luaState);
-    _openTable(luaState);
-    _openIo(luaState);
-    _openString(luaState);
-    _openMath(luaState);
-    
-    setTop(top);
+    _openLibs(luaState);
   }
+
 
   /********************** Luajava API Library **********************/
 
@@ -864,7 +946,7 @@ public class LuaState
     else if (obj instanceof Boolean)
     {
       Boolean bool = (Boolean) obj;
-      pushBoolean(bool.booleanValue() ? 1 : 0);
+      pushBoolean(bool.booleanValue());
     }
     else if (obj instanceof Number)
     {

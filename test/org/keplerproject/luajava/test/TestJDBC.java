@@ -60,14 +60,14 @@ public class TestJDBC
     }
     
     LuaState L = LuaStateFactory.newLuaState();
-    L.openBasicLibraries();
+    L.openLibs();
     
     //L.pushString("st");
     L.pushObjectValue(st);
     //L.setTable(LuaState.LUA_GLOBALSINDEX.intValue());
     L.setGlobal("st");
     
-    int err = L.doFile("testJDBC.lua");
+    int err = L.LdoFile("testJDBC.lua");
     if (err != 0)
     {
       switch (err)

@@ -60,8 +60,8 @@ LuaJava - ferramenta de scripts para Java</title>    <link rel="stylesheet" href
 <p>LuaJava pode ser compilado para Windows usando <em>nmake</em> em <em>MSVC++</em>. Para fazer isso, execute o comando <code>VCVARS32.BAT</code> antes de executar nmake:</p>
 
 <pre class="example">
-c:\luajava-1.0&gt;&quot;drive:\complete_path_to\VCVARS32.bat&quot;
-c:\luajava-1.0&gt;nmake -f nmakefile
+c:\luajava-1.1&gt;&quot;drive:\complete_path_to\VCVARS32.bat&quot;
+c:\luajava-1.1&gt;nmake -f nmakefile
 </pre>
 
 <h3>Linux</h3>
@@ -75,14 +75,14 @@ make
 
 <h2><a name="install"></a>Instala&ccedil;&atilde;o</h2>
 
-<p>A compila&ccedil;&atilde;o do LuaJava gera dois arquivos: <code>luajava-1.0.jar</code> e <code>luajava-1.0.dll</code> (ou <code>libluajava-1.0.so</code> no Unix, ou <code>libluajava-1.0.jnilib</code> no MacOSX).
+<p>A compila&ccedil;&atilde;o do LuaJava gera dois arquivos: <code>luajava-1.1.jar</code> e <code>luajava-1.1.dll</code> (ou <code>libluajava-1.1.so</code> no Unix, ou <code>libluajava-1.1.jnilib</code> no MacOSX).
 </p>
 
 <dl>
-<dt><strong>luajava-1.0.jar</strong></dt>
+<dt><strong>luajava-1.1.jar</strong></dt>
 <dd>Este arquivo deve ser copiado em um caminho no CLASSPATH da aplica&ccedil;&atilde;o java.</dd>
 
-<dt><strong>luajava-1.0.dll (ou libluajava-1.0.so ou libluajava-1.0.jnilib)</strong></dt>
+<dt><strong>luajava-1.1.dll (ou libluajava-1.1.so ou libluajava-1.1.jnilib)</strong></dt>
 <dd>Este arquivo deve ser copiado em um diret&oacute;rio de sistema, o que depende do sistema operacional. Os usu&aacute;rios de Windows podem us&aacute;-lo no diret&oacute;rio <code>bin</code> da JRE ou na pasta do sistema Windows. Os usu&aacute;rios Unix podem coloc&aacute;-lo no diret&oacute;rio <code>bin</code> da JRE ou em um diret&oacute;rio apontado pela vari&aacute;vel de ambiente LD_LIBRARY_PATH.</dd>
 </dl>
 
@@ -92,7 +92,7 @@ make
 <p>O LuaJava &eacute; distribu&iacute;do com um console simples. Para execut&aacute;-lo, digite:</p>
 
 <pre class="example">
-c:\luajava-1.0&gt;java -cp &quot;luajava-1.0.jar&quot;
+c:\luajava-1.1&gt;java -cp &quot;luajava-1.1.jar&quot;
        org.keplerproject.luajava.Console
 </pre>
 
