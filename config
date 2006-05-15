@@ -1,14 +1,14 @@
 #############################################################
 #Linux/BSD/Mac
-LUA_DIR= /usr/local/share/lua/5.0
-LUA_LIBDIR= /usr/local/lib/lua/5.0
+LUA_DIR= /usr/local/share/lua/5.1
+LUA_LIBDIR= /usr/local/lib
 LUA_INCLUDES= /usr/local/include
 JDK= $(JAVA_HOME)
 # For Mac OS, comment the above line and uncomment this one
 #JDK=/Library/Java/Home
 
 # Full path to Lua static library
-LIB_LUA=/usr/local/lib/liblua50.a
+LIB_LUA=$(LUA_LIBDIR)/liblua.a
 
 #Linux/BSD
 LIB_EXT= .so
@@ -32,17 +32,17 @@ CC= gcc
 
 #############################################################
 #Windows
-#LUA_DIR= ..\external-src\lua50
-#LUA_LIBDIR= ..\external-src\lua50\lib\dll
+#LUA_DIR= c:\prj\lua\binaries\lua5.1
+#LUA_LIBDIR= $(LUA_DIR)\lib\dll
 #LUA_INCLUDES= $(LUA_DIR)\include
 #JDK= $(JAVA_HOME)
-#VS_INCDIR= C:\Program Files\Microsoft Visual Studio\VC98\include
 #JDK= C:\j2sdk1.4.2_06
+#VS_INCDIR= C:\Program Files\Microsoft Visual Studio\VC98\include
 
-#LIB_LUA= lua50.lib
+#LIB_LUA= lua5.1.lib
 
 #LIB_EXT= .dll
-#INCS= -I$(JDK)/include -I$(JDK)/include/win32 -I"$(VS_INCDIR)" -I"$(LUA_INCLUDES)"
+#INCS= -I"$(JDK)/include" -I"$(JDK)/include/win32" -I"$(VS_INCDIR)" -I"$(LUA_INCLUDES)"
 #CFLAGS= -nologo -DWIN32 $(INCS) -Fosrc\C\\ -MD
 
 #SYSLIBPATH = C:\Program Files\Microsoft Visual Studio\VC98\lib
@@ -50,7 +50,7 @@ CC= gcc
 
 
 #########################################################
-VERSION= 1.0
+VERSION= 1.1
 PKG= luajava-$(VERSION)
 TAR_FILE= $(PKG).tar.gz
 ZIP_FILE= $(PKG).zip
@@ -58,4 +58,4 @@ JAR_FILE= $(PKG).jar
 SO_FILE= $(LIB_PREFIX)$(PKG)$(LIB_EXT)
 DIST_DIR= $(PKG)
 
-# $Id: config,v 1.10 2005-06-22 17:55:25 tuler Exp $
+# $Id: config,v 1.11 2006-05-15 14:44:40 thiago Exp $
