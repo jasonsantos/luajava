@@ -1,5 +1,5 @@
 /*
- * $Id: LuaState.java,v 1.7 2006-05-15 01:46:17 thiago Exp $
+ * $Id: LuaState.java,v 1.8 2006-05-15 14:54:45 thiago Exp $
  * Copyright (C) 2005 Kepler Project.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -33,7 +33,7 @@ package org.keplerproject.luajava;
  */
 public class LuaState
 {
-  private final static String LUAJAVA_LIB = "luajava-1.0";
+  private final static String LUAJAVA_LIB = "luajava-1.1";
 
   final public static Integer LUA_GLOBALSINDEX  = new Integer(-10002);
   final public static Integer LUA_REGISTRYINDEX = new Integer(-10000);
