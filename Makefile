@@ -99,5 +99,5 @@ dist_dir:	apidoc
 	cp -R src $(DIST_DIR)
 	cp -R doc $(DIST_DIR)
 	cp -R test $(DIST_DIR)
-	cp config License.txt Makefile nmakefile $(DIST_DIR)
+	cp config License.txt Makefile config.win Makefile.win $(DIST_DIR)
 

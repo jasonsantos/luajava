@@ -2,7 +2,7 @@
 # NMake makefile for the LuaJava Windows Distribution
 #
 
-!include ./config
+include config.win
 
 
 #
@@ -28,7 +28,7 @@ DOC_CLASSES = \
 	src/java/org/keplerproject/luajava/LuaStateFactory.java \
 	src/java/org/keplerproject/luajava/Console.java
 	
-OBJS        = src/c/luajava.obj
+OBJS        = src\c\luajava.obj
 .SUFFIXES: .java .class
 
 #
@@ -67,7 +67,8 @@ apidoc:
 # Build .c files.
 #
 $(SO_FILE): $(OBJS)
-	link /LIBPATH:"$(SYSLIBPATH)" /LIBPATH:$(LUA_LIBDIR)  -nologo -dll -out:$@ $? $(LIB_LUA)
+	link  /dll /nodefaultlib:"msvcrt.lib" -out:$@ $? $(LUA_LIBDIR)\$(LIB_LUA)
+#	link  /dll -out:$@ $? $(LUA_LIBDIR)\$(LIB_LUA)
 
 src/c/luajava.c: src/c/luajava.h
 
@@ -86,8 +87,15 @@ checkjdk: "$(JDK)\bin\java.exe"
 #
 FORCE: ;
 
+
+install: $(SO_FILE)
+	IF NOT EXIST $(LUA_LIBDIR) mkdir $(LUA_LIBDIR)
+	copy $(SO_FILE) $(LUA_LIBDIR)
+
 #
 # Cleanliness.
 #
 clean:
 	-del src\java\org\keplerproject\luajava\*.class src\c\*.obj *.pdb *.exp *.lib *.exp *.ilk
+
+# $Id: Makefile.win,v 1.1 2006-12-22 14:06:40 thiago Exp $

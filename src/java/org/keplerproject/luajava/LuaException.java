@@ -1,6 +1,6 @@
 /*
- * $Id: LuaException.java,v 1.5 2006-05-15 01:46:17 thiago Exp $
- * Copyright (C) 2005 Kepler Project.
+ * $Id: LuaException.java,v 1.6 2006-12-22 14:06:40 thiago Exp $
+ * Copyright (C) 2003-2007 Kepler Project.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the

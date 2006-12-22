@@ -44,8 +44,13 @@
 		</li>
 		<li><a href="examples.html">Examples</a></li>
 		<li><a href="history.html">History</a></li>
+    <li><a href="http://luaforge.net/projects/luajava/">Project</a>
+       <ul>
+          <li><a href="http://luaforge.net/tracker/?group_id=10">Bug Tracker</a></li>
+          <li><a href="http://luaforge.net/scm/?group_id=10">CVS</a></li>
+       </ul>
+    </li>
 		<li><a href="license.html">License</a></li>
-		<li><a href="http://luaforge.net/projects/luajava/">LuaForge project</a></li>
 	</ul>
 </div> <!-- id="navigation" -->
 
@@ -66,8 +71,8 @@ and compilers.</p>
 To do that, run the <code>VCVARS32.BAT</code> command before running nmake:</p>
 
 <pre class="example">
-c:\luajava-1.1>"drive:\complete_path_to\VCVARS32.bat"
-c:\luajava-1.1>nmake -f nmakefile
+c:\luajava-1.1b1&gt;&quot;drive:\complete_path_to\VCVARS32.bat&quot;
+c:\luajava-1.1b1&gt;nmake -f nmakefile
 </pre>
 
 <h3>Linux</h3>
@@ -81,16 +86,16 @@ make
 
 <h2><a name="install"></a>Installing</h2>
 
-<p>LuaJava compilation generates two files: <code>luajava-1.1.jar</code> and 
-<code>luajava-1.1.dll</code> (or <code>libluajava-1.1.so</code> in Unix, or 
-<code>libluajava-1.1.jnilib</code> in MacOSX).
+<p>LuaJava compilation generates two files: <code>luajava-1.1b1.jar</code> and 
+<code>luajava-1.1b1.dll</code> (or <code>libluajava-1.1b1.so</code> in Unix, or 
+<code>libluajava-1.1b1.jnilib</code> in MacOSX).
 </p>
 
 <dl>
-<dt><strong>luajava-1.1.jar</strong></dt>
+<dt><strong>luajava-1.1b1.jar</strong></dt>
 <dd>This file must be copied to a path in the java application CLASSPATH.</dd>
 
-<dt><strong>luajava-1.1.dll (or libluajava-1.1.so or libluajava-1.1.jnilib)</strong></dt>
+<dt><strong>luajava-1.1b1.dll (or libluajava-1.1b1.so or libluajava-1.1b1.jnilib)</strong></dt>
 <dd>This file must be copied to a path in your system path, that depends on your OS. 
 Windows users can place it in the JRE bin directory, or the windows system folder. Unix
 users can place it in the JRE bin directory or a directory pointed by LD_LIBRARY_PATH 
@@ -103,7 +108,7 @@ environment variable.</dd>
 <p>LuaJava is distributed with a simple console. To run it type :</p>
 
 <pre class="example">
-c:\luajava-1.1>java -cp "luajava-1.1.jar"
+c:\luajava-1.1b1&gt;java -cp &quot;luajava-1.1.jar&quot;
        org.keplerproject.luajava.Console
 </pre>
 

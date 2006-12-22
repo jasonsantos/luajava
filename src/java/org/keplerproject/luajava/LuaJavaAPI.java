@@ -1,6 +1,6 @@
 /*
- * $Id: LuaJavaAPI.java,v 1.3 2005-06-22 19:22:49 tuler Exp $
- * Copyright (C) 2005 Kepler Project.
+ * $Id: LuaJavaAPI.java,v 1.4 2006-12-22 14:06:40 thiago Exp $
+ * Copyright (C) 2003-2007 Kepler Project.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the

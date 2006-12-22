@@ -1,6 +1,6 @@
 #############################################################
 #Linux/BSD/Mac
-LUA_DIR= /usr/local/share/lua/5.1
+LUA_DIR= /usr/local/share/lua/5.1.1
 LUA_LIBDIR= /usr/local/lib
 LUA_INCLUDES= /usr/local/include
 JDK= $(JAVA_HOME)
@@ -14,7 +14,9 @@ LIB_LUA=$(LUA_LIBDIR)/liblua.a
 LIB_EXT= .so
 #Mac OS
 #LIB_EXT= .jnilib
+
 LIB_PREFIX= lib
+
 #Linux/BSD
 LIB_OPTION= -shared
 #Mac OS
@@ -30,25 +32,6 @@ CFLAGS= $(WARN) $(INCS)
 CC= gcc
 
 
-#############################################################
-#Windows
-#LUA_DIR= c:\prj\lua\binaries\lua5.1
-#LUA_LIBDIR= $(LUA_DIR)\lib\dll
-#LUA_INCLUDES= $(LUA_DIR)\include
-#JDK= $(JAVA_HOME)
-#JDK= C:\j2sdk1.4.2_06
-#VS_INCDIR= C:\Program Files\Microsoft Visual Studio\VC98\include
-
-#LIB_LUA= lua5.1.lib
-
-#LIB_EXT= .dll
-#INCS= -I"$(JDK)/include" -I"$(JDK)/include/win32" -I"$(VS_INCDIR)" -I"$(LUA_INCLUDES)"
-#CFLAGS= -nologo -DWIN32 $(INCS) -Fosrc\C\\ -MD
-
-#SYSLIBPATH = C:\Program Files\Microsoft Visual Studio\VC98\lib
-#CC= cl
-
-
 #########################################################
 VERSION= 1.1
 PKG= luajava-$(VERSION)
@@ -58,4 +41,4 @@ JAR_FILE= $(PKG).jar
 SO_FILE= $(LIB_PREFIX)$(PKG)$(LIB_EXT)
 DIST_DIR= $(PKG)
 
-# $Id: config,v 1.11 2006-05-15 14:44:40 thiago Exp $
+# $Id: config,v 1.12 2006-12-22 14:06:40 thiago Exp $
