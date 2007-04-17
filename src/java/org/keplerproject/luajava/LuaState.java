@@ -1,5 +1,5 @@
 /*
- * $Id: LuaState.java,v 1.9 2006-12-22 14:06:40 thiago Exp $
+ * $Id: LuaState.java,v 1.10 2007-04-17 23:47:50 thiago Exp $
  * Copyright (C) 2003-2007 Kepler Project.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -864,6 +864,13 @@ public class LuaState
    * @param obj
    */
   private synchronized native void _pushJavaObject(CPtr L, Object obj);
+  
+  /**
+   * Pushes a Java Array into the state stack
+   * @param L
+   * @param obj
+   */
+  private synchronized native void _pushJavaArray(CPtr L, Object obj);
 
   /**
    * Pushes a JavaFunction into the state stack
@@ -910,6 +917,14 @@ public class LuaState
   public void pushJavaObject(Object obj)
   {
     _pushJavaObject(luaState, obj);
+  }
+  
+  public void pushJavaArray(Object obj) throws LuaException
+  {
+	  if (!obj.getClass().isArray())
+		  throw new LuaException("Object is not an array.");
+	  
+	  _pushJavaArray(luaState, obj);
   }
 
   /**
@@ -969,6 +984,10 @@ public class LuaState
     else if (obj instanceof byte[])
     {
       pushString((byte[]) obj);
+    }
+    else if (obj.getClass().isArray())
+    {
+   	 pushJavaArray(obj);
     }
     else
     {

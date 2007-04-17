@@ -1,5 +1,5 @@
 /*
- * $Id: LuaJavaAPI.java,v 1.4 2006-12-22 14:06:40 thiago Exp $
+ * $Id: LuaJavaAPI.java,v 1.5 2007-04-17 23:47:50 thiago Exp $
  * Copyright (C) 2003-2007 Kepler Project.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -24,6 +24,7 @@
 
 package org.keplerproject.luajava;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -42,7 +43,7 @@ public final class LuaJavaAPI
   }
 
   /**
-   * Java implementation of the metamethod __index
+   * Java implementation of the metamethod __index for normal objects
    * 
    * @param luaState int that indicates the state used
    * @param obj Object to be indexed
@@ -59,19 +60,29 @@ public final class LuaJavaAPI
       int top = L.getTop();
 
       Object[] objs = new Object[top - 1];
+      Method method = null;
 
       Class clazz;
 
       if (obj instanceof Class)
       {
         clazz = (Class) obj;
+        // First try. Static methods of the object
+        method = getMethod(L, clazz, methodName, objs, top);
+        
+        if (method == null)
+      	  clazz = Class.class;
+        
+        // Second try. Methods of the Class class
+        method = getMethod(L, clazz, methodName, objs, top);
       }
       else
       {
         clazz = obj.getClass();
+        method = getMethod(L, clazz, methodName, objs, top);
       }
-
-      Method[] methods = clazz.getMethods();
+      
+/*      Method[] methods = clazz.getMethods();
       Method method = null;
 
       // gets method and arguments
@@ -106,7 +117,7 @@ public final class LuaJavaAPI
           break;
         }
 
-      }
+      }*/
 
       // If method is null means there isn't one receiving the given arguments
       if (method == null)
@@ -122,7 +133,8 @@ public final class LuaJavaAPI
           method.setAccessible(true);
         }
         
-        if (obj instanceof Class)
+        //if (obj instanceof Class)
+        if (Modifier.isStatic(method.getModifiers()))
         {
           ret = method.invoke(null, objs);
         }
@@ -145,6 +157,33 @@ public final class LuaJavaAPI
       // push result
       L.pushObjectValue(ret);
 
+      return 1;
+    }
+  }
+  
+  /**
+   * Java function that implements the __index for Java arrays
+   * @param luaState int that indicates the state used
+   * @param obj Object to be indexed
+   * @param index index number of array. Since Lua index starts from 1,
+   * the number used will be (index - 1)
+   * @return number of returned objects
+   */
+  public static int arrayIndex(int luaState, Object obj, int index) throws LuaException
+  {
+    LuaState L = LuaStateFactory.getExistingState(luaState);
+
+    synchronized (L)
+    {
+
+      if (!obj.getClass().isArray())
+        throw new LuaException("Object indexed is not an array.");
+	  
+      if (Array.getLength(obj) < index)
+        throw new LuaException("Index out of bounds.");
+	  
+      L.pushObjectValue(Array.get(obj, index - 1));
+	  
       return 1;
     }
   }
@@ -185,6 +224,101 @@ public final class LuaJavaAPI
     }
   }
 
+  
+  /**
+   * Java function to be called when a java object metamethod __newindex is called.
+   * 
+   * @param luaState int that represents the state to be used
+   * @param object to be used
+   * @param fieldName name of the field to be set
+   * @return number of returned objects
+   * @throws LuaException
+   */
+  public static int objectNewIndex(int luaState, Object obj, String fieldName)
+    throws LuaException
+  {
+    LuaState L = LuaStateFactory.getExistingState(luaState);
+
+    synchronized (L)
+    {
+      Field field = null;
+      Class objClass;
+
+      if (obj instanceof Class)
+      {
+        objClass = (Class) obj;
+      }
+      else
+      {
+        objClass = obj.getClass();
+      }
+
+      try
+      {
+        field = objClass.getField(fieldName);
+      }
+      catch (Exception e)
+      {
+        throw new LuaException("Error accessing field.", e);
+      }
+      
+      Class type = field.getType();
+      Object setObj = compareTypes(L, type, 3);
+      
+      if (field.isAccessible())
+        field.setAccessible(true);
+      
+      try
+      {
+        field.set(obj, setObj);
+      }
+      catch (IllegalArgumentException e)
+      {
+        throw new LuaException("Ilegal argument to set field.", e);
+      }
+      catch (IllegalAccessException e)
+      {
+        throw new LuaException("Field not accessible.", e);
+      }
+    }
+    
+    return 0;
+  }
+  
+  
+  /**
+   * Java function to be called when a java array metamethod __newindex is called.
+   * 
+   * @param luaState int that represents the state to be used
+   * @param object to be used
+   * @param index index number of array. Since Lua index starts from 1,
+   * the number used will be (index - 1)
+   * @return number of returned objects
+   * @throws LuaException
+   */
+  public static int arrayNewIndex(int luaState, Object obj, int index)
+    throws LuaException
+  {
+    LuaState L = LuaStateFactory.getExistingState(luaState);
+
+    synchronized (L)
+    {
+      if (!obj.getClass().isArray())
+        throw new LuaException("Object indexed is not an array.");
+  	  
+      if (Array.getLength(obj) < index)
+        throw new LuaException("Index out of bounds.");
+
+      Class type = obj.getClass().getComponentType();
+      Object setObj = compareTypes(L, type, 3);
+      
+      Array.set(obj, index - 1, setObj);
+    }
+    
+    return 0;
+  }
+  
+  
   /**
    * Pushes a new instance of a java Object of the type className
    * 
@@ -421,7 +555,7 @@ public final class LuaJavaAPI
    * @param methodName name of the field to be inpected
    * @return number of returned objects
    */
-  public static int checkMethod(int luaState, Object obj, String methodName)
+  private static int checkMethod(int luaState, Object obj, String methodName)
   {
     LuaState L = LuaStateFactory.getExistingState(luaState);
 
@@ -592,4 +726,51 @@ public final class LuaJavaAPI
     return obj;
   }
 
+  private static Method getMethod(LuaState L, Class clazz, String methodName, Object[] retObjs, int top)
+  {
+     Object[] objs = new Object[top - 1];
+
+     Method[] methods = clazz.getMethods();
+     Method method = null;
+
+     // gets method and arguments
+     for (int i = 0; i < methods.length; i++)
+     {
+       if (!methods[i].getName().equals(methodName))
+
+         continue;
+
+       Class[] parameters = methods[i].getParameterTypes();
+       if (parameters.length != top - 1)
+         continue;
+
+       boolean okMethod = true;
+
+       for (int j = 0; j < parameters.length; j++)
+       {
+         try
+         {
+           objs[j] = compareTypes(L, parameters[j], j + 2);
+         }
+         catch (Exception e)
+         {
+           okMethod = false;
+           break;
+         }
+       }
+
+       if (okMethod)
+       {
+         method = methods[i];
+         for (int k = 0 ; k < objs.length ; k++)
+         	retObjs[k] = objs[k];
+         
+         break;
+       }
+
+     }
+	  
+	  return method;
+  }
 }
+ 
