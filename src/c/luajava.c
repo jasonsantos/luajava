@@ -2956,6 +2956,9 @@ JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState__1pushString__Lor
 
    uniStr =  ( *env )->GetStringUTFChars( env , str , NULL );
 
+   if ( uniStr == NULL )
+      return;
+
    lua_pushstring( L , uniStr );
    
    ( *env )->ReleaseStringUTFChars( env , str , uniStr );

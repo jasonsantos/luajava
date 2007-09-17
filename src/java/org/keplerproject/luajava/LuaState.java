@@ -1,5 +1,5 @@
 /*
- * $Id: LuaState.java,v 1.10 2007-04-17 23:47:50 thiago Exp $
+ * $Id: LuaState.java,v 1.11 2007-09-17 19:28:40 thiago Exp $
  * Copyright (C) 2003-2007 Kepler Project.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -58,19 +58,13 @@ public class LuaState
   /*
    * error codes for `lua_load' and `lua_pcall'
    */
-  /**
-   * a runtime error.
-   */
-  final public static Integer LUA_ERRRUN    = new Integer(1);
+
+  final public static Integer LUA_YIELD    = new Integer(1);
   
-  /**
-   * 
-   */
-  final public static Integer LUA_YIELD     = new Integer(2);
+  /** a runtime error. */
+  final public static Integer LUA_ERRRUN     = new Integer(2);
   
-  /**
-   * syntax error during pre-compilation.
-   */
+  /** syntax error during pre-compilation. */
   final public static Integer LUA_ERRSYNTAX = new Integer(3);
   
   /**
@@ -250,7 +244,7 @@ public class LuaState
 
 
   // LuaLibAux
-  private synchronized native int _LdoFile(CPtr ptr, String fileName);
+  private static synchronized native int _LdoFile(CPtr ptr, String fileName);
   private synchronized native int _LdoString(CPtr ptr, String string);
   //private synchronized native int _doBuffer(CPtr ptr, byte[] buff, long sz, String n);
   

@@ -1,5 +1,5 @@
 /*
- * $Id: Console.java,v 1.7 2006-12-22 14:06:40 thiago Exp $
+ * $Id: Console.java,v 1.8 2007-09-17 19:28:40 thiago Exp $
  * Copyright (C) 2003-2007 Kepler Project.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -79,7 +79,10 @@ public class Console
             int ret = L.LloadBuffer(line.getBytes(), "from console");
             if (ret == 0)
             {
-               ret = L.pcall(0, 0, 0);
+               synchronized (L)
+					{
+               	ret = L.pcall(0, 0, 0);	
+					}
             }
             if (ret != 0)
             {
