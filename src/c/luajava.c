@@ -57,7 +57,7 @@
 /* Call metamethod name */
 #define LUACALLMETAMETHODTAG  "__call"
 /* Constant that defines where in the metatable should I place the function name */
-#define LUAJAVAOBJFUNCCALLED  "__FunctionCalled"
+//#define LUAJAVAOBJFUNCCALLED  "__FunctionCalled"
 
 
 
@@ -547,7 +547,7 @@ int objectIndex( lua_State * L )
       return checkField;
    }
 
-   lua_getmetatable( L , 1 );
+   /*lua_getmetatable( L , 1 );
 
    if ( !lua_istable( L , -1 ) )
    {
@@ -559,7 +559,7 @@ int objectIndex( lua_State * L )
    lua_pushstring( L , key );
    lua_rawset( L , -3 );
 
-   lua_pop( L , 1 );
+   lua_pop( L , 1 );*/
 
    lua_pushstring( L, key );
    lua_pushcclosure( L , &objectIndexReturn , 1 );
@@ -610,19 +610,16 @@ int objectIndexReturn( lua_State * L )
       lua_pushstring( L , "Not a valid java Object." );
       lua_error( L );
    }
+   
+   lua_pop( L , 1 );
 
    /* Gets the method Name */
-   lua_pushstring( L , LUAJAVAOBJFUNCCALLED );
-   lua_rawget( L , -2 );
-   if ( lua_type( L , -1 ) == LUA_TNIL )
+   if ( lua_type( L , lua_upvalueindex(1) ) == LUA_TNIL )
    {
       lua_pushstring( L , "Not a OO function call." );
       lua_error( L );
    }
-   methodName = lua_tostring( L , -1 );
    methodName = lua_tostring( L, lua_upvalueindex(1) );
-
-   lua_pop( L , 2 );
 
    /* Gets the object reference */
    pObject = ( jobject* ) lua_touserdata( L , 1 );
@@ -887,12 +884,12 @@ int classIndex( lua_State * L )
 
    if ( ret == 2 )
    {
-      lua_getmetatable( L , 1 );
+      /*lua_getmetatable( L , 1 );
       lua_pushstring( L , LUAJAVAOBJFUNCCALLED );
       lua_pushstring( L , fieldName );
       lua_rawset( L , -3 );
 
-      lua_pop( L , 1 );
+      lua_pop( L , 1 );*/
 
       lua_pushstring( L , fieldName );
       lua_pushcclosure( L , &objectIndexReturn , 1 );
