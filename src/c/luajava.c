@@ -561,7 +561,8 @@ int objectIndex( lua_State * L )
 
    lua_pop( L , 1 );
 
-   lua_pushcfunction( L , &objectIndexReturn );
+   lua_pushstring( L, key );
+   lua_pushcclosure( L , &objectIndexReturn , 1 );
 
    return 1;
 }
@@ -619,6 +620,7 @@ int objectIndexReturn( lua_State * L )
       lua_error( L );
    }
    methodName = lua_tostring( L , -1 );
+   methodName = lua_tostring( L, lua_upvalueindex(1) );
 
    lua_pop( L , 2 );
 
@@ -892,7 +894,8 @@ int classIndex( lua_State * L )
 
       lua_pop( L , 1 );
 
-      lua_pushcfunction( L , &objectIndexReturn );
+      lua_pushstring( L , fieldName );
+      lua_pushcclosure( L , &objectIndexReturn , 1 );
 
       return 1;
    }
