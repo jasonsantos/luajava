@@ -33,7 +33,7 @@ package org.keplerproject.luajava;
  */
 public class LuaState
 {
-  private final static String LUAJAVA_LIB = "/luajava-1.1";
+  private final static String LUAJAVA_LIB = "luajava-1.1";
 
   final public static Integer LUA_GLOBALSINDEX  = new Integer(-10002);
   final public static Integer LUA_REGISTRYINDEX = new Integer(-10000);
@@ -83,15 +83,15 @@ public class LuaState
    */
   static
   {
-	String arch = System.getProperty("os.arch");
+	//String arch = System.getProperty("os.arch");
     try{
-		System.loadLibrary(arch+"/lua51");
+		System.loadLibrary("lua51");
 	}catch(Throwable e){
 		e.printStackTrace();
 		System.err.println("catched");
 	}
     try{
-		System.loadLibrary(System.getProperty("os.arch")+LUAJAVA_LIB);
+		System.loadLibrary(LUAJAVA_LIB);
 	}catch(Throwable e){
 		e.printStackTrace();
 		System.err.println("catched");
