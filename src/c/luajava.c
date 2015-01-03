@@ -38,6 +38,7 @@
 #include <stdlib.h>
 #include "luajava.h"
 #include "lua.h"
+#include "luajit.h"
 #include "lualib.h"
 #include "lauxlib.h"
 
@@ -1162,15 +1163,18 @@ int javaBindClass( lua_State * L )
       lua_error( L );
    }
    className = lua_tostring( L , 1 );
-
+/*
    method = ( *javaEnv )->GetStaticMethodID( javaEnv , java_lang_class , "forName" , 
                                              "(Ljava/lang/String;)Ljava/lang/Class;" );
-
+*/
+   method = ( *javaEnv )->GetStaticMethodID( javaEnv , luajava_api_class , "getClassForName" ,
+                                             "(Ljava/lang/String;)Ljava/lang/Class;" );
    javaClassName = ( *javaEnv )->NewStringUTF( javaEnv , className );
-
+/*
    classInstance = ( *javaEnv )->CallStaticObjectMethod( javaEnv , java_lang_class ,
                                                          method , javaClassName );
-
+*/
+   classInstance = ( *javaEnv )->CallStaticObjectMethod( javaEnv , luajava_api_class , method,javaClassName );
    exp = ( *javaEnv )->ExceptionOccurred( javaEnv );
 
    /* Handles exception */
