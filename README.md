@@ -1,7 +1,7 @@
 this is a fork from jasonsantos/luajava by duzc2.
 changes:
 * integration with luajit 2.0.3
-* auto dected x86 or x64
+* wildfly module impl
 
 luajava
 =======
