@@ -1139,7 +1139,21 @@ int javaBindClass( lua_State * L )
    jstring javaClassName;
    jobject classInstance;
    jthrowable exp;
+   lua_Number stateIndex;
    JNIEnv * javaEnv;
+
+   /* Gets the luaState index */
+   lua_pushstring(L, LUAJAVASTATEINDEX);
+   lua_rawget(L, LUA_REGISTRYINDEX);
+
+   if (!lua_isnumber(L, -1))
+   {
+	   lua_pushstring(L, "Impossible to identify luaState id.");
+	   lua_error(L);
+   }
+
+   stateIndex = lua_tonumber(L, -1);
+   lua_pop(L, 1);
 
    top = lua_gettop( L );
 
@@ -1168,13 +1182,13 @@ int javaBindClass( lua_State * L )
                                              "(Ljava/lang/String;)Ljava/lang/Class;" );
 */
    method = ( *javaEnv )->GetStaticMethodID( javaEnv , luajava_api_class , "getClassForName" ,
-                                             "(Ljava/lang/String;)Ljava/lang/Class;" );
+                                             "(ILjava/lang/String;)Ljava/lang/Class;" );
    javaClassName = ( *javaEnv )->NewStringUTF( javaEnv , className );
 /*
    classInstance = ( *javaEnv )->CallStaticObjectMethod( javaEnv , java_lang_class ,
                                                          method , javaClassName );
 */
-   classInstance = ( *javaEnv )->CallStaticObjectMethod( javaEnv , luajava_api_class , method,javaClassName );
+   classInstance = (*javaEnv)->CallStaticObjectMethod(javaEnv, luajava_api_class, method, (jint)stateIndex, javaClassName);
    exp = ( *javaEnv )->ExceptionOccurred( javaEnv );
 
    /* Handles exception */

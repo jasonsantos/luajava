@@ -60,7 +60,7 @@ public class LuaInvocationHandler implements InvocationHandler
 	  		return null;
 	  	}
 	  	
-	  	Class retType = method.getReturnType();
+	  	Class<?> retType = method.getReturnType();
 	  	Object ret;
 
 	  	// Checks if returned type is void. if it is returns null.

@@ -101,6 +101,7 @@ public class LuaState
   private CPtr luaState;
 
   private int stateId;
+  private ClassLoader classLoader;
 
   /**
    * Constructor to instance a new LuaState and initialize it with LuaJava's functions
@@ -1129,7 +1130,7 @@ public class LuaState
 	 * @param retType type to convert to
 	 * @return The converted number
 	 */
-	public static Number convertLuaNumber(Double db, Class retType)
+	public static Number convertLuaNumber(Double db, Class<?> retType)
 	{
 	  // checks if retType is a primitive type
     if (retType.isPrimitive())
@@ -1190,5 +1191,13 @@ public class LuaState
     
     // if all checks fail, return null
     return null;	  
+	}
+
+	public ClassLoader getClassLoader() {
+		return classLoader;
+	}
+
+	public void setClassLoader(ClassLoader classLoader) {
+		this.classLoader = classLoader;
 	}
 }

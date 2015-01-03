@@ -41,7 +41,7 @@ public final class LuaStateFactory
 	/**
 	 * Array with all luaState's instances
 	 */
-	private static final List states = new ArrayList();
+	private static final List<LuaState> states = new ArrayList<>();
 	
 	/**
 	 * Non-public constructor. 
