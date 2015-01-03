@@ -10,7 +10,8 @@ JDK= $(JAVA_HOME)
 LIB_LUA= lua5.1.lib
 
 INCS= -I"$(JDK)/include" -I"$(JDK)/include/win32" -I"$(LUA_INCLUDES)"
-CFLAGS= -nologo -DWIN32 $(INCS) -Fosrc\C\\ -MD
+CFLAGS= -nologo -DWIN32 $(INCS) -Fosrc\C\\
+#-MD
 
 CC= cl
 
