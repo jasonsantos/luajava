@@ -1,13 +1,13 @@
 #############################################################
 #Windows
 #LUA_DIR= c:\lua5.1
-LUA_DIR= D:\temp\lua\LuaJIT-2.0.3\LuaJIT-2.0.3
+LUA_DIR= E:\lua\LuaJIT-2.0.3\LuaJIT-2.0.3
 LUA_LIBDIR= $(LUA_DIR)\build\x64
 #LUA_LIBDIR= $(LUA_DIR)\build\x86
 LUA_INCLUDES= $(LUA_DIR)\src
 #JDK= $(JAVA_HOME)
 #JDK= C:\Program Files (x86)\Java\jdk1.8.0_25
-JDK= C:\Program Files\Java\jdk1.8.0_20
+JDK= C:\Program Files\Java\jdk1.8.0_25
 
 LIB_LUA= lua51.lib
 
