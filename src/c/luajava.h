@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     org_keplerproject_luajava_LuaState
+ * Method:    _init
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState__1init
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     org_keplerproject_luajava_LuaState
  * Method:    _open
  * Signature: ()Lorg/keplerproject/luajava/CPtr;
  */
@@ -549,7 +557,7 @@ JNIEXPORT jint JNICALL Java_org_keplerproject_luajava_LuaState__1getGcCount
  * Signature: (Lorg/keplerproject/luajava/CPtr;Ljava/lang/String;)I
  */
 JNIEXPORT jint JNICALL Java_org_keplerproject_luajava_LuaState__1LdoFile
-  (JNIEnv *, jclass, jobject, jstring);
+  (JNIEnv *, jobject, jobject, jstring);
 
 /*
  * Class:     org_keplerproject_luajava_LuaState

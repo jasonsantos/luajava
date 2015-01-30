@@ -42,6 +42,10 @@
 #include "lualib.h"
 #include "lauxlib.h"
 
+#ifndef _WIN32
+#include <dlfcn.h>
+#endif
+
 
 /* Constant that is used to index the JNI Environment */
 #define LUAJAVAJNIENVTAG      "__JNIEnv"
@@ -447,8 +451,12 @@ static jclass    java_lang_class      = NULL;
 *$. **********************************************************************/
 
    static JNIEnv * getEnvFromState( lua_State * L );
+   /****
+   *
+   * 用于 *unix 环境加载lua.so
+   */
+   void *lualib;
    
-
 /********************* Implementations ***************************/
 
 /***************************************************************************
@@ -1981,6 +1989,20 @@ static void set_info (lua_State *L) {
 *      LuaJava API Function
 ************************************************************************/
 
+JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState__1init
+  ( JNIEnv * env , jobject jobj)
+{
+#ifndef _WIN32
+	lualib = dlopen("libluajava-1.1.so",RTLD_NOW|RTLD_GLOBAL);
+	if (!lualib) {
+        fputs (dlerror(), stderr);
+        exit(1);
+    }else{
+		fputs("loading lua",stderr);
+	}
+#endif
+	
+}
 JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState_luajava_1open
   ( JNIEnv * env , jobject jobj , jobject cptr , jint stateId )
 {
