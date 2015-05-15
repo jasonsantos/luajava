@@ -169,14 +169,6 @@ JNIEXPORT jint JNICALL Java_org_keplerproject_luajava_LuaState__1rawequal
 
 /*
  * Class:     org_keplerproject_luajava_LuaState
- * Method:    _lessthan
- * Signature: (Lorg/keplerproject/luajava/CPtr;II)I
- */
-JNIEXPORT jint JNICALL Java_org_keplerproject_luajava_LuaState__1lessthan
-  (JNIEnv *, jobject, jobject, jint, jint);
-
-/*
- * Class:     org_keplerproject_luajava_LuaState
  * Method:    _toNumber
  * Signature: (Lorg/keplerproject/luajava/CPtr;I)D
  */
@@ -321,14 +313,6 @@ JNIEXPORT jint JNICALL Java_org_keplerproject_luajava_LuaState__1getMetaTable
 
 /*
  * Class:     org_keplerproject_luajava_LuaState
- * Method:    _getFEnv
- * Signature: (Lorg/keplerproject/luajava/CPtr;I)V
- */
-JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState__1getFEnv
-  (JNIEnv *, jobject, jobject, jint);
-
-/*
- * Class:     org_keplerproject_luajava_LuaState
  * Method:    _setTable
  * Signature: (Lorg/keplerproject/luajava/CPtr;I)V
  */
@@ -365,14 +349,6 @@ JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState__1rawSetI
  * Signature: (Lorg/keplerproject/luajava/CPtr;I)I
  */
 JNIEXPORT jint JNICALL Java_org_keplerproject_luajava_LuaState__1setMetaTable
-  (JNIEnv *, jobject, jobject, jint);
-
-/*
- * Class:     org_keplerproject_luajava_LuaState
- * Method:    _setFEnv
- * Signature: (Lorg/keplerproject/luajava/CPtr;I)I
- */
-JNIEXPORT jint JNICALL Java_org_keplerproject_luajava_LuaState__1setFEnv
   (JNIEnv *, jobject, jobject, jint);
 
 /*
@@ -462,14 +438,6 @@ JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState__1pop
  */
 JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState__1newTable
   (JNIEnv *, jobject, jobject);
-
-/*
- * Class:     org_keplerproject_luajava_LuaState
- * Method:    _strlen
- * Signature: (Lorg/keplerproject/luajava/CPtr;I)I
- */
-JNIEXPORT jint JNICALL Java_org_keplerproject_luajava_LuaState__1strlen
-  (JNIEnv *, jobject, jobject, jint);
 
 /*
  * Class:     org_keplerproject_luajava_LuaState
@@ -758,14 +726,6 @@ JNIEXPORT jint JNICALL Java_org_keplerproject_luajava_LuaState__1LloadString
  */
 JNIEXPORT jstring JNICALL Java_org_keplerproject_luajava_LuaState__1Lgsub
   (JNIEnv *, jobject, jobject, jstring, jstring, jstring);
-
-/*
- * Class:     org_keplerproject_luajava_LuaState
- * Method:    _LfindTable
- * Signature: (Lorg/keplerproject/luajava/CPtr;ILjava/lang/String;I)Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_org_keplerproject_luajava_LuaState__1LfindTable
-  (JNIEnv *, jobject, jobject, jint, jstring, jint);
 
 /*
  * Class:     org_keplerproject_luajava_LuaState

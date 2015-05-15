@@ -191,7 +191,7 @@ public class LuaState {
 
 	private synchronized native int _rawequal(CPtr ptr, int idx1, int idx2);
 
-	private synchronized native int _lessthan(CPtr ptr, int idx1, int idx2);
+	//private synchronized native int _lessthan(CPtr ptr, int idx1, int idx2);
 
 	private synchronized native double _toNumber(CPtr ptr, int idx);
 
@@ -231,7 +231,7 @@ public class LuaState {
 
 	private synchronized native int _getMetaTable(CPtr ptr, int idx);
 
-	private synchronized native void _getFEnv(CPtr ptr, int idx);
+	//private synchronized native void _getFEnv(CPtr ptr, int idx);
 
 	// Set functions
 	private synchronized native void _setTable(CPtr ptr, int idx);
@@ -244,7 +244,7 @@ public class LuaState {
 
 	private synchronized native int _setMetaTable(CPtr ptr, int idx);
 
-	private synchronized native int _setFEnv(CPtr ptr, int idx);
+	//private synchronized native int _setFEnv(CPtr ptr, int idx);
 
 	private synchronized native void _call(CPtr ptr, int nArgs, int nResults);
 
@@ -282,7 +282,7 @@ public class LuaState {
 
 	private synchronized native void _newTable(CPtr ptr);
 
-	private synchronized native int _strlen(CPtr ptr, int idx);
+	//private synchronized native int _strlen(CPtr ptr, int idx);
 
 	private synchronized native int _isFunction(CPtr ptr, int idx);
 
@@ -365,8 +365,8 @@ public class LuaState {
 	private synchronized native String _Lgsub(CPtr ptr, String s, String p,
 			String r);
 
-	private synchronized native String _LfindTable(CPtr ptr, int idx,
-			String fname, int szhint);
+	//private synchronized native String _LfindTable(CPtr ptr, int idx,
+	//		String fname, int szhint);
 
 	private synchronized native void _openBase(CPtr ptr);
 
@@ -490,9 +490,9 @@ public class LuaState {
 		return _rawequal(luaState, idx1, idx2);
 	}
 
-	public int lessthan(int idx1, int idx2) {
-		return _lessthan(luaState, idx1, idx2);
-	}
+	//public int lessthan(int idx1, int idx2) {
+	//	return _lessthan(luaState, idx1, idx2);
+	//}
 
 	public double toNumber(int idx) {
 		return _toNumber(luaState, idx);
@@ -510,9 +510,9 @@ public class LuaState {
 		return _toString(luaState, idx);
 	}
 
-	public int strLen(int idx) {
-		return _strlen(luaState, idx);
-	}
+	//public int strLen(int idx) {
+	//	return _strlen(luaState, idx);
+	//}
 
 	public int objLen(int idx) {
 		return _objlen(luaState, idx);
@@ -585,9 +585,9 @@ public class LuaState {
 		return _getMetaTable(luaState, idx);
 	}
 
-	public void getFEnv(int idx) {
-		_getFEnv(luaState, idx);
-	}
+	//public void getFEnv(int idx) {
+	//	_getFEnv(luaState, idx);
+	//}
 
 	// SET FUNCTIONS
 
@@ -613,9 +613,9 @@ public class LuaState {
 	}
 
 	// if object is not a function returns 0
-	public int setFEnv(int idx) {
-		return _setFEnv(luaState, idx);
-	}
+	//public int setFEnv(int idx) {
+	//	return _setFEnv(luaState, idx);
+	//}
 
 	public void call(int nArgs, int nResults) {
 		_call(luaState, nArgs, nResults);
@@ -745,9 +745,9 @@ public class LuaState {
 		return _LgetN(luaState, t);
 	}
 
-	public void LsetN(int t, int n) {
-		_LsetN(luaState, t, n);
-	}
+	//public void LsetN(int t, int n) {
+	//	_LsetN(luaState, t, n);
+	//}
 
 	public int LloadFile(String fileName) {
 		return _LloadFile(luaState, fileName);
@@ -765,9 +765,9 @@ public class LuaState {
 		return _Lgsub(luaState, s, p, r);
 	}
 
-	public String LfindTable(int idx, String fname, int szhint) {
-		return _LfindTable(luaState, idx, fname, szhint);
-	}
+	//public String LfindTable(int idx, String fname, int szhint) {
+	//	return _LfindTable(luaState, idx, fname, szhint);
+	//}
 
 	// IMPLEMENTED C MACROS
 
