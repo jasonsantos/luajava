@@ -41,6 +41,7 @@ public class CPtr
      *		    pointers being pointed to by these objects are also
      *		    equal. Returns false otherwise.
      */
+	@Override
 	public boolean equals(Object other)
 	{
 		if (other == null)

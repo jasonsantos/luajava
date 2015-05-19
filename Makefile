@@ -61,8 +61,8 @@ apidoc:
 # Build .c files.
 #
 $(SO_FILE): $(OBJS)
-	@echo Build $(LIB_OPTION) $(INCS)
-	$(CC) $(LIB_OPTION) $(INCS) -o $@ $?
+	@echo Build1 $(LIB_OPTION) $(INCS)
+	$(CC) $(INCS) $(LIB_OPTION) -o $@ $?
 
 src/c/luajava.c: src/c/luajava.h
 
@@ -72,7 +72,8 @@ src/c/luajava.h:
 
 ## regras implicitas para compilacao
 
-$(OBJDIR)/%.o:  %.c
+%.o:  %.c
+	@echo Build2 $(LIB_OPTION) $(INCS)
 	$(CC) -c $(CFLAGS) $(LIB_OPTION) -o $@ $<
 
 #

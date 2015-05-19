@@ -193,6 +193,7 @@ public class LuaObject {
 		}
 	}
 
+	@Override
 	protected void finalize() {
 		try {
 			synchronized (L) {
@@ -427,6 +428,7 @@ public class LuaObject {
 		return call(args, 1)[0];
 	}
 
+	@Override
 	public String toString() {
 		synchronized (L) {
 			try {
