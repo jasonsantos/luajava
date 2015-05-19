@@ -1,0 +1,52 @@
+#############################################################
+#Linux/BSD/Mac
+#LUA_DIR= /usr/share/lua/5.1
+LUA_DIR= E:\lua\lua-5.2.4\src
+LUA_LIBDIR= E:\lua\lua-5.2.4\src
+#LUA_LIBDIR= /usr/local/lib
+##LUA_INCLUDES= /usr/local/include
+#LUA_INCLUDES= /usr/include/luajit-2.0
+LUA_INCLUDES= $(LUA_DIR)
+#JDK= $(JAVA_HOME)
+#JDK= /usr/lib/jvm/java-1.7.0-openjdk.x86_64
+JDK=/usr/lib/jvm/java-openjdk/
+# For Mac OS, comment the above line and uncomment this one
+#JDK=/Library/Java/Home
+
+# Full path to Lua static library
+#LIB_LUA=/root/test/zipFiles/LuaJIT-2.0.3/src/libluajit.so
+LIB_LUA=$(LUA_LIBDIR)/liblua.a
+
+#Linux/BSD
+LIB_EXT= .dll
+#Mac OS
+#LIB_EXT= .jnilib
+
+LIB_PREFIX= lib
+
+#Linux/BSD
+LIB_OPTION=  -pedantic -Wall -Wshadow -Wextra -Wimplicit -O2  -fPIC -fvisibility=hidden -shared -Wl,-E -llua
+#Mac OS
+#LIB_OPTION= -dynamiclib -all_load -Wl,-E
+
+## On FreeBSD and Mac OS systems, the following line should be commented
+#DLLIB= -ldl -L$(LIB_LUA)
+
+WARN= -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings
+INCS= -I$(JDK)/include -I$(JDK)/include/win32 -I$(LUA_INCLUDES)  -fPIC
+CFLAGS= $(WARN) $(INCS) 
+LDFLAGS= -O  -fPIC
+
+CC= gcc
+
+
+#########################################################
+VERSION= 1.1
+PKG= luajava-$(VERSION)
+TAR_FILE= $(PKG).tar.gz
+ZIP_FILE= $(PKG).zip
+JAR_FILE= $(PKG).jar
+SO_FILE= $(LIB_PREFIX)$(PKG)$(LIB_EXT)
+DIST_DIR= $(PKG)
+
+# $Id: config,v 1.12 2006-12-22 14:06:40 thiago Exp $
