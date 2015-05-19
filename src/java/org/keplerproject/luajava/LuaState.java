@@ -86,7 +86,7 @@ public class LuaState {
 		String osname = System.getProperty("os.name");
 		if (osname.contains("indows")) {
 			try {
-				System.loadLibrary("lua51");
+				System.loadLibrary("lua");
 			} catch (Throwable e) {
 				e.printStackTrace();
 				System.err.println("catched");

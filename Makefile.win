@@ -1,13 +1,9 @@
 #
-# NMake makefile for the LuaJava Windows Distribution
+# Makefile for LuaJava Linux Distribution
 #
 
-include config.win
+include ./config.win
 
-
-#
-# Other variables.
-#
 CLASSES     = \
 	src/java/org/keplerproject/luajava/CPtr.class \
 	src/java/org/keplerproject/luajava/JavaFunction.class \
@@ -18,8 +14,8 @@ CLASSES     = \
 	src/java/org/keplerproject/luajava/LuaState.class \
 	src/java/org/keplerproject/luajava/LuaStateFactory.class \
 	src/java/org/keplerproject/luajava/Console.class
-	
-DOC_CLASSES = \
+
+DOC_CLASSES	= \
 	src/java/org/keplerproject/luajava/JavaFunction.java \
 	src/java/org/keplerproject/luajava/LuaException.java \
 	src/java/org/keplerproject/luajava/LuaInvocationHandler.java \
@@ -27,75 +23,81 @@ DOC_CLASSES = \
 	src/java/org/keplerproject/luajava/LuaState.java \
 	src/java/org/keplerproject/luajava/LuaStateFactory.java \
 	src/java/org/keplerproject/luajava/Console.java
-	
-OBJS        = src\c\luajava.obj
+
+OBJS        = src/c/luajava.o
 .SUFFIXES: .java .class
 
 #
 # Targets
 #
-run: build FORCE
+run: build
 	@echo ------------------
 	@echo Build Complete
 	@echo ------------------
 
-#build: checkjdk $(CLASSES) $(JAR_FILE) apidoc $(SO_FILE) clean FORCE
-build: checkjdk $(CLASSES) $(JAR_FILE) apidoc $(SO_FILE) clean FORCE
+build: $(JAR_FILE) apidoc $(SO_FILE)
 
 #
 # Build .class files.
 #
 .java.class:
-	"$(JDK)\bin\javac" -sourcepath ./src/java $*.java
+	javac -sourcepath ./src/java $*.java
 
 #
 # Create the JAR
 #
-$(JAR_FILE):
-	cd src/java
-	"$(JDK)\bin\jar" cvf ../../$(JAR_FILE) org/keplerproject/luajava/*.class
-	cd ..
-	cd ..
+$(JAR_FILE): $(CLASSES)
+	cd src/java & \
+	jar cvf ../../$(JAR_FILE) org/keplerproject/luajava/*.class & \
+	cd ../..
   
 #
 # Create the API Documentation
 #
 apidoc:
-	"$(JDK)\bin\javadoc" -classpath "src/java/" -public -quiet -d "doc/us/API" $(DOC_CLASSES)
+	javadoc -public -classpath src/java/ -quiet -d "doc/us/API" $(DOC_CLASSES)
 
 #
 # Build .c files.
 #
 $(SO_FILE): $(OBJS)
-	link  /dll /nodefaultlib:"msvcrt.lib" -out:$@ $? $(LUA_LIBDIR)\$(LIB_LUA)
-#	link  /dll -out:$@ $? $(LUA_LIBDIR)\$(LIB_LUA)
+	$(CC) $(LIB_OPTION) $(INCS) -o $@ $?
 
 src/c/luajava.c: src/c/luajava.h
 
 src/c/luajava.h:
-	"$(JDK)\bin\javah" -o src/c/luajava.h -classpath "$(JAR_FILE)" org.keplerproject.luajava.LuaState
+	javah -o src/c/luajava.h -classpath "$(JAR_FILE)" org.keplerproject.luajava.LuaState
   
+
+## regras implicitas para compilacao
+
+$(OBJDIR)/%.o:  %.c
+	$(CC) -c $(CFLAGS) -o $@ $<
 
 #
 # Check that the user has a valid JDK install.  This will cause a
 # premature death if JDK is not defined.
 #
-checkjdk: "$(JDK)\bin\java.exe"
-
-#
-# Help deal with phony targets.
-#
-FORCE: ;
-
-
-install: $(SO_FILE)
-	IF NOT EXIST $(LUA_LIBDIR) mkdir $(LUA_LIBDIR)
-	copy $(SO_FILE) $(LUA_LIBDIR)
+#checkjdk: java
 
 #
 # Cleanliness.
 #
 clean:
-	-del src\java\org\keplerproject\luajava\*.class src\c\*.obj *.pdb *.exp *.lib *.exp *.ilk
+	rm -f $(JAR_FILE)
+	rm -f $(SO_FILE)
+	rm -rf doc/us/API
+	rm -f src/java/org/keplerproject/luajava/*.class src/c/*.o src/c/luajava.h
+	rm -f $(TAR_FILE) $(ZIP_FILE)
 
-# $Id: Makefile.win,v 1.1 2006-12-22 14:06:40 thiago Exp $
+dist:	dist_dir
+	tar -czf $(TAR_FILE) --exclude \*CVS\* --exclude *.class --exclude *.o --exclude *.h --exclude $(TAR_FILE) --exclude $(ZIP_FILE) $(DIST_DIR)
+	zip -qr $(ZIP_FILE) $(DIST_DIR)/* -x ./\*CVS\* *.class *.o *.h ./$(TAR_FILE) ./$(ZIP_FILE)
+
+dist_dir:	apidoc
+	mkdir -p $(DIST_DIR)
+	cp -R src $(DIST_DIR)
+	cp -R doc $(DIST_DIR)
+	cp -R test $(DIST_DIR)
+	cp config License.txt Makefile config.win Makefile.win $(DIST_DIR)
+

@@ -2,7 +2,7 @@
 # Makefile for LuaJava Linux Distribution
 #
 
-include ./config
+include ./config.linux
 
 CLASSES     = \
 	src/java/org/keplerproject/luajava/CPtr.class \
