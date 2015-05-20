@@ -455,8 +455,8 @@ static jclass    java_lang_class      = NULL;
    /****
    *
    * 用于 *unix 环境加载lua.so
-   */
-   void *lualib;
+   
+   void *lualib;*/
    
 /********************* Implementations ***************************/
 
@@ -1993,6 +1993,7 @@ static void set_info (lua_State *L) {
 JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState__1init
   ( JNIEnv * env , jobject jobj)
 {
+/*
 #ifndef _WIN32
 	lualib = dlopen("libluajava-1.1.so",RTLD_NOW|RTLD_GLOBAL);
 	if (!lualib) {
@@ -2002,7 +2003,7 @@ JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState__1init
 		fputs("loading lua",stderr);
 	}
 #endif
-	
+*/
 }
 JNIEXPORT void JNICALL Java_org_keplerproject_luajava_LuaState_luajava_1open
   ( JNIEnv * env , jobject jobj , jobject cptr , jint stateId )
