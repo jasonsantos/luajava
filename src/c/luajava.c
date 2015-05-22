@@ -528,6 +528,7 @@ int objectIndex( lua_State * L )
       jobject jstr;
       const char * cStr;
       
+      ( *javaEnv )->ExceptionDescribe( javaEnv );
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
@@ -660,6 +661,8 @@ int objectIndexReturn( lua_State * L )
       jobject jstr;
       const char * cStr;
       
+      ( *javaEnv )->ExceptionDescribe( javaEnv );
+
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
@@ -761,6 +764,8 @@ int objectNewIndex( lua_State * L  )
       jobject jstr;
       const char * cStr;
       
+      ( *javaEnv )->ExceptionDescribe( javaEnv );
+
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
@@ -863,6 +868,8 @@ int classIndex( lua_State * L )
       jobject jstr;
       const char * cStr;
       
+      ( *javaEnv )->ExceptionDescribe( javaEnv );
+
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
@@ -986,6 +993,8 @@ int arrayIndex( lua_State * L )
       jobject jstr;
       const char * cStr;
       
+      ( *javaEnv )->ExceptionDescribe( javaEnv );
+
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
@@ -1079,6 +1088,8 @@ int arrayNewIndex( lua_State * L )
       jobject jstr;
       const char * cStr;
       
+      ( *javaEnv )->ExceptionDescribe( javaEnv );
+
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
@@ -1206,6 +1217,8 @@ int javaBindClass( lua_State * L )
       jobject jstr;
       const char * cStr;
       
+      ( *javaEnv )->ExceptionDescribe( javaEnv );
+
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
@@ -1300,6 +1313,8 @@ int createProxy( lua_State * L )
       jobject jstr;
       const char * cStr;
       
+      ( *javaEnv )->ExceptionDescribe( javaEnv );
+
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
@@ -1411,6 +1426,8 @@ int javaNew( lua_State * L )
       jobject jstr;
       const char * str;
       
+      ( *javaEnv )->ExceptionDescribe( javaEnv );
+
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
@@ -1495,6 +1512,8 @@ int javaNewInstance( lua_State * L )
       jobject jstr;
       const char * str;
       
+      ( *javaEnv )->ExceptionDescribe( javaEnv );
+
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
@@ -1595,6 +1614,8 @@ int javaLoadLib( lua_State * L )
       jobject jstr;
       const char * str;
       
+      ( *javaEnv )->ExceptionDescribe( javaEnv );
+
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
@@ -1886,6 +1907,8 @@ int luaJavaFunctionCall( lua_State * L )
       jobject jstr;
       const char * str;
       
+      ( *javaEnv )->ExceptionDescribe( javaEnv );
+
       ( *javaEnv )->ExceptionClear( javaEnv );
       jstr = ( *javaEnv )->CallObjectMethod( javaEnv , exp , get_message_method );
 
