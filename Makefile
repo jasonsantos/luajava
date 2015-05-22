@@ -1,8 +1,8 @@
 #
-# Makefile for LuaJava MingGw Distribution
+# Makefile for LuaJava Linux Distribution
 #
 
-include ./config.win
+include ./config
 
 CLASSES     = \
 	src/java/org/keplerproject/luajava/CPtr.class \
@@ -35,52 +35,50 @@ run: build
 	@echo Build Complete
 	@echo ------------------
 
-build: $(JAR_FILE) apidoc $(SO_FILE)
+build: checkjdk $(JAR_FILE) apidoc $(SO_FILE)
 
 #
 # Build .class files.
 #
 .java.class:
-	javac -sourcepath ./src/java $*.java
+	$(JDK)/bin/javac -sourcepath ./src/java $*.java
 
 #
 # Create the JAR
 #
 $(JAR_FILE): $(CLASSES)
-	cd src/java & \
-	jar cvf ../../$(JAR_FILE) org/keplerproject/luajava/*.class & \
-	cd ../..
+	cd src/java; \
+	$(JDK)/bin/jar cvf ../../$(JAR_FILE) org/keplerproject/luajava/*.class; \
+	cd ../..;
   
 #
 # Create the API Documentation
 #
 apidoc:
-	javadoc -public -classpath src/java/ -quiet -d "doc/us/API" $(DOC_CLASSES)
+	$(JDK)/bin/javadoc -public -classpath src/java/ -quiet -d "doc/us/API" $(DOC_CLASSES)
 
 #
 # Build .c files.
 #
 $(SO_FILE): $(OBJS)
-	@echo Build1 $(LIB_OPTION) $(INCS)
-	$(CC) $(INCS) $(LIB_OPTION) -o $@ $?
+	 $(CC) $(LIB_OPTION) -o $@ $? $(LIB_LUA)
 
 src/c/luajava.c: src/c/luajava.h
 
 src/c/luajava.h:
-	javah -o src/c/luajava.h -classpath "$(JAR_FILE)" org.keplerproject.luajava.LuaState
+	$(JDK)/bin/javah -o src/c/luajava.h -classpath "$(JAR_FILE)" org.keplerproject.luajava.LuaState
   
 
 ## regras implicitas para compilacao
 
-%.o:  %.c
-	@echo Build2 $(LIB_OPTION) $(INCS)
-	$(CC) -c $(CFLAGS) $(LIB_OPTION) -o $@ $<
+$(OBJDIR)/%.o:  %.c
+	$(CC) -c $(CFLAGS) -o $@ $<
 
 #
 # Check that the user has a valid JDK install.  This will cause a
 # premature death if JDK is not defined.
 #
-#checkjdk: java
+checkjdk: $(JDK)/bin/java
 
 #
 # Cleanliness.
