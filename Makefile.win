@@ -72,7 +72,7 @@ src/c/luajava.h:
 
 ## regras implicitas para compilacao
 
-$(OBJDIR)/%.o:  %.c
+%.o:  %.c
 	$(CC) -c $(CFLAGS) $(LIB_OPTION) -o $@ $<
 
 #
