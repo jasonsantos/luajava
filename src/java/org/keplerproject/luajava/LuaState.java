@@ -83,15 +83,15 @@ public class LuaState {
 	 * Opens the library containing the luajava API
 	 */
 	static {
-		String osname = System.getProperty("os.name");
-		if (osname.contains("indows")) {
-			try {
-				System.loadLibrary("lua");
-			} catch (Throwable e) {
-				e.printStackTrace();
-				System.err.println("catched");
-			}
-		}
+//		String osname = System.getProperty("os.name");
+//		if (osname.contains("indows")) {
+//			try {
+//				System.loadLibrary("lua52");
+//			} catch (Throwable e) {
+//				e.printStackTrace();
+//				System.err.println("catched");
+//			}
+//		}
 		System.loadLibrary(LUAJAVA_LIB);
 		_init();
 	}
