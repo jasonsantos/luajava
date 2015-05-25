@@ -62,7 +62,7 @@ apidoc:
 #
 $(SO_FILE): $(OBJS)
 	@echo Build $(LIB_OPTION) $(INCS)
-	$(CC) $(LIB_OPTION) $(INCS) -o $@ $?  $(LUA_LIBDIR)\liblua.a
+	$(CC) $(LIB_OPTION) $(INCS) -o $@ $?  $(LUA_LIBDIR)\liblua52.a
 
 src/c/luajava.c: src/c/luajava.h
 

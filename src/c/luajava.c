@@ -461,11 +461,15 @@ void *lualib;*/
 
 /********************* Implementations ***************************/
 static void strcatext(char** strpp, int* buflength, char* append){
+	if (((void*)append) == NULL){
+		strcatext(strpp, buflength, "\"\"");
+		return;
+	}
 	int strLength = strlen(*strpp);
 	int appendLength = strlen(append);
 	if (strLength > *buflength - 50 - appendLength){
 		int newbuflength = (*buflength + 50 + appendLength) * 2;
-		char newbuf[newbuflength];
+		char* newbuf = (char*)calloc(newbuflength, sizeof(char));
 		strcpy(newbuf, *strpp);
 		*strpp = newbuf;
 		*buflength = newbuflength;
@@ -479,6 +483,7 @@ static void printLuaStack(lua_State *L){
 		lua_Debug d;
 		int ok = lua_getstack(L, i, &d);
 		if (ok == 0){
+			arr_d[i] = NULL;
 			break;
 		}
 		else{
@@ -488,21 +493,20 @@ static void printLuaStack(lua_State *L){
 	}
 	// print
 	int length = 100;
-	char cha[length];
-	char* str = cha;
+	char* str = (char*)calloc(length, sizeof(char));
 	strcpy(str, "lua stack:\n");
 
 	for (i = 0; ((void*)arr_d[i]) != NULL; i++){
 		lua_Debug* d = arr_d[i];
-		strcatext(&str, &length, "what=");
+		strcatext(&str, &length, "what=\"");
 		strcatext(&str, &length, d->what);
-		strcatext(&str, &length, ",S=");
+		strcatext(&str, &length, "\",S=\"");
 		strcatext(&str, &length, d->source);
-		strcatext(&str, &length, ",namewhat=");
+		strcatext(&str, &length, "\",namewhat=\"");
 		strcatext(&str, &length, d->namewhat);
-		strcatext(&str, &length, ",name=");
+		strcatext(&str, &length, "\",name=\"");
 		strcatext(&str, &length, d->name);
-		strcatext(&str, &length, ",currentline=");
+		strcatext(&str, &length, "\",currentline=");
 		char currentline[5];
 		sprintf(currentline, "%d\n", d->currentline);
 		strcatext(&str, &length, currentline);

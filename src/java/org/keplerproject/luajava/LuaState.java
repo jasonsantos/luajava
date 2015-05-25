@@ -881,6 +881,13 @@ public class LuaState {
 	 */
 	private synchronized native void _pushJavaFunction(CPtr L, JavaFunction func)
 			throws LuaException;
+	/**
+	 * set a JavaFunction as panic
+	 * 
+	 * @param L
+	 * @param func
+	 */
+	//private synchronized native void _atpanic(CPtr L, JavaFunction func);
 
 	/**
 	 * Returns whether a userdata contains a Java Function
@@ -1163,4 +1170,8 @@ public class LuaState {
 	public void setClassLoader(ClassLoader classLoader) {
 		this.classLoader = classLoader;
 	}
+
+//	public void atpanic(JavaFunction panic) {
+//		_atpanic(luaState, panic);
+//	}
 }
