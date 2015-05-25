@@ -5,7 +5,7 @@ LUA_LIBDIR= E:\lua\lua-5.2.4\build\winx64
 LUA_INCLUDES= $(LUA_DIR)
 JDK= C:\Program Files\Java\jdk1.8.0_25
 
-LIB_LUA=lua52
+LIB_LUA=lua
 
 INCS= -I"$(JDK)\include" -I"$(JDK)\include\win32" -I"$(LUA_INCLUDES)"
 CFLAGS= -DWIN32 $(INCS) -Fosrc\C\\
