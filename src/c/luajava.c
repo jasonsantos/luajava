@@ -488,7 +488,8 @@ static void printLuaStack(lua_State *L){
 	}
 	// print
 	int length = 100;
-	char str[length];
+	char cha[length];
+	char* str = cha;
 	strcpy(str, "lua stack:\n");
 
 	for (i = 0; ((void*)arr_d[i]) != NULL; i++){
