@@ -1,8 +1,8 @@
 #############################################################
 #Linux/BSD/Mac
 #LUA_DIR= /usr/share/lua/5.1
-LUA_DIR= E:\lua\lua-5.2.4\src
-LUA_LIBDIR= E:\lua\lua-5.2.4\src
+LUA_DIR= /root/lua52/src/lua-5.2.4/src
+LUA_LIBDIR= /root/lua52/src/lua-5.2.4/src
 #LUA_LIBDIR= /usr/local/lib
 ##LUA_INCLUDES= /usr/local/include
 #LUA_INCLUDES= /usr/include/luajit-2.0
@@ -15,17 +15,17 @@ JDK=/usr/lib/jvm/java-openjdk/
 
 # Full path to Lua static library
 #LIB_LUA=/root/test/zipFiles/LuaJIT-2.0.3/src/libluajit.so
-LIB_LUA=$(LUA_LIBDIR)/liblua.a
+LIB_LUA=lua
 
 #Linux/BSD
-LIB_EXT= .dll
+LIB_EXT= .so
 #Mac OS
 #LIB_EXT= .jnilib
 
 LIB_PREFIX= lib
 
 #Linux/BSD
-LIB_OPTION=  -pedantic -Wall -Wshadow -Wextra -Wimplicit -O2  -fPIC -fvisibility=hidden -shared -Wl,-E -llua
+LIB_OPTION=  -pedantic -Wall -Wshadow -Wextra -Wimplicit -O2  -fPIC -fvisibility=hidden -shared -Wl,-E  -L$(LUA_LIBDIR) -l$(LIB_LUA) 
 #Mac OS
 #LIB_OPTION= -dynamiclib -all_load -Wl,-E
 
@@ -33,7 +33,7 @@ LIB_OPTION=  -pedantic -Wall -Wshadow -Wextra -Wimplicit -O2  -fPIC -fvisibility
 #DLLIB= -ldl -L$(LIB_LUA)
 
 WARN= -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings
-INCS= -I$(JDK)/include -I$(JDK)/include/win32 -I$(LUA_INCLUDES)  -fPIC
+INCS= -I$(JDK)/include -I$(JDK)/include/linux -I$(LUA_INCLUDES)  -fPIC
 CFLAGS= $(WARN) $(INCS) 
 LDFLAGS= -O  -fPIC
 
