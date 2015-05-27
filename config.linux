@@ -25,7 +25,7 @@ LIB_EXT= .so
 LIB_PREFIX= lib
 
 #Linux/BSD
-LIB_OPTION=  -pedantic -Wall -Wshadow -Wextra -Wimplicit -O2  -fPIC -fvisibility=hidden -shared -Wl,-Bdynamic -L$(LUA_LIBDIR) -l$(LIB_LUA) 
+LIB_OPTION=  -pedantic -Wall -Wshadow -Wextra -Wimplicit -O2  -fPIC -fvisibility=hidden -shared -Wl,-E  -L$(LUA_LIBDIR) -l$(LIB_LUA) 
 #Mac OS
 #LIB_OPTION= -dynamiclib -all_load -Wl,-E
 
