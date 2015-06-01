@@ -40,7 +40,7 @@ public final class LuaStateFactory {
 	/**
 	 * Array with all luaState's instances
 	 */
-	private static final List<LuaState> states = new ArrayList<>();
+	private static final List<LuaState> states = new ArrayList<>(1024);
 	private static final ConcurrentHashMap<Integer, LuaException> removedRecord = new ConcurrentHashMap<Integer, LuaException>();
 
 	/**
