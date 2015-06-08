@@ -42,9 +42,8 @@ public final class LuaJavaAPI {
 	private LuaJavaAPI() {
 	}
 
-	private static void wrapException(Exception e, HashMap<String, Object> m)
-			throws LuaException {
-		StringBuilder sb = new StringBuilder(m.toString()).append('\n');
+	private static void addStack(StringBuilder sb, Throwable e) {
+		sb.append("\n**\n** ").append(e.toString()).append('\n');
 		StackTraceElement[] stackTrace = e.getStackTrace();
 		for (StackTraceElement s : stackTrace) {
 			sb.append("** ");
@@ -57,6 +56,18 @@ public final class LuaJavaAPI {
 			sb.append(s.getLineNumber());
 			sb.append(')');
 			sb.append('\n');
+		}
+	}
+
+	private static void wrapException(Exception e, HashMap<String, Object> m)
+			throws LuaException {
+		StringBuilder sb = new StringBuilder("** ").append(m.toString())
+				.append('\n');
+		Throwable e1 = e, e2 = null;
+		while (e1 != null && e1 != e2) {
+			addStack(sb, e1);
+			e2=e1;
+			e1=e1.getCause();
 		}
 		throw new LuaException(sb.toString(), e);
 	}
