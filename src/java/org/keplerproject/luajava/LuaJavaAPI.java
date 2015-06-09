@@ -43,7 +43,9 @@ public final class LuaJavaAPI {
 	}
 
 	private static void addStack(StringBuilder sb, Throwable e) {
-		sb.append("\n**\n** ").append(e.toString()).append('\n');
+		sb.append("\n**\n** ").append(e.toString()).append(":")
+				.append(e.getLocalizedMessage()).append("/")
+				.append(e.getMessage()).append('\n');
 		StackTraceElement[] stackTrace = e.getStackTrace();
 		for (StackTraceElement s : stackTrace) {
 			sb.append("** ");
@@ -61,13 +63,12 @@ public final class LuaJavaAPI {
 
 	private static void wrapException(Exception e, HashMap<String, Object> m)
 			throws LuaException {
-		StringBuilder sb = new StringBuilder("** ").append(m.toString())
-				.append('\n');
+		StringBuilder sb = new StringBuilder("** ").append(m.toString());
 		Throwable e1 = e, e2 = null;
 		while (e1 != null && e1 != e2) {
 			addStack(sb, e1);
-			e2=e1;
-			e1=e1.getCause();
+			e2 = e1;
+			e1 = e1.getCause();
 		}
 		throw new LuaException(sb.toString(), e);
 	}
