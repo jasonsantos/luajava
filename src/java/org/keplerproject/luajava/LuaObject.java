@@ -217,7 +217,7 @@ public class LuaObject
 	}
 
 	/**
-	 * Pushes the object represented by <code>this<code> into L's stack
+	 * Pushes the object represented by <code>this</code> into L's stack
 	 */
 	public void push()
 	{
@@ -379,7 +379,7 @@ public class LuaObject
 	}
 
 	/**
-	 * If <code>this<code> is a table or userdata tries to get
+	 * If <code>this</code> is a table or userdata tries to get
 	 * a field value.
 	 */
 	public LuaObject getField(String field) throws LuaException
