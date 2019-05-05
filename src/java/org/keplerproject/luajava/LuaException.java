@@ -48,7 +48,7 @@ public class LuaException extends Exception
 	 */
 	public LuaException(Exception e)
 	{
-	   super((e.getCause() != null) ? e.getCause() : e);
+	   super(e);
 		//super(e.getMessage());
 	}
 	

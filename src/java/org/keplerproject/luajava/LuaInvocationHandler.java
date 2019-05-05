@@ -48,7 +48,8 @@ public class LuaInvocationHandler implements InvocationHandler
 	/**
 	 * Function called when a proxy object function is invoked.
 	 */
-  public Object invoke(Object proxy, Method method, Object[] args) throws LuaException
+  @Override
+public Object invoke(Object proxy, Method method, Object[] args) throws LuaException
   {
     synchronized(obj.L)
     {
@@ -60,7 +61,7 @@ public class LuaInvocationHandler implements InvocationHandler
 	  		return null;
 	  	}
 	  	
-	  	Class retType = method.getReturnType();
+	  	Class<?> retType = method.getReturnType();
 	  	Object ret;
 
 	  	// Checks if returned type is void. if it is returns null.

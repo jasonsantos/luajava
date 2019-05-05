@@ -1,18 +1,19 @@
 #############################################################
 #Windows
-#LUA_DIR= c:\lua5.1
-LUA_DIR= c:\lua\lua\binaries\lua5.1.1
-LUA_LIBDIR= $(LUA_DIR)\lib
-LUA_INCLUDES= $(LUA_DIR)\include
-JDK= $(JAVA_HOME)
-#JDK= C:\j2sdk1.4.2_06
+LUA_DIR= E:\lua\lua-5.2.4\src
+LUA_LIBDIR= E:\lua\lua-5.2.4\build\winx64
+LUA_INCLUDES= $(LUA_DIR)
+JDK= C:\Program Files\Java\jdk1.8.0_25
 
-LIB_LUA= lua5.1.lib
+LIB_LUA=lua52
 
-INCS= -I"$(JDK)/include" -I"$(JDK)/include/win32" -I"$(LUA_INCLUDES)"
-CFLAGS= -nologo -DWIN32 $(INCS) -Fosrc\C\\ -MD
+INCS= -I"$(JDK)\include" -I"$(JDK)\include\win32" -I"$(LUA_INCLUDES)"
+CFLAGS= -DWIN32 $(INCS) -Fosrc\C\\
+# -MD
+LIB_OPTION = -L"$(LUA_LIBDIR)" -l"$(LIB_LUA)"  -O2  -shared 
+# -lmingw32 
 
-CC= cl
+CC= gcc
 
 
 #########################################################

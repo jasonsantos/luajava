@@ -1,3 +1,9 @@
+this is a fork from jasonsantos/luajava by duzc2.
+changes:
+* integration with luajit 2.0.3
+* wildfly module impl
+* better work within Linux(old luajava can't load .so module in Linux like System,because of the difference of JDK impl)
+
 luajava
 =======
 

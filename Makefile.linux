@@ -2,7 +2,7 @@
 # Makefile for LuaJava Linux Distribution
 #
 
-include ./config
+include ./config.linux
 
 CLASSES     = \
 	src/java/org/keplerproject/luajava/CPtr.class \
@@ -61,7 +61,7 @@ apidoc:
 # Build .c files.
 #
 $(SO_FILE): $(OBJS)
-	export MACOSX_DEPLOYMENT_TARGET=10.3; $(CC) $(LIB_OPTION) -o $@ $? $(LIB_LUA)
+	export MACOSX_DEPLOYMENT_TARGET=10.3; $(CC) $(LIB_OPTION) -o $@ $?
 
 src/c/luajava.c: src/c/luajava.h
 
