@@ -57,8 +57,12 @@ public final class LuaStateFactory
 	{
 		int i = getNextStateIndex();
 		LuaState L = new LuaState(i);
-		
-		states.add(i, L);
+
+		if (i >= states.size()) {
+			states.add(i, L);
+		} else {
+			states.set(i, L);
+		}
 		
 		return L;
 	}
@@ -94,8 +98,12 @@ public final class LuaStateFactory
 		}
 
 		i = getNextStateIndex();
-		
-		states.set(i, L);
+
+		if (i >= states.size()) {
+			states.add(i, L);
+		} else {
+			states.set(i, L);
+		}
 		
 		return i;
 	}
@@ -107,6 +115,13 @@ public final class LuaStateFactory
 	public synchronized static void removeLuaState(int idx)
 	{
 		states.set(idx, null);
+
+		for (int i = states.size() - 1; i >= 0; i--) {
+			if (states.get(i) != null) {
+				break;
+			}
+			states.remove(i);
+		}
 	}
 	
 	/**
